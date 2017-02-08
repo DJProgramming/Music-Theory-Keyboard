@@ -9,6 +9,10 @@ var delayInc = 0.25; // space between notes
 var sustain = 3*delayInc; // note length
 var velocity = 127; // how hard the note hits
 
+//var colorMap = MIDI.Synesthesia.map(); // control piano key colors
+
+document.addEventListener("keydown",keyDownFunction, false); // allows you to press keys anywhere on the page
+
 // scale & chord pattern arrays
 var majorScale = [
     0,  // root
@@ -273,10 +277,76 @@ function keyboardTrigger(e) {
     var unicode = e.keyCode ? e.keyCode : e.charCode;
     // alert(unicode);
     if(unicode == 81) { // q
+		document.getElementById('c3Key').style.background='blue';
     	playSingleNote('c', 3);
     } else if(unicode == 50) { // 2
+		document.getElementById('db3Key').style.background='blue';
     	playSingleNote('db', 3);
     } else if(unicode == 87) { // w
+		document.getElementById('d3Key').style.background='blue';
+    	playSingleNote('d', 3);
+    } else if(unicode == 51) { // 3
+    	playSingleNote('eb', 3);
+    } else if(unicode == 69) { // e
+    	playSingleNote('e', 3);
+    } else if(unicode == 82) { // r
+    	playSingleNote('f', 3);
+    } else if(unicode == 53) { // 5
+    	playSingleNote('gb', 3);
+    } else if(unicode == 84) { // t
+    	playSingleNote('g', 3);
+    } else if(unicode == 54) { // 6
+    	playSingleNote('ab', 4);
+    } else if(unicode == 89) { // y
+    	playSingleNote('a', 4);
+    } else if(unicode == 55) { // 7
+    	playSingleNote('bb', 4);
+    } else if(unicode == 85) { // u
+    	playSingleNote('b', 4);
+    } else if(unicode == 73) { // i
+    	playSingleNote('c', 4);
+    } else if(unicode == 57) { // 9
+    	playSingleNote('db', 4);
+    } else if(unicode == 79) { // o
+    	playSingleNote('d', 4);
+    } else if(unicode == 48) { // 0
+    	playSingleNote('eb', 4);
+    } else if(unicode == 80) { // p
+    	playSingleNote('e', 4);
+    } else if(unicode == 90) { // z
+    	playSingleNote('f', 4);
+    } else if(unicode == 83) { // s
+    	playSingleNote('gb', 4);
+    } else if(unicode == 88) { // x
+    	playSingleNote('g', 4);
+    } else if(unicode == 68) { // d
+    	playSingleNote('ab', 5)
+    } else if(unicode == 67) { // c
+    	playSingleNote('a', 5);
+    } else if(unicode == 70) { // f
+    	playSingleNote('bb', 5);
+    } else if(unicode == 86) { // v
+    	playSingleNote('b', 5);
+    } else if(unicode == 66) { // b
+    	playSingleNote('c', 5);
+    } else if(unicode == 72) { // h
+    	playSingleNote('db', 5)
+    } else if(unicode == 78) { // n
+    	playSingleNote('d', 5);
+    } else if(unicode == 74) { // j
+    	playSingleNote('eb', 5);
+    } else if(unicode == 77) { // m
+    	playSingleNote('e', 5);
+    }    var unicode = e.keyCode ? e.keyCode : e.charCode;
+    // alert(unicode);
+    if(unicode == 81) { // q
+		document.getElementById('c3Key').style.background='blue';
+    	playSingleNote('c', 3);
+    } else if(unicode == 50) { // 2
+		document.getElementById('db3Key').style.background='blue';
+    	playSingleNote('db', 3);
+    } else if(unicode == 87) { // w
+		document.getElementById('d3Key').style.background='blue';
     	playSingleNote('d', 3);
     } else if(unicode == 51) { // 3
     	playSingleNote('eb', 3);
@@ -376,4 +446,306 @@ function playMinorScale(note, delay, delayInc) {
         MIDI.noteOff(0, note+minorScale[i], delay + sustain);
         delay += delayInc;	// increment beat
     }
+}
+
+
+/* Allows users to play keyboard on page without text field */
+function keyDownFunction(e) {
+	var unicode = e.keyCode ? e.keyCode : e.charCode;
+
+	// alert(unicode);
+	if (unicode == 81) { // q
+		var element = document.getElementById('c3Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		//document.getElementById('c3Key').style.background = 'blue';
+		playSingleNote('c', 3);
+	} else if (unicode == 50) { // 2
+		var element = document.getElementById('db3Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		//document.getElementById('db3Key').style.background = 'blue';
+		playSingleNote('db', 3);
+	} else if (unicode == 87) { // w
+		var element = document.getElementById('d3Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		//document.getElementById('d3Key').style.background = 'blue';
+		playSingleNote('d', 3);
+	} else if (unicode == 51) { // 3
+		var element = document.getElementById('eb3Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('eb', 3);
+	} else if (unicode == 69) { // e
+		var element = document.getElementById('e3Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('e', 3);
+	} else if (unicode == 82) { // r
+		var element = document.getElementById('f3Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('f', 3);
+	} else if (unicode == 53) { // 5
+		var element = document.getElementById('gb3Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('gb', 3);
+	} else if (unicode == 84) { // t
+		var element = document.getElementById('g3Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('g', 3);
+	} else if (unicode == 54) { // 6
+		var element = document.getElementById('ab4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('ab', 4);
+	} else if (unicode == 89) { // y
+		var element = document.getElementById('a4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('a', 4);
+	} else if (unicode == 55) { // 7
+		var element = document.getElementById('bb4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('bb', 4);
+	} else if (unicode == 85) { // u
+		var element = document.getElementById('b4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('b', 4);
+	} else if (unicode == 73) { // i
+		var element = document.getElementById('c4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('c', 4);
+	} else if (unicode == 57) { // 9
+		var element = document.getElementById('db4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('db', 4);
+	} else if (unicode == 79) { // o
+		var element = document.getElementById('d4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('d', 4);
+	} else if (unicode == 48) { // 0
+		var element = document.getElementById('eb4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('eb', 4);
+	} else if (unicode == 80) { // p
+		var element = document.getElementById('e4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('e', 4);
+	} else if (unicode == 90) { // z
+		var element = document.getElementById('f4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('f', 4);
+	} else if (unicode == 83) { // s
+		var element = document.getElementById('gb4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('gb', 4);
+	} else if (unicode == 88) { // x
+		var element = document.getElementById('g4Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('g', 4);
+	} else if (unicode == 68) { // d
+		var element = document.getElementById('ab5Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('ab', 5)
+	} else if (unicode == 67) { // c
+		var element = document.getElementById('a5Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('a', 5);
+	} else if (unicode == 70) { // f
+		var element = document.getElementById('bb5Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('bb', 5);
+	} else if (unicode == 86) { // v
+		var element = document.getElementById('b5Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('b', 5);
+	} else if (unicode == 66) { // b
+		var element = document.getElementById('c5Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('c', 5);
+	} else if (unicode == 72) { // h
+		var element = document.getElementById('db5Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('db', 5)
+	} else if (unicode == 78) { // n
+		var element = document.getElementById('d5Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('d', 5);
+	} else if (unicode == 74) { // j
+		var element = document.getElementById('eb5Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('eb', 5);
+	} else if (unicode == 77) { // m
+		var element = document.getElementById('e5Key');
+		if (element){
+			document.addEventListener("keyup", function onKeyUp(){
+				document.removeEventListener("keyup", onKeyUp);
+				element.style.background = '';
+			}, false);
+			element.style.background='blue';
+		}
+		playSingleNote('e', 5);
+	}
 }
