@@ -12,7 +12,7 @@ var highlightColor = 'b22';
 var black = 'black';
 var white = 'white';
 
-var timer = 500;
+var timer = 300;
 
 // scale & chord pattern arrays
 var majorScale = [
@@ -45,6 +45,8 @@ var minorTriChord = [
     3, // +3 semitones
     7  // +7 semitones
 ];
+
+var divInfo = {};
 
 var keyAllowed = {};
 
@@ -128,6 +130,8 @@ function playMajorChord() {
 
 	for(var i = 0; i < 3; i++) {
 		triggerNote(globalNote+majorTriChord[i], globalVelocity, globalDelay, globalSustain);
+		divInfo = detectDivId(globalNote+majorTriChord[i]);
+		triggerColor(divInfo[0]);
     }
 }
 
@@ -136,12 +140,16 @@ function playMinorChord() {
 
 	for(var i = 0; i < 3; i++) {
 		triggerNote(globalNote+minorTriChord[i], globalVelocity, globalDelay, globalSustain);
+		divInfo = detectDivId(globalNote+minorTriChord[i]);
+		triggerColor(divInfo[0]);
     }
 }
 
 function playNote() {
 	MIDI.setVolume(0,127);
     triggerNote(globalNote, globalVelocity, globalDelay, globalSustain);
+    divInfo = detectDivId(globalNote);
+	triggerColor(divInfo[0]);
 }
 
 function playSingleNote(value, oct) {
@@ -286,6 +294,76 @@ function idNote(input) {
     return noteData;
 }
 
+function detectDivId(number) {
+	// array for note information initialized with dummy values
+	// position 1: div id; position 2: note name; postition 3: octave
+    var noteData = ['1', '2', 3];
+
+    // alert(unicode);
+    if(number == 48) { // q
+    	setNoteData(noteData, 'c3Key', 'c', 3);
+    } else if(number == 49) { // 2
+    	setNoteData(noteData, 'db3Key', 'db', 3);
+    } else if(number == 50) { // w
+    	setNoteData(noteData, 'd3Key', 'd', 3);
+    } else if(number == 51) { // 3
+    	setNoteData(noteData, 'eb3Key', 'eb', 3);
+    } else if(number == 52) { // e
+    	setNoteData(noteData, 'e3Key', 'e', 3);
+    } else if(number == 53) { // r
+    	setNoteData(noteData, 'f3Key', 'f', 3);
+    } else if(number == 54) { // 5
+    	setNoteData(noteData, 'gb3Key', 'gb', 3);
+    } else if(number == 55) { // t
+    	setNoteData(noteData, 'g3Key', 'g', 3);
+    } else if(number == 56) { // 6
+    	setNoteData(noteData, 'ab4Key', 'ab', 4);
+    } else if(number == 57) { // y
+    	setNoteData(noteData, 'a4Key', 'a', 4);
+    } else if(number == 58) { // 7
+    	setNoteData(noteData, 'bb4Key', 'bb', 4);
+    } else if(number == 59) { // u
+    	setNoteData(noteData, 'b4Key', 'b', 4);
+    } else if(number == 60) { // i
+    	setNoteData(noteData, 'c4Key', 'c', 4);
+    } else if(number == 61) { // 9
+    	setNoteData(noteData, 'db4Key', 'db', 4);
+    } else if(number == 62) { // o
+    	setNoteData(noteData, 'd4Key', 'd', 4);
+    } else if(number == 63) { // 0
+    	setNoteData(noteData, 'eb4Key', 'eb', 4);
+    } else if(number == 64) { // p
+    	setNoteData(noteData, 'e4Key', 'e', 4);
+    } else if(number == 65) { // z
+    	setNoteData(noteData, 'f4Key', 'f', 4);
+    } else if(number == 66) { // s
+    	setNoteData(noteData, 'gb4Key', 'gb', 4);
+    } else if(number == 67) { // x
+    	setNoteData(noteData, 'g4Key', 'g', 4);
+    } else if(number == 68) { // d
+    	setNoteData(noteData, 'ab5Key', 'ab', 5);
+    } else if(number == 69) { // c
+    	setNoteData(noteData, 'a5Key', 'a', 5);
+    } else if(number == 70) { // f
+    	setNoteData(noteData, 'bb5Key', 'bb', 5);
+    } else if(number == 71) { // v
+    	setNoteData(noteData, 'b5Key', 'b', 5);
+    } else if(number == 72) { // b
+    	setNoteData(noteData, 'c5Key', 'c', 5);
+    } else if(number == 73) { // h
+    	setNoteData(noteData, 'db5Key', 'db', 5);
+    } else if(number == 74) { // n
+    	setNoteData(noteData, 'd5Key', 'd', 5);
+    } else if(number == 75) { // j
+    	setNoteData(noteData, 'eb5Key', 'eb', 5);
+    } else if(number == 76) { // m
+    	setNoteData(noteData, 'e5Key', 'e', 5);
+    }
+    // return note information in a 3 element array
+    // position 1: div id; position 2: note name; postition 3: octave
+    return noteData;
+}
+
 // helper function to set relevant values when key is pressed
 function setNoteData(array, id, noteName, octave) {
 	array[0] = id;
@@ -365,62 +443,15 @@ function revertColor(input) {
 function triggerColor(input) {
 	changeColor(input);
 	setTimeout(function () {    //  call a 3s setTimeout when the loop is called
-      // alert('hello');          //  your code here
-      revertColor(input);
+      revertColor(input);		//  your code here
       i++;                     //  increment the counter
       if (i < 10) {            //  if the counter < 10, call the loop function
          myLoop();             //  ..  again which will trigger another 
       }                        //  ..  setTimeout()
    }, timer)
-	// revertColor(input);
 }
 
 // tests whether element is a member of a class
 function hasClass(element, klass) {
 	return (" " + element.className + " " ).indexOf( " " + klass + " " ) > -1;
 }
-
-/*
-// ******************************************************************
-// Concept Definitions
-// ******************************************************************
-
-function playMajorChord(note, delay, sustain) {
-	for(var i = 0; i < 3; i++) {
-        MIDI.noteOn(0, note+majorTriChord[i], globalVelocity, delay);
-        MIDI.noteOff(0, note+majorTriChord[i], delay + sustain);
-    }
-}
-function palyMinorChord(note, delay, sustain) {
-	for(var i = 0; i < 3; i++) {
-        MIDI.noteOn(0, note+minorTriChord[i], globalVelocity, delay);
-        MIDI.noteOff(0, note+minorTriChord[i], delay + sustain);
-    }
-}
-function playMajorScale(note, delay, delayInc, sustain) {
-	for(var i = 0; i <= 7; i++) {
-        MIDI.noteOn(0, note+majorScale[i], globalVelocity, delay);
-        MIDI.noteOff(0, note+majorScale[i], delay + sustain);
-        delay += delayInc;	// increment beat
-    }
-    for(var i = 6; i >= 0; i--) {
-        MIDI.noteOn(0, note+majorScale[i], globalVelocity, delay);
-        MIDI.noteOff(0, note+majorScale[i], delay + sustain);
-        delay += delayInc;	// increment beat
-    }
-}
-function playMinorScale(note, delay, delayInc) {
-	for(var i = 0; i <= 7; i++) {
-        // play the note
-        MIDI.noteOn(0, note+minorScale[i], globalVelocity, delay);
-        MIDI.noteOff(0, note+minorScale[i], delay + sustain);
-        delay += delayInc;	// increment beat
-    }
-    for(var i = 6; i >= 0; i--) {
-        // play the note
-        MIDI.noteOn(0, note+minorScale[i], globalVelocity, delay);
-        MIDI.noteOff(0, note+minorScale[i], delay + sustain);
-        delay += delayInc;	// increment beat
-    }
-}
-*/
