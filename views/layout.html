@@ -21,13 +21,13 @@
 		<!-- custom scripts -->
 		<script type="text/javascript" src="../static/js/concepts.js"></script>
 	</head>
-	<body>
+	<body onload="load()">
 		<!-- container for individual keys -->
 		<div id="keyboard">
 			<!-- keyboard keys that call functions to play corresponding note when clicked --><!--
-			--><div class="key lStraightKey" id="c3Key" onclick="playSingleNote('c', 3)"></div><!--
-			--><div class="key blackKey" id="db3Key" onclick="playSingleNote('db', 3)"></div><!--
-			--><div class="key cutKey" id="d3Key" onclick="playSingleNote('d', 3)"></div><!--
+			--><div class="key lStraightKey" id="c3Key" onclick="playSingleNote('c', 3); triggerColor(this.id)"></div><!--
+			--><div class="key blackKey" id="db3Key" onclick="playSingleNote('db', 3); triggerColor(this.id)"></div><!--
+			--><div class="key cutKey" id="d3Key" onclick="playSingleNote('d', 3); triggerColor(this.id)"></div><!--
 			--><div class="key blackKey" id="eb3Key" onclick="playSingleNote('eb', 3)"></div><!--
 			--><div class="key rStraightKey" id="e3Key" onclick="playSingleNote('e', 3)"></div><!--
 			--><div class="key lStraightKey" id="f3Key" onclick="playSingleNote('f', 3)"></div><!--
@@ -48,22 +48,28 @@
 			--><div class="key blackKey" id="ab5Key" onclick="playSingleNote('ab', 5)"></div><!--
 			--><div class="key cutKey" id="a5Key" onclick="playSingleNote('a', 5)"></div><!--
 			--><div class="key blackKey" id="bb5Key" onclick="playSingleNote('bb', 5)"></div><!--
-			--><div class="key rStraightKey" id="b5Key" onclick="playSingleNote('b', 5)"></div>
+			--><div class="key rStraightKey" id="b5Key" onclick="playSingleNote('b', 5)"></div><!--
+			--><div class="key lStraightKey" id="c5Key" onclick="playSingleNote('c', 5)"></div><!--
+			--><div class="key blackKey" id="db5Key" onclick="playSingleNote('db', 5)"></div><!--
+			--><div class="key cutKey" id="d5Key" onclick="playSingleNote('d', 5)"></div><!--
+			--><div class="key blackKey" id="eb5Key" onclick="playSingleNote('eb', 5)"></div><!--
+			--><div class="key rStraightKey" id="e5Key" onclick="playSingleNote('e', 5)"></div>
+
 		</div>
 
 		<div id="keyboardKeyInputTest">
 			<form>
-				<input type="text" size="2" maxlength="1" onkeydown="keyboardTrigger(event); this.select()" />
+				<input type="text" size="2" maxlength="1" onkeydown="keyboardTrigger(event); this.select()" onkeyup="keyboardUntrigger(event); this.select()" />
 			</form>
 		</div>
 
 		<div id="options">
-			<input type="text" value="Note" onkeypress="changeNote(this.value)" size="4" id="noteValue" />
+			<input type="text" value="Note" onkeypress="changeGlobalNote(this.value)" size="4" id="noteValue" />
 			<input type="button" onclick="playNote()" value="Play Root Note"/>
-			<input type="button" onclick="playMajorS()" value="Play Major Scale"/>
-			<input type="button" onclick="playMinorS()" value="Play Minor Scale"/>
-			<input type="button" onclick="playMajorCh()" value="Play Major Chord"/>
-			<input type="button" onclick="playMinorCh()" value="Play Minor Chord"/>
+			<input type="button" onclick="playMajorScale()" value="Play Major Scale"/>
+			<input type="button" onclick="playMinorScale()" value="Play Minor Scale"/>
+			<input type="button" onclick="playMajorChord()" value="Play Major Chord"/>
+			<input type="button" onclick="playMinorChord()" value="Play Minor Chord"/>
 		</div>
 	</body>
 </html>
