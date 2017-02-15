@@ -2,16 +2,17 @@
 // Global Variables
 // ******************************************************************
 
-var note = 48; // the MIDI note (C3)
-var delay = 0; // play one note every quarter second
-var delayInc = 0.25; // space between notes
-//var sustain = 0.75; // note length
-var sustain = 3*delayInc; // note length
-var velocity = 127; // how hard the note hits
+var globalNote = 48; // the MIDI note (C3)
+var globalDelay = 0; // play one note every quarter second
+var globalDelayInc = 0.25; // space between notes
+var globalSustain = 3*globalDelayInc; // note length
+var globalVelocity = 127; // how hard the note hits
 
-//var colorMap = MIDI.Synesthesia.map(); // control piano key colors
+var highlightColor = 'b22';
+var black = 'black';
+var white = 'white';
 
-document.addEventListener("keydown",keyDownFunction, false); // allows you to press keys anywhere on the page
+var timer = 500;
 
 // scale & chord pattern arrays
 var majorScale = [
@@ -45,175 +46,152 @@ var minorTriChord = [
     7  // +7 semitones
 ];
 
+var keyAllowed = {};
+
 // ******************************************************************
 // Main Function Call
 // ******************************************************************
 
-function changeNote(val) {
-	if(val == "ab" || val == "g#") {
-		note = 44;
-	} else if(val == "a") {
-		note = 45;
-	} else if(val == "bb" || val == "a#") {
-		note = 46;
-	} else if(val == "b" || val == "cb") {
-		note = 47;
-	} else if(val == "c" || val == "b#") {
-		note = 48;
-	} else if(val == "db" || val == "c#") {
-		note = 49;
-	} else if(val == "d") {
-		note = 50;
-	} else if(val == "eb" || val == "d#") {
-		note = 51;
-	} else if(val == "e" || val == "fb") {
-		note = 52; 
-	} else if(val == "f" || val == "e#") {
-		note = 53;
-	} else if(val == "gb" || val == "f#") {
-		note = 54;
-	} else if(val == "g") {
-		note = 55;
+document.addEventListener("keydown", keyboardTrigger, false);
+
+document.addEventListener("keyup", keyboardUntrigger, false);afa
+
+// is called when html body is loaded
+function load() {
+	MIDI.loadPlugin({
+		soundfontUrl: "../static/js/",
+		instrument: "acoustic_grand_piano"
+	})
+}
+
+// change the value of the global note
+function changeGlobalNote(value) {
+	if(value == "ab" || value == "g#") {
+		globalNote = 44;
+	} else if(value == "a") {
+		globalNote = 45;
+	} else if(value == "bb" || value == "a#") {
+		globalNote = 46;
+	} else if(value == "b" || value == "cb") {
+		globalNote = 47;
+	} else if(value == "c" || value == "b#") {
+		globalNote = 48;
+	} else if(value == "db" || value == "c#") {
+		globalNote = 49;
+	} else if(value == "d") {
+		globalNote = 50;
+	} else if(value == "eb" || value == "d#") {
+		globalNote = 51;
+	} else if(value == "e" || value == "fb") {
+		globalNote = 52; 
+	} else if(value == "f" || value == "e#") {
+		globalNote = 53;
+	} else if(value == "gb" || value == "f#") {
+		globalNote = 54;
+	} else if(value == "g") {
+		globalNote = 55;
 	}
 }
-function playMajorS() {
-	var d = delay;
-	MIDI.loadPlugin({
-		soundfontUrl: "../static/js/",
-		instrument: "acoustic_grand_piano",
-		onsuccess: function() {
 
-			MIDI.setVolume(0,127);
+function playMajorScale() {
+	// local delay variable incremented to play successive notes
+	var delay = globalDelay;
+	MIDI.setVolume(0,127);
 
-			for(var i = 0; i <= 7; i++) {
-		        // play the note
-		        MIDI.noteOn(0, note+majorScale[i], velocity, d);
-		        MIDI.noteOff(0, note+majorScale[i], d + sustain);
-		        d += delayInc;	// increment delay
-		    }
-		    for(var i = 6; i >= 0; i--) {
-		        // play the note
-		        MIDI.noteOn(0, note+majorScale[i], velocity, d);
-		        MIDI.noteOff(0, note+majorScale[i], d + sustain);
-		        d += delayInc;	// increment delay
-		    }
-		}
-	});
+	for(var i = 0; i <= 7; i++) {
+        triggerNote(globalNote+majorScale[i], globalVelocity, delay, globalSustain);
+        delay += globalDelayInc;	// increment delay
+    }
+    for(var i = 6; i >= 0; i--) {
+        triggerNote(globalNote+majorScale[i], globalVelocity, delay, globalSustain);
+        delay += globalDelayInc;	// increment delay
+    }
 }
-function playMinorS() {
-	var d = delay;
-	MIDI.loadPlugin({
-		soundfontUrl: "../static/js/",
-		instrument: "acoustic_grand_piano",
-		onsuccess: function() {
 
-			MIDI.setVolume(0,127);
+function playMinorScale() {
+	// local delay variable incremented to play successive notes
+	var delay = globalDelay;
+	MIDI.setVolume(0,127);
 
-			for(var i = 0; i <= 7; i++) {
-		        // play the note
-		        MIDI.noteOn(0, note+minorScale[i], velocity, d);
-		        MIDI.noteOff(0, note+minorScale[i], d + sustain);
-		        d += delayInc;	// increment delay
-		    }
-		    for(var i = 6; i >= 0; i--) {
-		        // play the note
-		        MIDI.noteOn(0, note+minorScale[i], velocity, d);
-		        MIDI.noteOff(0, note+minorScale[i], d + sustain);
-		        d += delayInc;	// increment delay
-		    }
-		}
-	});
+	for(var i = 0; i <= 7; i++) {
+        triggerNote(globalNote+minorScale[i], globalVelocity, delay, globalSustain);
+        delay += globalDelayInc;	// increment delay
+    }
+    for(var i = 6; i >= 0; i--) {
+        triggerNote(globalNote+minorScale[i], globalVelocity, delay, globalSustain);
+        delay += globalDelayInc;	// increment delay
+    }
 }
-function playMajorCh() {
-	var d = delay;
-	MIDI.loadPlugin({
-		soundfontUrl: "../static/js/",
-		instrument: "acoustic_grand_piano",
-		onsuccess: function() {
 
-			MIDI.setVolume(0,127);
+function playMajorChord() {
+	MIDI.setVolume(0,127);
 
-			for(var i = 0; i < 3; i++) {
-		        MIDI.noteOn(0, note+majorTriChord[i], velocity, d);
-		        MIDI.noteOff(0, note+majorTriChord[i], d + sustain);
-		    }
-		}
-	});
+	for(var i = 0; i < 3; i++) {
+		triggerNote(globalNote+majorTriChord[i], globalVelocity, globalDelay, globalSustain);
+    }
 }
-function playMinorCh() {
-	var d = delay;
-	MIDI.loadPlugin({
-		soundfontUrl: "../static/js/",
-		instrument: "acoustic_grand_piano",
-		onsuccess: function() {
 
-			MIDI.setVolume(0,127);
+function playMinorChord() {
+	MIDI.setVolume(0,127);
 
-			for(var i = 0; i < 3; i++) {
-		        MIDI.noteOn(0, note+minorTriChord[i], velocity, d);
-		        MIDI.noteOff(0, note+minorTriChord[i], d + sustain);
-		    }
-		}
-	});
+	for(var i = 0; i < 3; i++) {
+		triggerNote(globalNote+minorTriChord[i], globalVelocity, globalDelay, globalSustain);
+    }
 }
+
 function playNote() {
-	var d = delay;
-	MIDI.loadPlugin({
-		soundfontUrl: "../static/js/",
-		instrument: "acoustic_grand_piano",
-		onsuccess: function() {
-
-			MIDI.setVolume(0,127);
-
-	        // MIDI.noteOn(0, note, velocity, d);
-	        // MIDI.noteOff(0, note, d + sustain);
-	        triggerNote(note, velocity, d, sustain);
-		}
-	});
-}
-function playSingleNote(val, oct) {
-	var key = checkNote(val, oct); // calls function to determine note to play
-
-	var d = delay;
-	MIDI.loadPlugin({
-		soundfontUrl: "../static/js/",
-		instrument: "acoustic_grand_piano",
-		onsuccess: function() {
-
-			MIDI.setVolume(0,127);
-
-	        // MIDI.noteOn(0, key, velocity, d);
-	        // MIDI.noteOff(0, key, d + sustain);
-	        triggerNote(key, velocity, d, sustain);
-		}
-	});
+	MIDI.setVolume(0,127);
+    triggerNote(globalNote, globalVelocity, globalDelay, globalSustain);
 }
 
-function checkNote(val, oct) {
+function playSingleNote(value, oct) {
+	var key = checkNote(value, oct); // calls function to determine note to play
+
+	var delay = globalDelay;
+	MIDI.setVolume(0,127);
+    triggerNote(key, globalVelocity, delay, globalSustain);
+}
+
+function startNote(value, oct) {
+	var key = checkNote(value, oct); // calls function to determine note to play
+
+	MIDI.setVolume(0,127);
+    MIDI.noteOn(0, key, globalVelocity, 0);
+}
+function stopNote(value, oct) {
+	var key = checkNote(value, oct); // calls function to determine note to play
+
+	MIDI.setVolume(0,127);
+    MIDI.noteOff(0, key, 0);
+}
+
+// used to change global note value variable
+// called by playSingleNote function
+function checkNote(value, oct) {
 	var noteVal;
-	if(val == "ab" || val == "g#") {
+	if(value == "ab" || value == "g#") {
 		noteVal = 44;
-	} else if(val == "a") {
+	} else if(value == "a") {
 		noteVal = 45;
-	} else if(val == "bb" || val == "a#") {
+	} else if(value == "bb" || value == "a#") {
 		noteVal = 46;
-	} else if(val == "b" || val == "cb") {
+	} else if(value == "b" || value == "cb") {
 		noteVal = 47;
-	} else if(val == "c" || val == "b#") {
+	} else if(value == "c" || value == "b#") {
 		noteVal = 48;
-	} else if(val == "db" || val == "c#") {
+	} else if(value == "db" || value == "c#") {
 		noteVal = 49;
-	} else if(val == "d") {
+	} else if(value == "d") {
 		noteVal = 50;
-	} else if(val == "eb" || val == "d#") {
+	} else if(value == "eb" || value == "d#") {
 		noteVal = 51;
-	} else if(val == "e" || val == "fb") {
+	} else if(value == "e" || value == "fb") {
 		noteVal = 52; 
-	} else if(val == "f" || val == "e#") {
+	} else if(value == "f" || value == "e#") {
 		noteVal = 53;
-	} else if(val == "gb" || val == "f#") {
+	} else if(value == "gb" || value == "f#") {
 		noteVal = 54;
-	} else if(val == "g") {
+	} else if(value == "g") {
 		noteVal = 55;
 	}
 	// check octave (3rd octave is default)
@@ -230,205 +208,203 @@ function checkNote(val, oct) {
 	return noteVal;
 }
 
-function triggerNote(n, v, d, s) {
-	// n = note value
-	// v = velocity (volume)
-	// d = delay
-	// s = sustain (note length)
-	MIDI.noteOn(0, n, v, d);
-	MIDI.noteOff(0, n, d+s);
+// used to start and stop a note
+function triggerNote(note, velocity, delay, sustain) {
+	MIDI.noteOn(0, note, velocity, delay);
+	MIDI.noteOff(0, note, delay+sustain);
 }
 
-/* only uses rows with q & a
-function keyboardTrigger(e) {
-    var unicode=e.keyCode? e.keyCode : e.charCode;
-    // alert(unicode);
-    if(unicode == 65) {
-    	playSingleNote('c', 3);
-    } else if(unicode == 87) {
-    	playSingleNote('db', 3);
-    } else if(unicode == 83) {
-    	playSingleNote('d', 3);
-    } else if(unicode == 69) {
-    	playSingleNote('eb', 3);
-    } else if(unicode == 68) {
-    	playSingleNote('e', 3);
-    } else if(unicode == 70) {
-    	playSingleNote('f', 3);
-    } else if(unicode == 84) {
-    	playSingleNote('gb', 3);
-    } else if(unicode == 71) {
-    	playSingleNote('g', 3);
-    } else if(unicode == 89) {
-    	playSingleNote('ab', 4);
-    } else if(unicode == 72) {
-    	playSingleNote('a', 4);
-    } else if(unicode == 85) {
-    	playSingleNote('bb', 4);
-    } else if(unicode == 74) {
-    	playSingleNote('b', 4);
-    } else if(unicode == 75) {
-    	playSingleNote('c', 4);
-    } 
-}
-*/
+// translate keyboard unicode into corresponding key on screen
+function idNote(input) {
+	// array for note information initialized with dummy values
+	// position 1: div id; position 2: note name; postition 3: octave
+    var noteData = ['1', '2', 3];
 
-function keyboardTrigger(e) {
-    var unicode = e.keyCode ? e.keyCode : e.charCode;
+    var unicode = input.keyCode ? input.keyCode : input.charCode;
     // alert(unicode);
     if(unicode == 81) { // q
-		document.getElementById('c3Key').style.background='blue';
-    	playSingleNote('c', 3);
+    	setNoteData(noteData, 'c3Key', 'c', 3);
     } else if(unicode == 50) { // 2
-		document.getElementById('db3Key').style.background='blue';
-    	playSingleNote('db', 3);
+    	setNoteData(noteData, 'db3Key', 'db', 3);
     } else if(unicode == 87) { // w
-		document.getElementById('d3Key').style.background='blue';
-    	playSingleNote('d', 3);
+    	setNoteData(noteData, 'd3Key', 'd', 3);
     } else if(unicode == 51) { // 3
-    	playSingleNote('eb', 3);
+    	setNoteData(noteData, 'eb3Key', 'eb', 3);
     } else if(unicode == 69) { // e
-    	playSingleNote('e', 3);
+    	setNoteData(noteData, 'e3Key', 'e', 3);
     } else if(unicode == 82) { // r
-    	playSingleNote('f', 3);
+    	setNoteData(noteData, 'f3Key', 'f', 3);
     } else if(unicode == 53) { // 5
-    	playSingleNote('gb', 3);
+    	setNoteData(noteData, 'gb3Key', 'gb', 3);
     } else if(unicode == 84) { // t
-    	playSingleNote('g', 3);
+    	setNoteData(noteData, 'g3Key', 'g', 3);
     } else if(unicode == 54) { // 6
-    	playSingleNote('ab', 4);
+    	setNoteData(noteData, 'ab4Key', 'ab', 4);
     } else if(unicode == 89) { // y
-    	playSingleNote('a', 4);
+    	setNoteData(noteData, 'a4Key', 'a', 4);
     } else if(unicode == 55) { // 7
-    	playSingleNote('bb', 4);
+    	setNoteData(noteData, 'bb4Key', 'bb', 4);
     } else if(unicode == 85) { // u
-    	playSingleNote('b', 4);
+    	setNoteData(noteData, 'b4Key', 'b', 4);
     } else if(unicode == 73) { // i
-    	playSingleNote('c', 4);
+    	setNoteData(noteData, 'c4Key', 'c', 4);
     } else if(unicode == 57) { // 9
-    	playSingleNote('db', 4);
+    	setNoteData(noteData, 'db4Key', 'db', 4);
     } else if(unicode == 79) { // o
-    	playSingleNote('d', 4);
+    	setNoteData(noteData, 'd4Key', 'd', 4);
     } else if(unicode == 48) { // 0
-    	playSingleNote('eb', 4);
+    	setNoteData(noteData, 'eb4Key', 'eb', 4);
     } else if(unicode == 80) { // p
-    	playSingleNote('e', 4);
+    	setNoteData(noteData, 'e4Key', 'e', 4);
     } else if(unicode == 90) { // z
-    	playSingleNote('f', 4);
+    	setNoteData(noteData, 'f4Key', 'f', 4);
     } else if(unicode == 83) { // s
-    	playSingleNote('gb', 4);
+    	setNoteData(noteData, 'gb4Key', 'gb', 4);
     } else if(unicode == 88) { // x
-    	playSingleNote('g', 4);
+    	setNoteData(noteData, 'g4Key', 'g', 4);
     } else if(unicode == 68) { // d
-    	playSingleNote('ab', 5)
+    	setNoteData(noteData, 'ab5Key', 'ab', 5);
     } else if(unicode == 67) { // c
-    	playSingleNote('a', 5);
+    	setNoteData(noteData, 'a5Key', 'a', 5);
     } else if(unicode == 70) { // f
-    	playSingleNote('bb', 5);
+    	setNoteData(noteData, 'bb5Key', 'bb', 5);
     } else if(unicode == 86) { // v
-    	playSingleNote('b', 5);
+    	setNoteData(noteData, 'b5Key', 'b', 5);
     } else if(unicode == 66) { // b
-    	playSingleNote('c', 5);
+    	setNoteData(noteData, 'c5Key', 'c', 5);
     } else if(unicode == 72) { // h
-    	playSingleNote('db', 5)
+    	setNoteData(noteData, 'db5Key', 'db', 5);
     } else if(unicode == 78) { // n
-    	playSingleNote('d', 5);
+    	setNoteData(noteData, 'd5Key', 'd', 5);
     } else if(unicode == 74) { // j
-    	playSingleNote('eb', 5);
+    	setNoteData(noteData, 'eb5Key', 'eb', 5);
     } else if(unicode == 77) { // m
-    	playSingleNote('e', 5);
-    }    var unicode = e.keyCode ? e.keyCode : e.charCode;
-    // alert(unicode);
-    if(unicode == 81) { // q
-		document.getElementById('c3Key').style.background='blue';
-    	playSingleNote('c', 3);
-    } else if(unicode == 50) { // 2
-		document.getElementById('db3Key').style.background='blue';
-    	playSingleNote('db', 3);
-    } else if(unicode == 87) { // w
-		document.getElementById('d3Key').style.background='blue';
-    	playSingleNote('d', 3);
-    } else if(unicode == 51) { // 3
-    	playSingleNote('eb', 3);
-    } else if(unicode == 69) { // e
-    	playSingleNote('e', 3);
-    } else if(unicode == 82) { // r
-    	playSingleNote('f', 3);
-    } else if(unicode == 53) { // 5
-    	playSingleNote('gb', 3);
-    } else if(unicode == 84) { // t
-    	playSingleNote('g', 3);
-    } else if(unicode == 54) { // 6
-    	playSingleNote('ab', 4);
-    } else if(unicode == 89) { // y
-    	playSingleNote('a', 4);
-    } else if(unicode == 55) { // 7
-    	playSingleNote('bb', 4);
-    } else if(unicode == 85) { // u
-    	playSingleNote('b', 4);
-    } else if(unicode == 73) { // i
-    	playSingleNote('c', 4);
-    } else if(unicode == 57) { // 9
-    	playSingleNote('db', 4);
-    } else if(unicode == 79) { // o
-    	playSingleNote('d', 4);
-    } else if(unicode == 48) { // 0
-    	playSingleNote('eb', 4);
-    } else if(unicode == 80) { // p
-    	playSingleNote('e', 4);
-    } else if(unicode == 90) { // z
-    	playSingleNote('f', 4);
-    } else if(unicode == 83) { // s
-    	playSingleNote('gb', 4);
-    } else if(unicode == 88) { // x
-    	playSingleNote('g', 4);
-    } else if(unicode == 68) { // d
-    	playSingleNote('ab', 5)
-    } else if(unicode == 67) { // c
-    	playSingleNote('a', 5);
-    } else if(unicode == 70) { // f
-    	playSingleNote('bb', 5);
-    } else if(unicode == 86) { // v
-    	playSingleNote('b', 5);
-    } else if(unicode == 66) { // b
-    	playSingleNote('c', 5);
-    } else if(unicode == 72) { // h
-    	playSingleNote('db', 5)
-    } else if(unicode == 78) { // n
-    	playSingleNote('d', 5);
-    } else if(unicode == 74) { // j
-    	playSingleNote('eb', 5);
-    } else if(unicode == 77) { // m
-    	playSingleNote('e', 5);
+    	setNoteData(noteData, 'e5Key', 'e', 5);
     }
+    // return note information in a 3 element array
+    // position 1: div id; position 2: note name; postition 3: octave
+    return noteData;
 }
 
+// helper function to set relevant values when key is pressed
+function setNoteData(array, id, noteName, octave) {
+	array[0] = id;
+	array[1] = noteName;
+	array[2] = octave;
+}
+
+function keyboardTrigger(input) {
+	if(keyAllowed [input.which] == false) return;
+	keyAllowed [input.which] = false;
+	var array = idNote(input); // check what keyboard key was pressed
+    if(array[0] != '1') { // checks whether keyboard input is valid
+	    changeColor(array[0]);
+	    startNote(array[1], array[2]);
+	}
+}
+
+function keyboardUntrigger(input) {
+	keyAllowed [input.which] = true;
+	var array = idNote(input); // check what keyboard key was pressed
+	if(array[0] != '1') { // checks whether keyboard input is valid
+		revertColor(array[0]);
+		stopNote(array[1], array[2]);
+	}
+}
+
+// highlight key
+// called by keyboardTrigger
+function changeColor(input) {
+	// var t = document.getElementById(input);
+	// var test = hasClass(t, 'lStraightKey');
+	// alert(test);
+	// document.getElementById(input).style.background = '#'+highlightColor;
+
+	// document.getElementById(input).className = "highlightKey lStraightKey";
+
+	if(hasClass(document.getElementById(input), 'lStraightKey')) {
+		document.getElementById(input).className = "highlightKey lStraightKey";
+		// alert('left key');
+	} else if(hasClass(document.getElementById(input), 'cutKey')) {
+		document.getElementById(input).className = "highlightKey cutKey";
+		// alert('cut key');
+	} else if(hasClass(document.getElementById(input), 'rStraightKey')) {
+		document.getElementById(input).className = "highlightKey rStraightKey";
+		// alert('right key');
+	} else if(hasClass(document.getElementById(input), 'blackKey')) {
+		document.getElementById(input).className = "key highlightBlackKey";
+		// alert('black key');
+	}
+}
+
+// change key color back to default color
+// called by keyboardUntrigger
+function revertColor(input) {
+	/*
+	if(hasClass(document.getElementById(input), 'blackKey')) {
+		document.getElementById(input).style.background = black;
+	} else {
+		document.getElementById(input).style.background = white;
+	}
+	*/
+	if(hasClass(document.getElementById(input), 'lStraightKey')) {
+		document.getElementById(input).className = "key lStraightKey";
+		// alert('left key');
+	} else if(hasClass(document.getElementById(input), 'cutKey')) {
+		document.getElementById(input).className = "key cutKey";
+		// alert('cut key');
+	} else if(hasClass(document.getElementById(input), 'rStraightKey')) {
+		document.getElementById(input).className = "key rStraightKey";
+		// alert('right key');
+	} else if(hasClass(document.getElementById(input), 'highlightBlackKey')) {
+		document.getElementById(input).className = "key blackKey";
+		// alert('black key');
+	}
+}
+
+function triggerColor(input) {
+	changeColor(input);
+	setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+      // alert('hello');          //  your code here
+      revertColor(input);
+      i++;                     //  increment the counter
+      if (i < 10) {            //  if the counter < 10, call the loop function
+         myLoop();             //  ..  again which will trigger another 
+      }                        //  ..  setTimeout()
+   }, timer)
+	// revertColor(input);
+}
+
+// tests whether element is a member of a class
+function hasClass(element, klass) {
+	return (" " + element.className + " " ).indexOf( " " + klass + " " ) > -1;
+}
+
+/*
 // ******************************************************************
 // Concept Definitions
 // ******************************************************************
 
 function playMajorChord(note, delay, sustain) {
 	for(var i = 0; i < 3; i++) {
-        MIDI.noteOn(0, note+majorTriChord[i], velocity, delay);
+        MIDI.noteOn(0, note+majorTriChord[i], globalVelocity, delay);
         MIDI.noteOff(0, note+majorTriChord[i], delay + sustain);
     }
 }
 function palyMinorChord(note, delay, sustain) {
 	for(var i = 0; i < 3; i++) {
-        MIDI.noteOn(0, note+minorTriChord[i], velocity, delay);
+        MIDI.noteOn(0, note+minorTriChord[i], globalVelocity, delay);
         MIDI.noteOff(0, note+minorTriChord[i], delay + sustain);
     }
 }
 function playMajorScale(note, delay, delayInc, sustain) {
 	for(var i = 0; i <= 7; i++) {
-        // play the note
-        MIDI.noteOn(0, note+majorScale[i], velocity, delay);
+        MIDI.noteOn(0, note+majorScale[i], globalVelocity, delay);
         MIDI.noteOff(0, note+majorScale[i], delay + sustain);
         delay += delayInc;	// increment beat
     }
     for(var i = 6; i >= 0; i--) {
-        // play the note
-        MIDI.noteOn(0, note+majorScale[i], velocity, delay);
+        MIDI.noteOn(0, note+majorScale[i], globalVelocity, delay);
         MIDI.noteOff(0, note+majorScale[i], delay + sustain);
         delay += delayInc;	// increment beat
     }
@@ -436,316 +412,15 @@ function playMajorScale(note, delay, delayInc, sustain) {
 function playMinorScale(note, delay, delayInc) {
 	for(var i = 0; i <= 7; i++) {
         // play the note
-        MIDI.noteOn(0, note+minorScale[i], velocity, delay);
+        MIDI.noteOn(0, note+minorScale[i], globalVelocity, delay);
         MIDI.noteOff(0, note+minorScale[i], delay + sustain);
         delay += delayInc;	// increment beat
     }
     for(var i = 6; i >= 0; i--) {
         // play the note
-        MIDI.noteOn(0, note+minorScale[i], velocity, delay);
+        MIDI.noteOn(0, note+minorScale[i], globalVelocity, delay);
         MIDI.noteOff(0, note+minorScale[i], delay + sustain);
         delay += delayInc;	// increment beat
     }
 }
-
-
-/* Allows users to play keyboard on page without text field */
-function keyDownFunction(e) {
-	var unicode = e.keyCode ? e.keyCode : e.charCode;
-
-	// alert(unicode);
-	if (unicode == 81) { // q
-		var element = document.getElementById('c3Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		//document.getElementById('c3Key').style.background = 'blue';
-		playSingleNote('c', 3);
-	} else if (unicode == 50) { // 2
-		var element = document.getElementById('db3Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		//document.getElementById('db3Key').style.background = 'blue';
-		playSingleNote('db', 3);
-	} else if (unicode == 87) { // w
-		var element = document.getElementById('d3Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		//document.getElementById('d3Key').style.background = 'blue';
-		playSingleNote('d', 3);
-	} else if (unicode == 51) { // 3
-		var element = document.getElementById('eb3Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('eb', 3);
-	} else if (unicode == 69) { // e
-		var element = document.getElementById('e3Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('e', 3);
-	} else if (unicode == 82) { // r
-		var element = document.getElementById('f3Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('f', 3);
-	} else if (unicode == 53) { // 5
-		var element = document.getElementById('gb3Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('gb', 3);
-	} else if (unicode == 84) { // t
-		var element = document.getElementById('g3Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('g', 3);
-	} else if (unicode == 54) { // 6
-		var element = document.getElementById('ab4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('ab', 4);
-	} else if (unicode == 89) { // y
-		var element = document.getElementById('a4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('a', 4);
-	} else if (unicode == 55) { // 7
-		var element = document.getElementById('bb4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('bb', 4);
-	} else if (unicode == 85) { // u
-		var element = document.getElementById('b4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('b', 4);
-	} else if (unicode == 73) { // i
-		var element = document.getElementById('c4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('c', 4);
-	} else if (unicode == 57) { // 9
-		var element = document.getElementById('db4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('db', 4);
-	} else if (unicode == 79) { // o
-		var element = document.getElementById('d4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('d', 4);
-	} else if (unicode == 48) { // 0
-		var element = document.getElementById('eb4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('eb', 4);
-	} else if (unicode == 80) { // p
-		var element = document.getElementById('e4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('e', 4);
-	} else if (unicode == 90) { // z
-		var element = document.getElementById('f4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('f', 4);
-	} else if (unicode == 83) { // s
-		var element = document.getElementById('gb4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('gb', 4);
-	} else if (unicode == 88) { // x
-		var element = document.getElementById('g4Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('g', 4);
-	} else if (unicode == 68) { // d
-		var element = document.getElementById('ab5Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('ab', 5)
-	} else if (unicode == 67) { // c
-		var element = document.getElementById('a5Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('a', 5);
-	} else if (unicode == 70) { // f
-		var element = document.getElementById('bb5Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('bb', 5);
-	} else if (unicode == 86) { // v
-		var element = document.getElementById('b5Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('b', 5);
-	} else if (unicode == 66) { // b
-		var element = document.getElementById('c5Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('c', 5);
-	} else if (unicode == 72) { // h
-		var element = document.getElementById('db5Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('db', 5)
-	} else if (unicode == 78) { // n
-		var element = document.getElementById('d5Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('d', 5);
-	} else if (unicode == 74) { // j
-		var element = document.getElementById('eb5Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('eb', 5);
-	} else if (unicode == 77) { // m
-		var element = document.getElementById('e5Key');
-		if (element){
-			document.addEventListener("keyup", function onKeyUp(){
-				document.removeEventListener("keyup", onKeyUp);
-				element.style.background = '';
-			}, false);
-			element.style.background='blue';
-		}
-		playSingleNote('e', 5);
-	}
-}
+*/
