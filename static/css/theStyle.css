@@ -7,6 +7,7 @@
     --naturalKeyColor: white;
     --blackKeyColor: black;
     --borderColor: black;
+    --highlightColor: #b22;
 
     /* dimensions */
 
@@ -23,7 +24,7 @@
 
     --borderThickness: 2px;
 
-    --numberOfKeys: 14;
+    --numberOfKeys: 17;
 
     --minDepth: 5;
 }
@@ -48,12 +49,29 @@ html, body {
     background: var(--naturalKeyColor);
 }
 
+.highlightKey {
+    background: var(--highlightColor);
+}
+.highlightKey:after {
+    background: var(--highlightColor);
+}
+
 .blackKey {
     background: var(--blackKeyColor);
     display: inline-block;
     width: var(--blackKeyWidth);
     height: var(--blackKeyHeight);
     /*position: relative;*/
+    z-index: var(--minDepth); /* place above other keys */
+}
+
+.highlightBlackKey {
+    background: var(--highlightColor);
+    display: inline-block;
+    width: var(--blackKeyWidth);
+    height: var(--blackKeyHeight);
+    /*position: relative;*/
+    box-shadow: inset 4px 4px 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);
     z-index: var(--minDepth); /* place above other keys */
 }
 
