@@ -144,11 +144,6 @@ html, body {
     margin: auto;
 }
 
-#keyboardKeyInputTest {
-    width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));
-    margin: auto;
-}
-
 #options {
     width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));
     margin: auto;
