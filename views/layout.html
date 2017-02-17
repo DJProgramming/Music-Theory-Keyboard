@@ -56,13 +56,36 @@
 			--><div class="key rStraightKey" id="e5Key" onclick="playSingleNote('e', 5); triggerColor(this.id)"></div>
 
 		</div>
-		<div id="options">
-			<input type="text" value="Note" onkeypress="changeGlobalNote(this.value)" size="4" id="noteValue" />
+		<div id="noteSelection">
+			<input type="button" onclick="changeGlobalNote('c')" value="c"/>
+			<input type="button" onclick="changeGlobalNote('db')" value="db"/>
+			<input type="button" onclick="changeGlobalNote('d')" value="d"/>
+			<input type="button" onclick="changeGlobalNote('eb')" value="eb"/>
+			<input type="button" onclick="changeGlobalNote('e')" value="e"/>
+			<input type="button" onclick="changeGlobalNote('f')" value="f"/>
+			<input type="button" onclick="changeGlobalNote('gb')" value="gb"/>
+			<input type="button" onclick="changeGlobalNote('g')" value="g"/>
+			<input type="button" onclick="changeGlobalNote('ab')" value="ab"/>
+			<input type="button" onclick="changeGlobalNote('a')" value="a"/>
+			<input type="button" onclick="changeGlobalNote('bb')" value="bb"/>
+		</div>
+		<!-- <br/> -->
+		<div id="tempoSelection">
+			<input type="button" onclick="setTempo(100)" value="100"/>
+			<input type="button" onclick="setTempo(120)" value="120"/>
+			<input type="button" onclick="setTempo(140)" value="140"/>
+			<input type="button" onclick="setTempo(160)" value="160"/>
+		</div>
+		<div id="conceptOptions">
 			<input type="button" onclick="playNote()" value="Play Root Note"/>
 			<input type="button" onclick="playMajorScale()" value="Play Major Scale"/>
 			<input type="button" onclick="playMinorScale()" value="Play Minor Scale"/>
 			<input type="button" onclick="playMajorChord()" value="Play Major Chord"/>
 			<input type="button" onclick="playMinorChord()" value="Play Minor Chord"/>
+		</div>
+		<div id="highlightOptions">
+			<input type="button" onclick="highlightMajorScale()" value="Highlight Major Scale"/>
+			<input type="button" onclick="highlightMinorScale()" value="Highlight Minor Scale"/>
 		</div>
 	</body>
 </html>
