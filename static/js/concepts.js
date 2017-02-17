@@ -2,6 +2,7 @@
 // Global Variables
 // ******************************************************************
 
+var globalTempo;
 var globalNote = 48; // the MIDI note (C3)
 var globalDelay = 0; // play one note every quarter second
 var globalDelayInc = 0.25; // space between notes
@@ -12,7 +13,9 @@ var highlightColor = 'b22';
 var black = 'black';
 var white = 'white';
 
-var timer = 300;
+// var timeScaler = 0.5;
+// var timer = 500;
+var minute = 60000;
 
 // scale & chord pattern arrays
 var majorScale = [
@@ -35,6 +38,23 @@ var minorScale = [
     10, // whole
     12  // whole
 ];
+var scaleProgression = [
+	0,
+	1,
+	2,
+	3,
+	4,
+	5,
+	6,
+	7,
+	6,
+	5,
+	4,
+	3,
+	2,
+	1,
+	0
+];
 var majorTriChord = [
     0, // +0 semitones
     4, // +4 semitones
@@ -47,16 +67,19 @@ var minorTriChord = [
 ];
 
 var divInfo = {};
+var keyAllowed = {};	// holds the state of all keys being used
 
-var keyAllowed = {};
+var majorScaleHighlight = false;
+var minorScaleHighlight = false;
+var chordHighlight = false;
 
 // ******************************************************************
-// Main Function Call
+// Functions
 // ******************************************************************
 
 document.addEventListener("keydown", keyboardTrigger, false);
 
-document.addEventListener("keyup", keyboardUntrigger, false);afa
+document.addEventListener("keyup", keyboardUntrigger, false);
 
 // is called when html body is loaded
 function load() {
@@ -64,18 +87,31 @@ function load() {
 		soundfontUrl: "../static/js/",
 		instrument: "acoustic_grand_piano"
 	})
+	setTempo(120);
+}
+
+function setTempo(tempo) {
+	globalTempo = minute/(2*tempo);
 }
 
 // change the value of the global note
 function changeGlobalNote(value) {
+	if(majorScaleHighlight) {			// if major scale is hightlighted
+		highlightMajorScale();			// unhighlight current major scale
+		majorScaleHighlight = true;		// set flag to highlight new major scale
+	} else if(minorScaleHighlight) {	// if minor scale is highlighted
+		highlightMinorScale();			// unhighlight current minor scale
+		minorScaleHighlight = true;		// set flag to highlight new minor scale
+	}
+	// check which key was selected
 	if(value == "ab" || value == "g#") {
-		globalNote = 44;
+		globalNote = 44+12;
 	} else if(value == "a") {
-		globalNote = 45;
+		globalNote = 45+12;
 	} else if(value == "bb" || value == "a#") {
-		globalNote = 46;
+		globalNote = 46+12;
 	} else if(value == "b" || value == "cb") {
-		globalNote = 47;
+		globalNote = 47+12;
 	} else if(value == "c" || value == "b#") {
 		globalNote = 48;
 	} else if(value == "db" || value == "c#") {
@@ -93,36 +129,133 @@ function changeGlobalNote(value) {
 	} else if(value == "g") {
 		globalNote = 55;
 	}
+	if(majorScaleHighlight) {			// if major scale highlight flag is set
+		majorScaleHighlight = false;	// set major scale highlight flag to false to prime highlighting new scale
+		highlightMajorScale();			// highlight new major scale
+	} else if(minorScaleHighlight) {	// if minor scale highlight flag is set
+		minorScaleHighlight = false;	// set minor scale highlight flag to false to prime highlighting new scale
+		highlightMinorScale();			// highlight new minor scale
+	}
 }
 
+function highlightMajorScale() {
+	if(minorScaleHighlight) {
+		highlightMinorScale();
+	}
+	if(!majorScaleHighlight) {
+		majorScaleHighlight = true;
+		for(var i = 0; i <= 7; i++) {
+	        divInfo = getDivInfo(globalNote+majorScale[i]);
+	        changeColor(divInfo[0]);
+	    }
+	} else {
+		minorScaleHighlight = false;
+		majorScaleHighlight = false;
+		for(var i = 0; i <= 7; i++) {
+	        divInfo = getDivInfo(globalNote+majorScale[i]);
+	        revertColor(divInfo[0]);
+	    }
+	}
+}
+
+function highlightMinorScale() {
+	if(majorScaleHighlight) {
+		highlightMajorScale();
+	}
+	if(!minorScaleHighlight) {
+		minorScaleHighlight = true;
+		for(var i = 0; i <= 7; i++) {
+	        divInfo = getDivInfo(globalNote+minorScale[i]);
+	        changeColor(divInfo[0]);
+	    }
+	} else {
+		minorScaleHighlight = false;
+		majorScaleHighlight = false;
+		for(var i = 0; i <= 7; i++) {
+	        divInfo = getDivInfo(globalNote+minorScale[i]);
+	        revertColor(divInfo[0]);
+	    }
+	}
+}
+
+/*
 function playMajorScale() {
-	// local delay variable incremented to play successive notes
-	var delay = globalDelay;
 	MIDI.setVolume(0,127);
 
+	var index = 0;
+	var notesInScale = {};
+	var scaleColoring = {};
+
 	for(var i = 0; i <= 7; i++) {
-        triggerNote(globalNote+majorScale[i], globalVelocity, delay, globalSustain);
-        delay += globalDelayInc;	// increment delay
+        divInfo = getDivInfo(globalNote+majorScale[i]);
+        scaleColoring[i] = divInfo[0];
+        notesInScale[i] = globalNote+majorScale[i];
     }
     for(var i = 6; i >= 0; i--) {
-        triggerNote(globalNote+majorScale[i], globalVelocity, delay, globalSustain);
-        delay += globalDelayInc;	// increment delay
+        divInfo = getDivInfo(globalNote+majorScale[i]);
+        scaleColoring[14-i] = divInfo[0];
+        notesInScale[14-i] = globalNote+majorScale[i];
     }
+    noteProgression(index, notesInScale);
+    keyColoring(index, scaleColoring);
+}
+*/
+
+function playMajorScale() {
+	MIDI.setVolume(0,127);
+
+	var index = 0;
+	var notesInScale = {};
+	var scaleColoring = {};
+
+	for(var i = 0; i < scaleProgression.length; i++) {
+        divInfo = getDivInfo(globalNote+majorScale[scaleProgression[i]]);
+        scaleColoring[i] = divInfo[0];
+        notesInScale[i] = globalNote+majorScale[scaleProgression[i]];
+    }
+    noteProgression(index, notesInScale);
+    keyColoring(index, scaleColoring);
 }
 
 function playMinorScale() {
-	// local delay variable incremented to play successive notes
-	var delay = globalDelay;
 	MIDI.setVolume(0,127);
 
+	var index = 0;
+	var notesInScale = {};
+	var scaleColoring = {};
+
 	for(var i = 0; i <= 7; i++) {
-        triggerNote(globalNote+minorScale[i], globalVelocity, delay, globalSustain);
-        delay += globalDelayInc;	// increment delay
+        divInfo = getDivInfo(globalNote+minorScale[i]);
+        scaleColoring[i] = divInfo[0];
+        notesInScale[i] = globalNote+minorScale[i];
     }
     for(var i = 6; i >= 0; i--) {
-        triggerNote(globalNote+minorScale[i], globalVelocity, delay, globalSustain);
-        delay += globalDelayInc;	// increment delay
+        divInfo = getDivInfo(globalNote+minorScale[i]);
+        scaleColoring[14-i] = divInfo[0];
+        notesInScale[14-i] = globalNote+minorScale[i];
     }
+    noteProgression(index, notesInScale);
+    keyColoring(index, scaleColoring);
+}
+
+function keyColoring(count, input) {
+	triggerColor(input[count]);
+	setTimeout(function () {
+		count++;
+		if(count <= 14) {
+			keyColoring(count, input);
+		}
+	}, globalTempo); //timer*timeScaler);
+}
+
+function noteProgression(count, input) {
+	triggerNote(input[count], globalVelocity, globalDelay, globalSustain);
+	setTimeout(function () {
+		count++;
+		if(count <= 14) {
+			noteProgression(count, input);
+		}
+	}, globalTempo); //timer*timeScaler); //timer*timeScaler);
 }
 
 function playMajorChord() {
@@ -130,7 +263,7 @@ function playMajorChord() {
 
 	for(var i = 0; i < 3; i++) {
 		triggerNote(globalNote+majorTriChord[i], globalVelocity, globalDelay, globalSustain);
-		divInfo = detectDivId(globalNote+majorTriChord[i]);
+		divInfo = getDivInfo(globalNote+majorTriChord[i]);
 		triggerColor(divInfo[0]);
     }
 }
@@ -140,7 +273,7 @@ function playMinorChord() {
 
 	for(var i = 0; i < 3; i++) {
 		triggerNote(globalNote+minorTriChord[i], globalVelocity, globalDelay, globalSustain);
-		divInfo = detectDivId(globalNote+minorTriChord[i]);
+		divInfo = getDivInfo(globalNote+minorTriChord[i]);
 		triggerColor(divInfo[0]);
     }
 }
@@ -148,26 +281,26 @@ function playMinorChord() {
 function playNote() {
 	MIDI.setVolume(0,127);
     triggerNote(globalNote, globalVelocity, globalDelay, globalSustain);
-    divInfo = detectDivId(globalNote);
+    divInfo = getDivInfo(globalNote);
 	triggerColor(divInfo[0]);
 }
 
-function playSingleNote(value, oct) {
-	var key = checkNote(value, oct); // calls function to determine note to play
+function playSingleNote(value, octave) {
+	var key = checkNote(value, octave); // calls function to determine note to play
 
 	var delay = globalDelay;
 	MIDI.setVolume(0,127);
     triggerNote(key, globalVelocity, delay, globalSustain);
 }
 
-function startNote(value, oct) {
-	var key = checkNote(value, oct); // calls function to determine note to play
+function startNote(value, octave) {
+	var key = checkNote(value, octave); // calls function to determine note to play
 
 	MIDI.setVolume(0,127);
     MIDI.noteOn(0, key, globalVelocity, 0);
 }
-function stopNote(value, oct) {
-	var key = checkNote(value, oct); // calls function to determine note to play
+function stopNote(value, octave) {
+	var key = checkNote(value, octave); // calls function to determine note to play
 
 	MIDI.setVolume(0,127);
     MIDI.noteOff(0, key, 0);
@@ -175,7 +308,7 @@ function stopNote(value, oct) {
 
 // used to change global note value variable
 // called by playSingleNote function
-function checkNote(value, oct) {
+function checkNote(value, octave) {
 	var noteVal;
 	if(value == "ab" || value == "g#") {
 		noteVal = 44;
@@ -203,13 +336,13 @@ function checkNote(value, oct) {
 		noteVal = 55;
 	}
 	// check octave (3rd octave is default)
-	if(oct == 2) {
+	if(octave == 2) {
 		noteVal -= 12;
-	} else if(oct == 4) {
+	} else if(octave == 4) {
 		noteVal += 12;
-	} else if(oct == 5) {
+	} else if(octave == 5) {
 		noteVal += 24;
-	} else if(oct == 6) {
+	} else if(octave == 6) {
 		noteVal += 36;
 	}
 
@@ -294,12 +427,11 @@ function idNote(input) {
     return noteData;
 }
 
-function detectDivId(number) {
+function getDivInfo(number) {
 	// array for note information initialized with dummy values
 	// position 1: div id; position 2: note name; postition 3: octave
     var noteData = ['1', '2', 3];
 
-    // alert(unicode);
     if(number == 48) { // q
     	setNoteData(noteData, 'c3Key', 'c', 3);
     } else if(number == 49) { // 2
@@ -372,10 +504,10 @@ function setNoteData(array, id, noteName, octave) {
 }
 
 function keyboardTrigger(input) {
-	if(keyAllowed [input.which] == false) return;
+	if(keyAllowed [input.which] == false) return;	// check if key is being held down
 	keyAllowed [input.which] = false;
-	var array = idNote(input); // check what keyboard key was pressed
-    if(array[0] != '1') { // checks whether keyboard input is valid
+	var array = idNote(input);	// check what keyboard key was pressed
+    if(array[0] != '1') {	// checks whether keyboard input is valid
 	    changeColor(array[0]);
 	    startNote(array[1], array[2]);
 	}
@@ -383,8 +515,8 @@ function keyboardTrigger(input) {
 
 function keyboardUntrigger(input) {
 	keyAllowed [input.which] = true;
-	var array = idNote(input); // check what keyboard key was pressed
-	if(array[0] != '1') { // checks whether keyboard input is valid
+	var array = idNote(input);	// check what keyboard key was pressed
+	if(array[0] != '1') {	// checks whether keyboard input is valid
 		revertColor(array[0]);
 		stopNote(array[1], array[2]);
 	}
@@ -393,13 +525,6 @@ function keyboardUntrigger(input) {
 // highlight key
 // called by keyboardTrigger
 function changeColor(input) {
-	// var t = document.getElementById(input);
-	// var test = hasClass(t, 'lStraightKey');
-	// alert(test);
-	// document.getElementById(input).style.background = '#'+highlightColor;
-
-	// document.getElementById(input).className = "highlightKey lStraightKey";
-
 	if(hasClass(document.getElementById(input), 'lStraightKey')) {
 		document.getElementById(input).className = "highlightKey lStraightKey";
 		// alert('left key');
@@ -418,13 +543,6 @@ function changeColor(input) {
 // change key color back to default color
 // called by keyboardUntrigger
 function revertColor(input) {
-	/*
-	if(hasClass(document.getElementById(input), 'blackKey')) {
-		document.getElementById(input).style.background = black;
-	} else {
-		document.getElementById(input).style.background = white;
-	}
-	*/
 	if(hasClass(document.getElementById(input), 'lStraightKey')) {
 		document.getElementById(input).className = "key lStraightKey";
 		// alert('left key');
@@ -442,13 +560,9 @@ function revertColor(input) {
 
 function triggerColor(input) {
 	changeColor(input);
-	setTimeout(function () {    //  call a 3s setTimeout when the loop is called
-      revertColor(input);		//  your code here
-      i++;                     //  increment the counter
-      if (i < 10) {            //  if the counter < 10, call the loop function
-         myLoop();             //  ..  again which will trigger another 
-      }                        //  ..  setTimeout()
-   }, timer)
+	setTimeout(function () {
+      	revertColor(input);		//  your code here
+   	}, globalTempo);
 }
 
 // tests whether element is a member of a class
