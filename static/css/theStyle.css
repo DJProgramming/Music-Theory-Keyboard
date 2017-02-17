@@ -8,6 +8,7 @@
     --blackKeyColor: black;
     --borderColor: black;
     --highlightColor: #b22;
+    --selectColor: blue;
 
     /* dimensions */
 
@@ -38,6 +39,11 @@ html, body {
     margin: 0; /* no white space around keyboard */
 }
 
+div {
+    width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));
+    margin: auto;
+}
+
 /*********************************************/
 /* Classes */
 /*********************************************/
@@ -56,6 +62,13 @@ html, body {
     background: var(--highlightColor);
 }
 
+.selectKey {
+    background: var(--selectColor);
+}
+.selectKey:after {
+    background: var(--selectColor);
+}
+
 .blackKey {
     background: var(--blackKeyColor);
     display: inline-block;
@@ -67,6 +80,16 @@ html, body {
 
 .highlightBlackKey {
     background: var(--highlightColor);
+    display: inline-block;
+    width: var(--blackKeyWidth);
+    height: var(--blackKeyHeight);
+    /*position: relative;*/
+    box-shadow: inset 4px 4px 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);
+    z-index: var(--minDepth); /* place above other keys */
+}
+
+.selectBlackKey {
+    background: var(--selectColor);
     display: inline-block;
     width: var(--blackKeyWidth);
     height: var(--blackKeyHeight);
@@ -139,12 +162,21 @@ html, body {
 /*********************************************/
 
 #keyboard {
-    width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));
+    /*width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));*/
     min-height: var(--whiteKeyHeight);
-    margin: auto;
+    /*margin: auto;*/
 }
 
-#options {
-    width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));
-    margin: auto;
+#noteSelection {
+    /*width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));*/
+    /*margin: auto;*/
+}
+
+#tempoSelection {
+}
+
+#conceptOptions {
+}
+
+#highlightOptions {
 }
