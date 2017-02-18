@@ -85,10 +85,17 @@ document.addEventListener("keyup", keyboardUntrigger, false);
 function load() {
 	MIDI.loadPlugin({
 		soundfontUrl: "../static/js/",
-		instrument: "acoustic_grand_piano"
+		instrument: "acoustic_grand_piano",
+		onsuccess: function() {
+			MIDI.setVolume(0,127);
+		}
 	})
-	setTempo(120);
+	setTempo(120);	// set default tempo to 120 bpm
 }
+
+// ------------------------------------------------------------------
+// Change global parameters
+// ------------------------------------------------------------------
 
 function setTempo(tempo) {
 	globalTempo = minute/(2*tempo);
@@ -178,32 +185,11 @@ function highlightMinorScale() {
 	}
 }
 
-/*
-function playMajorScale() {
-	MIDI.setVolume(0,127);
-
-	var index = 0;
-	var notesInScale = {};
-	var scaleColoring = {};
-
-	for(var i = 0; i <= 7; i++) {
-        divInfo = getDivInfo(globalNote+majorScale[i]);
-        scaleColoring[i] = divInfo[0];
-        notesInScale[i] = globalNote+majorScale[i];
-    }
-    for(var i = 6; i >= 0; i--) {
-        divInfo = getDivInfo(globalNote+majorScale[i]);
-        scaleColoring[14-i] = divInfo[0];
-        notesInScale[14-i] = globalNote+majorScale[i];
-    }
-    noteProgression(index, notesInScale);
-    keyColoring(index, scaleColoring);
-}
-*/
+// ------------------------------------------------------------------
+// Audio Functions
+// ------------------------------------------------------------------
 
 function playMajorScale() {
-	MIDI.setVolume(0,127);
-
 	var index = 0;
 	var notesInScale = {};
 	var scaleColoring = {};
@@ -218,49 +204,20 @@ function playMajorScale() {
 }
 
 function playMinorScale() {
-	MIDI.setVolume(0,127);
-
 	var index = 0;
 	var notesInScale = {};
 	var scaleColoring = {};
 
-	for(var i = 0; i <= 7; i++) {
-        divInfo = getDivInfo(globalNote+minorScale[i]);
+	for(var i = 0; i < scaleProgression.length; i++) {
+        divInfo = getDivInfo(globalNote+minorScale[scaleProgression[i]]);
         scaleColoring[i] = divInfo[0];
-        notesInScale[i] = globalNote+minorScale[i];
-    }
-    for(var i = 6; i >= 0; i--) {
-        divInfo = getDivInfo(globalNote+minorScale[i]);
-        scaleColoring[14-i] = divInfo[0];
-        notesInScale[14-i] = globalNote+minorScale[i];
+        notesInScale[i] = globalNote+minorScale[scaleProgression[i]];
     }
     noteProgression(index, notesInScale);
     keyColoring(index, scaleColoring);
 }
 
-function keyColoring(count, input) {
-	triggerColor(input[count]);
-	setTimeout(function () {
-		count++;
-		if(count <= 14) {
-			keyColoring(count, input);
-		}
-	}, globalTempo); //timer*timeScaler);
-}
-
-function noteProgression(count, input) {
-	triggerNote(input[count], globalVelocity, globalDelay, globalSustain);
-	setTimeout(function () {
-		count++;
-		if(count <= 14) {
-			noteProgression(count, input);
-		}
-	}, globalTempo); //timer*timeScaler); //timer*timeScaler);
-}
-
 function playMajorChord() {
-	MIDI.setVolume(0,127);
-
 	for(var i = 0; i < 3; i++) {
 		triggerNote(globalNote+majorTriChord[i], globalVelocity, globalDelay, globalSustain);
 		divInfo = getDivInfo(globalNote+majorTriChord[i]);
@@ -269,8 +226,6 @@ function playMajorChord() {
 }
 
 function playMinorChord() {
-	MIDI.setVolume(0,127);
-
 	for(var i = 0; i < 3; i++) {
 		triggerNote(globalNote+minorTriChord[i], globalVelocity, globalDelay, globalSustain);
 		divInfo = getDivInfo(globalNote+minorTriChord[i]);
@@ -279,7 +234,6 @@ function playMinorChord() {
 }
 
 function playNote() {
-	MIDI.setVolume(0,127);
     triggerNote(globalNote, globalVelocity, globalDelay, globalSustain);
     divInfo = getDivInfo(globalNote);
 	triggerColor(divInfo[0]);
@@ -289,22 +243,28 @@ function playSingleNote(value, octave) {
 	var key = checkNote(value, octave); // calls function to determine note to play
 
 	var delay = globalDelay;
-	MIDI.setVolume(0,127);
     triggerNote(key, globalVelocity, delay, globalSustain);
 }
 
 function startNote(value, octave) {
 	var key = checkNote(value, octave); // calls function to determine note to play
-
-	MIDI.setVolume(0,127);
     MIDI.noteOn(0, key, globalVelocity, 0);
 }
+
 function stopNote(value, octave) {
 	var key = checkNote(value, octave); // calls function to determine note to play
-
-	MIDI.setVolume(0,127);
     MIDI.noteOff(0, key, 0);
 }
+
+// used to start and stop a note
+function triggerNote(note, velocity, delay, sustain) {
+	MIDI.noteOn(0, note, velocity, delay);
+	MIDI.noteOff(0, note, delay+sustain);
+}
+
+// ------------------------------------------------------------------
+// Information Functions
+// ------------------------------------------------------------------
 
 // used to change global note value variable
 // called by playSingleNote function
@@ -347,12 +307,6 @@ function checkNote(value, octave) {
 	}
 
 	return noteVal;
-}
-
-// used to start and stop a note
-function triggerNote(note, velocity, delay, sustain) {
-	MIDI.noteOn(0, note, velocity, delay);
-	MIDI.noteOff(0, note, delay+sustain);
 }
 
 // translate keyboard unicode into corresponding key on screen
@@ -503,6 +457,11 @@ function setNoteData(array, id, noteName, octave) {
 	array[2] = octave;
 }
 
+// tests whether element is a member of a class
+function hasClass(element, klass) {
+	return (" " + element.className + " " ).indexOf( " " + klass + " " ) > -1;
+}
+
 function keyboardTrigger(input) {
 	if(keyAllowed [input.which] == false) return;	// check if key is being held down
 	keyAllowed [input.which] = false;
@@ -521,6 +480,8 @@ function keyboardUntrigger(input) {
 		stopNote(array[1], array[2]);
 	}
 }
+
+
 
 // highlight key
 // called by keyboardTrigger
@@ -558,6 +519,10 @@ function revertColor(input) {
 	}
 }
 
+// ------------------------------------------------------------------
+// Timing Functions
+// ------------------------------------------------------------------
+
 function triggerColor(input) {
 	changeColor(input);
 	setTimeout(function () {
@@ -565,7 +530,22 @@ function triggerColor(input) {
    	}, globalTempo);
 }
 
-// tests whether element is a member of a class
-function hasClass(element, klass) {
-	return (" " + element.className + " " ).indexOf( " " + klass + " " ) > -1;
+function keyColoring(count, input) {
+	triggerColor(input[count]);
+	setTimeout(function () {
+		count++;
+		if(count <= 14) {
+			keyColoring(count, input);
+		}
+	}, globalTempo); //timer*timeScaler);
+}
+
+function noteProgression(count, input) {
+	triggerNote(input[count], globalVelocity, globalDelay, globalSustain);
+	setTimeout(function () {
+		count++;
+		if(count <= 14) {
+			noteProgression(count, input);
+		}
+	}, globalTempo); //timer*timeScaler); //timer*timeScaler);
 }
