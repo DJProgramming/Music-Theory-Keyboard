@@ -16,6 +16,7 @@ var white = 'white';
 // var timeScaler = 0.5;
 // var timer = 500;
 var minute = 60000;
+var scaleLength = 15;
 
 // scale & chord pattern arrays
 var majorScale = [
@@ -39,21 +40,7 @@ var minorScale = [
     12  // whole
 ];
 var scaleProgression = [
-	0,
-	1,
-	2,
-	3,
-	4,
-	5,
-	6,
-	7,
-	6,
-	5,
-	4,
-	3,
-	2,
-	1,
-	0
+	0,1,2,3,4,5,6,7,6,5,4,3,2,1,0	// index of each note to play in scale array
 ];
 var majorTriChord = [
     0, // +0 semitones
@@ -145,46 +132,6 @@ function changeGlobalNote(value) {
 	}
 }
 
-function highlightMajorScale() {
-	if(minorScaleHighlight) {
-		highlightMinorScale();
-	}
-	if(!majorScaleHighlight) {
-		majorScaleHighlight = true;
-		for(var i = 0; i <= 7; i++) {
-	        divInfo = getDivInfo(globalNote+majorScale[i]);
-	        changeColor(divInfo[0]);
-	    }
-	} else {
-		minorScaleHighlight = false;
-		majorScaleHighlight = false;
-		for(var i = 0; i <= 7; i++) {
-	        divInfo = getDivInfo(globalNote+majorScale[i]);
-	        revertColor(divInfo[0]);
-	    }
-	}
-}
-
-function highlightMinorScale() {
-	if(majorScaleHighlight) {
-		highlightMajorScale();
-	}
-	if(!minorScaleHighlight) {
-		minorScaleHighlight = true;
-		for(var i = 0; i <= 7; i++) {
-	        divInfo = getDivInfo(globalNote+minorScale[i]);
-	        changeColor(divInfo[0]);
-	    }
-	} else {
-		minorScaleHighlight = false;
-		majorScaleHighlight = false;
-		for(var i = 0; i <= 7; i++) {
-	        divInfo = getDivInfo(globalNote+minorScale[i]);
-	        revertColor(divInfo[0]);
-	    }
-	}
-}
-
 // ------------------------------------------------------------------
 // Audio Functions
 // ------------------------------------------------------------------
@@ -192,29 +139,29 @@ function highlightMinorScale() {
 function playMajorScale() {
 	var index = 0;
 	var notesInScale = {};
-	var scaleColoring = {};
+	var keysToColor = {};
 
 	for(var i = 0; i < scaleProgression.length; i++) {
         divInfo = getDivInfo(globalNote+majorScale[scaleProgression[i]]);
-        scaleColoring[i] = divInfo[0];
+        keysToColor[i] = divInfo[0];
         notesInScale[i] = globalNote+majorScale[scaleProgression[i]];
     }
     noteProgression(index, notesInScale);
-    keyColoring(index, scaleColoring);
+    scaleKeyColoring(index, keysToColor);
 }
 
 function playMinorScale() {
 	var index = 0;
 	var notesInScale = {};
-	var scaleColoring = {};
+	var keysToColor = {};
 
 	for(var i = 0; i < scaleProgression.length; i++) {
         divInfo = getDivInfo(globalNote+minorScale[scaleProgression[i]]);
-        scaleColoring[i] = divInfo[0];
+        keysToColor[i] = divInfo[0];
         notesInScale[i] = globalNote+minorScale[scaleProgression[i]];
     }
     noteProgression(index, notesInScale);
-    keyColoring(index, scaleColoring);
+    scaleKeyColoring(index, keysToColor);
 }
 
 function playMajorChord() {
@@ -462,6 +409,10 @@ function hasClass(element, klass) {
 	return (" " + element.className + " " ).indexOf( " " + klass + " " ) > -1;
 }
 
+// ------------------------------------------------------------------
+// User Keyboard Input Functions
+// ------------------------------------------------------------------
+
 function keyboardTrigger(input) {
 	if(keyAllowed [input.which] == false) return;	// check if key is being held down
 	keyAllowed [input.which] = false;
@@ -481,10 +432,53 @@ function keyboardUntrigger(input) {
 	}
 }
 
+// ------------------------------------------------------------------
+// Color Functions
+// ------------------------------------------------------------------
 
+function highlightMajorScale() {
+	if(minorScaleHighlight) {
+		highlightMinorScale();
+	}
+	if(!majorScaleHighlight) {
+		majorScaleHighlight = true;
+		for(var i = 0; i <= 7; i++) {
+	        divInfo = getDivInfo(globalNote+majorScale[i]);
+	        changeColor(divInfo[0]);
+	    }
+	} else {
+		minorScaleHighlight = false;
+		majorScaleHighlight = false;
+		for(var i = 0; i <= 7; i++) {
+	        divInfo = getDivInfo(globalNote+majorScale[i]);
+	        revertColor(divInfo[0]);
+	    }
+	}
+}
+
+function highlightMinorScale() {
+	if(majorScaleHighlight) {
+		highlightMajorScale();
+	}
+	if(!minorScaleHighlight) {
+		minorScaleHighlight = true;
+		for(var i = 0; i <= 7; i++) {
+	        divInfo = getDivInfo(globalNote+minorScale[i]);
+	        changeColor(divInfo[0]);
+	    }
+	} else {
+		minorScaleHighlight = false;
+		majorScaleHighlight = false;
+		for(var i = 0; i <= 7; i++) {
+	        divInfo = getDivInfo(globalNote+minorScale[i]);
+	        revertColor(divInfo[0]);
+	    }
+	}
+}
 
 // highlight key
 // called by keyboardTrigger
+// input is the name of div to change
 function changeColor(input) {
 	if(hasClass(document.getElementById(input), 'lStraightKey')) {
 		document.getElementById(input).className = "highlightKey lStraightKey";
@@ -503,6 +497,7 @@ function changeColor(input) {
 
 // change key color back to default color
 // called by keyboardUntrigger
+// input is the name of div to change
 function revertColor(input) {
 	if(hasClass(document.getElementById(input), 'lStraightKey')) {
 		document.getElementById(input).className = "key lStraightKey";
@@ -526,26 +521,26 @@ function revertColor(input) {
 function triggerColor(input) {
 	changeColor(input);
 	setTimeout(function () {
-      	revertColor(input);		//  your code here
+      	revertColor(input);
    	}, globalTempo);
 }
 
-function keyColoring(count, input) {
+function scaleKeyColoring(count, input) {
 	triggerColor(input[count]);
 	setTimeout(function () {
 		count++;
-		if(count <= 14) {
-			keyColoring(count, input);
+		if(count < scaleLength) {
+			scaleKeyColoring(count, input);
 		}
-	}, globalTempo); //timer*timeScaler);
+	}, globalTempo);
 }
 
 function noteProgression(count, input) {
 	triggerNote(input[count], globalVelocity, globalDelay, globalSustain);
 	setTimeout(function () {
 		count++;
-		if(count <= 14) {
+		if(count < scaleLength) {
 			noteProgression(count, input);
 		}
-	}, globalTempo); //timer*timeScaler); //timer*timeScaler);
+	}, globalTempo);
 }
