@@ -24,6 +24,7 @@
     --midWidth: 65px;
 
     --borderThickness: 2px;
+    --borderOffset: 4px;
 
     --numberOfKeys: 17;
 
@@ -33,6 +34,10 @@
 /*********************************************/
 /* Types */
 /*********************************************/
+
+* {
+    box-sizing: border-box;
+}
 
 html, body {
     padding: 0;
@@ -84,7 +89,8 @@ div {
     width: var(--blackKeyWidth);
     height: var(--blackKeyHeight);
     /*position: relative;*/
-    box-shadow: inset 4px 4px 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);
+    /*box-shadow: inset 4px 4px 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);*/
+    box-shadow: inset var(--borderOffset) var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
     z-index: var(--minDepth); /* place above other keys */
 }
 
@@ -94,7 +100,8 @@ div {
     width: var(--blackKeyWidth);
     height: var(--blackKeyHeight);
     /*position: relative;*/
-    box-shadow: inset 4px 4px 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);
+    /*box-shadow: inset 4px 4px 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);*/
+    box-shadow: inset var(--borderOffset) var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
     z-index: var(--minDepth); /* place above other keys */
 }
 
@@ -105,7 +112,8 @@ div {
     height: var(--blackKeyHeight);
     position: relative;
     /* black line at top of white key */
-    box-shadow: inset 0 4px 0 -2px var(--borderColor);
+    /*box-shadow: inset 0 4px 0 -2px var(--borderColor);*/
+    box-shadow: inset 0 var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 .cutKey:after {
     content: "";
@@ -115,7 +123,8 @@ div {
     height: calc(var(--whiteKeyHeight) - var(--blackKeyHeight));
     position: absolute;
     /* black line on bottom-left, bottom, and bottom-right of white key */
-    box-shadow: inset 4px 0 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);
+    /*box-shadow: inset 4px 0 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);*/
+    box-shadow: inset var(--borderOffset) 0 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 
 /* white keys to the left of black keys */
@@ -125,7 +134,8 @@ div {
     height: var(--blackKeyHeight);
     position: relative;
     /* black line on top and top-left of white key */
-    box-shadow: inset 4px 4px 0 -2px var(--borderColor);
+    /*box-shadow: inset 4px 4px 0 -2px var(--borderColor);*/
+    box-shadow: inset var(--borderOffset) var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 .lStraightKey:after {
     content: "";
@@ -134,7 +144,8 @@ div {
     height: calc(var(--whiteKeyHeight) - var(--blackKeyHeight));
     position: absolute;
     /* black line on bottom-left, bottom and bottom-right of white key */
-    box-shadow: inset 4px 0 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);
+    /*box-shadow: inset 4px 0 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);*/
+    box-shadow: inset var(--borderOffset) 0 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset))  0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 
 /* white keys to the right of black keys */
@@ -144,7 +155,8 @@ div {
     height: var(--blackKeyHeight);
     position: relative;
     /* black line on top and top-right of white key */
-    box-shadow: inset 0 4px 0 -2px var(--borderColor), inset -4px 0 0 -2px var(--borderColor);
+    /*box-shadow: inset 0 4px 0 -2px var(--borderColor), inset -4px 0 0 -2px var(--borderColor);*/
+    box-shadow: inset 0 var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) 0 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 .rStraightKey:after {
     content: "";
@@ -154,7 +166,8 @@ div {
     height: calc(var(--whiteKeyHeight) - var(--blackKeyHeight));
     position: absolute;
     /* black line on bottom-left, bottom and bottom-right of white key */
-    box-shadow: inset 4px 0 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);
+    /*box-shadow: inset 4px 0 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);*/
+    box-shadow: inset var(--borderOffset) 0 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 
 /*********************************************/
@@ -179,4 +192,63 @@ div {
 }
 
 #highlightOptions {
+}
+
+/*********************************************/
+/* Responsive Web Design */
+/*********************************************/
+/* Used to rescale keyboard elements to best fit screen */
+
+@media only screen and (max-width: 1800px) {
+    :root {
+        /* dimensions */
+
+        /* black keys */
+        --blackKeyHeight: 233.333px;
+        --blackKeyWidth: 46.667px;
+
+        /* white keys */
+        --whiteKeyHeight: 400px;
+        --whiteKeyWidth: 66.667px;
+        --leftOffset: -23.333px;
+        --thinWidth: 20px;
+        --midWidth: 43.333px;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    :root {
+        /* dimensions */
+
+        /* black keys */
+        --blackKeyHeight: 175px;
+        --blackKeyWidth: 35px;
+
+        /* white keys */
+        --whiteKeyHeight: 300px;
+        --whiteKeyWidth: 50px;
+        --leftOffset: -17.5px;
+        --thinWidth: 15px;
+        --midWidth: 32.5px;
+
+        --borderThickness: 1px;
+        --borderOffset: 2px;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    :root {
+        /* dimensions */
+
+        /* black keys */
+        --blackKeyHeight: 116.667px;
+        --blackKeyWidth: 23.333px;
+
+        /* white keys */
+        --whiteKeyHeight: 200px;
+        --whiteKeyWidth: 33.333px;
+        --leftOffset: -11.667px;
+        --thinWidth: 10px;
+        --midWidth: 21.667px;
+    }
 }
