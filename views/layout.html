@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns = "http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Home | Virtual Music Theory Keyboard</title>
+		<title>Virtual Music Theory Keyboard</title>
+		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+
 		<link rel="stylesheet" type="text/css" href="../static/css/theStyle.css">
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<!-- polyfill -->
@@ -69,23 +71,28 @@
 			<input type="button" onclick="changeGlobalNote('a')" value="a"/>
 			<input type="button" onclick="changeGlobalNote('bb')" value="bb"/>
 		</div>
-		<!-- <br/> -->
 		<div id="tempoSelection">
+		<!-- To add a new tempo option simply create an input button and call setTempo 
+		with the desired value as the argument as shown below -->
 			<input type="button" onclick="setTempo(100)" value="100"/>
 			<input type="button" onclick="setTempo(120)" value="120"/>
 			<input type="button" onclick="setTempo(140)" value="140"/>
 			<input type="button" onclick="setTempo(160)" value="160"/>
+			<input type="button" onclick="setTempo(180)" value="180"/>
 		</div>
 		<div id="conceptOptions">
+		<!-- These buttons are only used for testing and debugging purposes -->
 			<input type="button" onclick="playNote()" value="Play Root Note"/>
 			<input type="button" onclick="playMajorScale()" value="Play Major Scale"/>
 			<input type="button" onclick="playMinorScale()" value="Play Minor Scale"/>
-			<input type="button" onclick="playMajorChord()" value="Play Major Chord"/>
-			<input type="button" onclick="playMinorChord()" value="Play Minor Chord"/>
+			<input type="button" onclick="playMajorTriChord()" value="Play Major Chord"/>
+			<input type="button" onclick="playMinorTriChord()" value="Play Minor Chord"/>
 		</div>
 		<div id="highlightOptions">
-			<input type="button" onclick="highlightMajorScale()" value="Highlight Major Scale"/>
-			<input type="button" onclick="highlightMinorScale()" value="Highlight Minor Scale"/>
+			<input type="button" onclick="highlightMajorScale()" value="Toggle Major Scale"/>
+			<input type="button" onclick="highlightMinorScale()" value="Toggle Minor Scale"/>
+			<input type="button" onclick="highlightMajorChord()" value="Toggle Major Chord"/>
+			<input type="button" onclick="highlightMinorChord()" value="Toggle Minor Chord"/>
 		</div>
 	</body>
 </html>
