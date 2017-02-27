@@ -58,7 +58,8 @@ var keyAllowed = {};	// holds the state of all keys being used
 
 var majorScaleHighlight = false;
 var minorScaleHighlight = false;
-var chordHighlight = false;
+var majorChordHighlight = false;
+var minorChordHighlight = false;
 
 // ******************************************************************
 // Functions
@@ -68,7 +69,7 @@ document.addEventListener("keydown", keyboardTrigger, false);
 
 document.addEventListener("keyup", keyboardUntrigger, false);
 
-// is called when html body is loaded
+// is called when html body is loaded to load MIDI.JS plugin
 function load() {
 	MIDI.loadPlugin({
 		soundfontUrl: "../static/js/",
@@ -98,6 +99,8 @@ function changeGlobalNote(value) {
 		minorScaleHighlight = true;		// set flag to highlight new minor scale
 	}
 	// check which key was selected
+	// 'b' after a letter means flat
+	// '#' after a letter means sharp
 	if(value == "ab" || value == "g#") {
 		globalNote = 44+12;
 	} else if(value == "a") {
@@ -137,34 +140,47 @@ function changeGlobalNote(value) {
 // ------------------------------------------------------------------
 
 function playMajorScale() {
-	var index = 0;
-	var notesInScale = {};
-	var keysToColor = {};
+	var index = 0;				// used as a seed for noteProgression & scaleKeyColoring functions
+	var notesInScale = {};		// a local array that stores the notes that make up selcted major scale (used for playing scale)
+	var keysToColor = {};		// a local array that stores the div ids that make up selected major scale (used for coloring)
 
-	for(var i = 0; i < scaleProgression.length; i++) {
-        divInfo = getDivInfo(globalNote+majorScale[scaleProgression[i]]);
-        keysToColor[i] = divInfo[0];
-        notesInScale[i] = globalNote+majorScale[scaleProgression[i]];
+	if(majorScaleHighlight) {			// if major scale is highlighted
+		highlightMajorScale();			// unhighlight major scale before playing major scale
+	} else if(minorScaleHighlight) {	// if minor scale is highlighted
+		highlightMinorScale();			// unhighlight minor scale before playing major scale
+	}
+
+	for(var i = 0; i < scaleLength; i++) {									// loop to identify notes that make up major scale
+        divInfo = getDivInfo(globalNote+majorScale[scaleProgression[i]]);	// gets div id, note name, & octave for current note in major scale
+        keysToColor[i] = divInfo[0];										// store div id into local array to color keys after loop ends
+        notesInScale[i] = globalNote+majorScale[scaleProgression[i]];		// store note value in local array to play each note after loop ends
     }
-    noteProgression(index, notesInScale);
-    scaleKeyColoring(index, keysToColor);
+    noteProgression(index, notesInScale);	// plays each note that makes up major scale
+    scaleKeyColoring(index, keysToColor);	// colors each note as scale is major played
 }
 
 function playMinorScale() {
-	var index = 0;
-	var notesInScale = {};
-	var keysToColor = {};
+	var index = 0;				// used as a seed for noteProgression & scaleKeyColoring functions
+	var notesInScale = {};		// a local array that stores the notes that make up selcted minor scale (used for playing scale)
+	var keysToColor = {};		// a local array that stores the div ids that make up selected minor scale (used for coloring)
 
-	for(var i = 0; i < scaleProgression.length; i++) {
-        divInfo = getDivInfo(globalNote+minorScale[scaleProgression[i]]);
-        keysToColor[i] = divInfo[0];
-        notesInScale[i] = globalNote+minorScale[scaleProgression[i]];
+	if(majorScaleHighlight) {			// if major scale is highlighted
+		highlightMajorScale();			// unhighlight major scale before playing minor scale
+	} else if(minorScaleHighlight) {	// if minor scale is highlighted
+		highlightMinorScale();			// unhighlight minor scale before playing minor scale
+	}
+
+	for(var i = 0; i < scaleLength; i++) {									// loop to identify notes that make up minor scale
+        divInfo = getDivInfo(globalNote+minorScale[scaleProgression[i]]);	// gets div id, note name, & octave for current note in minor scale
+        keysToColor[i] = divInfo[0];										// store div id into local array to color keys after loop ends
+        notesInScale[i] = globalNote+minorScale[scaleProgression[i]];		// store note value in local array to play each note after loop ends
     }
-    noteProgression(index, notesInScale);
-    scaleKeyColoring(index, keysToColor);
+    noteProgression(index, notesInScale);	// plays each note that makes up minor scale
+    scaleKeyColoring(index, keysToColor);	// colors each note as scale is minor played
 }
 
-function playMajorChord() {
+function playMajorTriChord() {
+	unhighlight();
 	for(var i = 0; i < 3; i++) {
 		triggerNote(globalNote+majorTriChord[i], globalVelocity, globalDelay, globalSustain);
 		divInfo = getDivInfo(globalNote+majorTriChord[i]);
@@ -172,7 +188,8 @@ function playMajorChord() {
     }
 }
 
-function playMinorChord() {
+function playMinorTriChord() {
+	unhighlight();
 	for(var i = 0; i < 3; i++) {
 		triggerNote(globalNote+minorTriChord[i], globalVelocity, globalDelay, globalSustain);
 		divInfo = getDivInfo(globalNote+minorTriChord[i]);
@@ -181,6 +198,7 @@ function playMinorChord() {
 }
 
 function playNote() {
+	unhighlight();
     triggerNote(globalNote, globalVelocity, globalDelay, globalSustain);
     divInfo = getDivInfo(globalNote);
 	triggerColor(divInfo[0]);
@@ -439,15 +457,19 @@ function keyboardUntrigger(input) {
 function highlightMajorScale() {
 	if(minorScaleHighlight) {
 		highlightMinorScale();
+	} else if(majorChordHighlight) {
+		highlightMajorChord();
+	} else if(minorChordHighlight) {
+		highlightMinorChord();
 	}
-	if(!majorScaleHighlight) {
-		majorScaleHighlight = true;
-		for(var i = 0; i <= 7; i++) {
-	        divInfo = getDivInfo(globalNote+majorScale[i]);
-	        changeColor(divInfo[0]);
+
+	if(!majorScaleHighlight) {									// if major scale is not highlighted
+		majorScaleHighlight = true;								// set flag for major scale highlighting
+		for(var i = 0; i <= 7; i++) {							// for each key in the scale
+	        divInfo = getDivInfo(globalNote+majorScale[i]);		// get html div information for each key
+	        changeColor(divInfo[0]);							// change the color of each key
 	    }
 	} else {
-		minorScaleHighlight = false;
 		majorScaleHighlight = false;
 		for(var i = 0; i <= 7; i++) {
 	        divInfo = getDivInfo(globalNote+majorScale[i]);
@@ -459,6 +481,10 @@ function highlightMajorScale() {
 function highlightMinorScale() {
 	if(majorScaleHighlight) {
 		highlightMajorScale();
+	} else if(majorChordHighlight) {
+		highlightMajorChord();
+	} else if(minorChordHighlight) {
+		highlightMinorChord();
 	}
 	if(!minorScaleHighlight) {
 		minorScaleHighlight = true;
@@ -468,9 +494,54 @@ function highlightMinorScale() {
 	    }
 	} else {
 		minorScaleHighlight = false;
-		majorScaleHighlight = false;
 		for(var i = 0; i <= 7; i++) {
 	        divInfo = getDivInfo(globalNote+minorScale[i]);
+	        revertColor(divInfo[0]);
+	    }
+	}
+}
+
+function highlightMajorChord() {
+	if(minorChordHighlight) {
+		highlightMinorChord();
+	} else if(majorScaleHighlight) {
+		highlightMajorScale();
+	} else if(minorScaleHighlight) {
+		highlightMinorScale();
+	}
+	if(!majorChordHighlight) {
+		majorChordHighlight = true;
+		for(var i = 0; i < 3; i++) {
+	        divInfo = getDivInfo(globalNote+majorTriChord[i]);
+	        changeColor(divInfo[0]);
+	    }
+	} else {
+		majorChordHighlight = false;
+		for(var i = 0; i < 3; i++) {
+	        divInfo = getDivInfo(globalNote+majorTriChord[i]);
+	        revertColor(divInfo[0]);
+	    }
+	}
+}
+
+function highlightMinorChord() {
+	if(majorChordHighlight) {
+		highlightMajorChord();
+	} else if(majorScaleHighlight) {
+		highlightMajorScale();
+	} else if(minorScaleHighlight) {
+		highlightMinorScale();
+	}
+	if(!minorChordHighlight) {
+		minorChordHighlight = true;
+		for(var i = 0; i < 3; i++) {
+	        divInfo = getDivInfo(globalNote+minorTriChord[i]);
+	        changeColor(divInfo[0]);
+	    }
+	} else {
+		minorChordHighlight = false;
+		for(var i = 0; i < 3; i++) {
+	        divInfo = getDivInfo(globalNote+minorTriChord[i]);
 	        revertColor(divInfo[0]);
 	    }
 	}
@@ -511,6 +582,19 @@ function revertColor(input) {
 	} else if(hasClass(document.getElementById(input), 'highlightBlackKey')) {
 		document.getElementById(input).className = "key blackKey";
 		// alert('black key');
+	}
+}
+
+// hightlight all
+function unhighlight() {
+	if(majorScaleHighlight) {			// if major scale is highlighted
+		highlightMajorScale();			// unhighlight major scale before playing major chord
+	} else if(minorScaleHighlight) {	// if minor scale is highlighted
+		highlightMinorScale();			// unhighlight minor scale before playing major chord
+	} else if(majorChordHighlight) {
+		highlightMajorChord();
+	} else if(minorChordHighlight) {
+		highlightMinorChord();
 	}
 }
 
