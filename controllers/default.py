@@ -21,6 +21,14 @@ def index():
     return dict(message=T('Welcome to web2py!'))
 
 
+def quizNotes():
+    response.flash = T("Quiz: Notes")
+    return dict(message=T('WHAT!'))
+def quizSteps():
+    response.flash = T("Quiz: Steps")
+    return dict(message=T('WHAT!'))
+
+
 def user():
     """
     exposes:
