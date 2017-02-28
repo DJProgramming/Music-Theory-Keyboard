@@ -1,5 +1,7 @@
 var stepArray = Array('half', 'whole');
+var hiLowArray = Array('higher', 'lower');
 var randomStep;
+var randomHiLow;
 
 
 
@@ -15,10 +17,11 @@ var randomNote;
 /* Highlights random note in piano */
 function highlightRandom(){
 	var noteData = ['1', '2', '3'];
-	console.log('Note:' + randomNote);
     randomStep = stepArray[Math.floor(Math.random()*stepArray.length)];
-    console.log('Step: '+ randomStep );
+    randomHiLow = hiLowArray[Math.floor(Math.random()*hiLowArray.length)]
+
     document.getElementById('stepTxt').textContent = randomStep;
+    document.getElementById('highLowTxt').textContent = randomHiLow;
     randomNote = keyArray[Math.floor(Math.random()*keyArray.length)];
     //var classString = document.getElementById('c3Key').className;
     //console.log('Class Name: ' + classString);
@@ -109,159 +112,615 @@ function highlightRandom(){
 	else if(randomNote == 'e5'){
 		document.getElementById('e5Key').className = 'highlightKey rStraightKey';
 	}
+    if(randomNote == 'c3' && randomHiLow == 'lower'){
+        randomHiLow = 'higher';
+        document.getElementById('c3Key').className = 'highlightKey lStraightKey';
+        document.getElementById('highLowTxt').textContent = randomHiLow;
+    }
+    else if(randomNote == 'e5' && randomHiLow == 'higher'){
+        randomHiLow = 'lower';
+        document.getElementById('e5Key').className = 'highlightKey rStraightKey';
+        document.getElementById('highLowTxt').textContent = randomHiLow;
+    }
+    if(randomNote == 'db3' && randomHiLow == 'lower' && randomStep == 'whole'){
+        randomHiLow = 'higher';
+        document.getElementById('db3Key').className = 'highlightKey rStraightKey';
+        document.getElementById('highLowTxt').textContent = randomHiLow;
+    }
+    else if(randomNote == 'eb5' && randomHiLow == 'higher' && randomStep == 'whole'){
+        randomHiLow = 'lower';
+        document.getElementById('eb5Key').className = 'key highlightBlackKey';
+        document.getElementById('highLowTxt').textContent = randomHiLow;
+    }
 }
 
 function keyDownFunction(input){
     var unicode = input.keyCode ? input.keyCode : input.charCode;
-    if (unicode == 81 && randomNote == 'c3'){
+    if (unicode == 50 && randomNote == 'c3' && randomStep == 'half' && randomHiLow == 'higher'){
         document.getElementById('c3Key').className = "key lStraightKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 50 && randomNote == 'db3'){
+    else if (unicode == 87 && randomNote == 'c3' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('c3Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    /////////////////////////////////////
+    else if (unicode == 81 && randomNote == 'db3' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('db3Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 87 && randomNote == 'd3'){
+    else if (unicode == 87 && randomNote == 'db3' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('db3Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 51 && randomNote == 'db3' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('db3Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////
+    else if (unicode == 50 && randomNote == 'd3' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('d3Key').className = "key cutKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 51 && randomNote == 'eb3'){
+    else if (unicode == 81 && randomNote == 'd3' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('d3Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 51 && randomNote == 'd3' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('d3Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 69 && randomNote == 'd3' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('d3Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ///////////////////////////////////////
+    else if (unicode == 87 && randomNote == 'eb3' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('eb3Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 69 && randomNote == 'e3'){
+    else if (unicode == 50 && randomNote == 'eb3' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('eb3Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 69 && randomNote == 'eb3' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('eb3Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 82 && randomNote == 'eb3' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('eb3Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    /////////////////////////////////////
+    else if (unicode == 51 && randomNote == 'e3' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('e3Key').className = "key rStraightKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 82 && randomNote == 'f3'){
+    else if (unicode == 87 && randomNote == 'e3' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('e3Key').className = "key rStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 82 && randomNote == 'e3' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('e3Key').className = "key rStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 53 && randomNote == 'e3' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('e3Key').className = "key rStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////
+    else if (unicode == 69 && randomNote == 'f3' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('f3Key').className = "key lStraightKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 53 && randomNote == 'gb3'){
+    else if (unicode == 51 && randomNote == 'f3' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('f3Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 53 && randomNote == 'f3' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('f3Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 84 && randomNote == 'f3' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('f3Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    /////////////////////////////////////////
+    else if (unicode == 82 && randomNote == 'gb3' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('gb3Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 84 && randomNote == 'g3'){
+    else if (unicode == 69 && randomNote == 'gb3' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('gb3Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 84 && randomNote == 'gb3' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('gb3Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 54 && randomNote == 'gb3' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('gb3Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ///////////////////////////////////////////////
+    else if (unicode == 53 && randomNote == 'g3' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('g3Key').className = "key cutKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 54 && randomNote == 'ab4'){
+    else if (unicode == 82 && randomNote == 'g3' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('g3Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 54 && randomNote == 'g3' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('g3Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 89 && randomNote == 'g3' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('g3Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////////////
+    else if (unicode == 84 && randomNote == 'ab4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('ab4Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 89 && randomNote == 'a4'){
+    else if (unicode == 53 && randomNote == 'ab4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('ab4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 89 && randomNote == 'ab4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('ab4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 55 && randomNote == 'ab4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('ab4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////////////
+    else if (unicode == 54 && randomNote == 'a4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('a4Key').className = "key cutKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 55 && randomNote == 'bb4'){
+    else if (unicode == 84 && randomNote == 'a4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('a4Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 55 && randomNote == 'a4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('a4Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 85 && randomNote == 'a4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('a4Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ///////////////////////////////////////////////////
+    else if (unicode == 89 && randomNote == 'bb4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('bb4Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 85 && randomNote == 'b4'){
+    else if (unicode == 54 && randomNote == 'bb4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('bb4Key').className = "key blackKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 85 && randomNote == 'bb4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('bb4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 73 && randomNote == 'bb4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('bb4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////////////
+    else if (unicode == 55 && randomNote == 'b4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('b4Key').className = "key rStraightKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 73 && randomNote == 'c4'){
+    else if (unicode == 89 && randomNote == 'b4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('b4Key').className = "key rStraightKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 73 && randomNote == 'b4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('b4Key').className = "key rStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 57 && randomNote == 'b4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('b4Key').className = "key rStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////////////////
+    else if (unicode == 85 && randomNote == 'c4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('c4Key').className = "key lStraightKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 57 && randomNote == 'db4'){
+    else if (unicode == 55 && randomNote == 'c4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('c4Key').className = "key lStraightKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 57 && randomNote == 'c4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('c4Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 79 && randomNote == 'c4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('c4Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ///////////////////////////////////////////////////
+    else if (unicode == 73 && randomNote == 'db4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('db4Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 79 && randomNote == 'd4'){
+    else if (unicode == 85 && randomNote == 'db4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('db4Key').className = "key blackKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 79 && randomNote == 'db4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('db4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 48 && randomNote == 'db4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('db4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ///////////////////////////////////////////////////////
+    else if (unicode == 57 && randomNote == 'd4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('d4Key').className = "key cutKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 48 && randomNote == 'eb4'){
+    else if (unicode == 73 && randomNote == 'd4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('d4Key').className = "key cutKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 48 && randomNote == 'd4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('d4Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 80 && randomNote == 'd4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('d4Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ////////////////////////////////////////////////////
+    else if (unicode == 79 && randomNote == 'eb4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('eb4Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 80 && randomNote == 'e4'){
+    else if (unicode == 57 && randomNote == 'eb4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('eb4Key').className = "key blackKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 80 && randomNote == 'eb4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('eb4Key').className = "key blackKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 90 && randomNote == 'eb4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('eb4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    /*****************************************************************************/
+    /*****************************************************************************/
+   else if (unicode == 48 && randomNote == 'e4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('e4Key').className = "key rStraightKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 90 && randomNote == 'f4'){
+    else if (unicode == 79 && randomNote == 'e4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('e4Key').className = "key rStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 90 && randomNote == 'e4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('e4Key').className = "key rStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 83 && randomNote == 'e4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('e4Key').className = "key rStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////
+    else if (unicode == 80 && randomNote == 'f4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('f4Key').className = "key lStraightKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 83 && randomNote == 'gb4'){
+    else if (unicode == 48 && randomNote == 'f4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('f4Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 83 && randomNote == 'f4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('f4Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 88 && randomNote == 'f4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('f4Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    /////////////////////////////////////////
+    else if (unicode == 90 && randomNote == 'gb4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('gb4Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 88 && randomNote == 'g4'){
+    else if (unicode == 80 && randomNote == 'gb4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('gb4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 88 && randomNote == 'gb4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('gb4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 68 && randomNote == 'gb4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('gb4Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ///////////////////////////////////////////////
+    else if (unicode == 83 && randomNote == 'g4' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('g4Key').className = "key cutKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 68 && randomNote == 'ab5'){
+    else if (unicode == 90 && randomNote == 'g4' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('g4Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 68 && randomNote == 'g4' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('g4Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 67 && randomNote == 'g4' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('g4Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////////////
+    else if (unicode == 88 && randomNote == 'ab5' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('ab5Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 67 && randomNote == 'a5'){
+    else if (unicode == 83 && randomNote == 'ab5' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('ab5Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 67 && randomNote == 'ab5' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('ab5Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 70 && randomNote == 'ab5' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('ab5Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////////////
+    else if (unicode == 68 && randomNote == 'a5' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('a5Key').className = "key cutKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 70 && randomNote == 'bb5'){
+    else if (unicode == 88 && randomNote == 'a5' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('a5Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 70 && randomNote == 'a5' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('a5Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 86 && randomNote == 'a5' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('a5Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ///////////////////////////////////////////////////
+    else if (unicode == 67 && randomNote == 'bb5' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('bb5Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 86 && randomNote == 'b5'){
+    else if (unicode == 68 && randomNote == 'bb5' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('bb5Key').className = "key blackKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 86 && randomNote == 'bb5' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('bb5Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 66 && randomNote == 'bb5' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('bb5Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////////////
+    else if (unicode == 70 && randomNote == 'b5' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('b5Key').className = "key rStraightKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 66 && randomNote == 'c5'){
+    else if (unicode == 67 && randomNote == 'b5' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('b5Key').className = "key rStraightKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 66 && randomNote == 'b5' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('b5Key').className = "key rStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 72 && randomNote == 'b5' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('b5Key').className = "key rStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    //////////////////////////////////////////////////
+    else if (unicode == 86 && randomNote == 'c5' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('c5Key').className = "key lStraightKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 72 && randomNote == 'db5'){
+    else if (unicode == 70 && randomNote == 'c5' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('c5Key').className = "key lStraightKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 72 && randomNote == 'c5' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('c5Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 78 && randomNote == 'c5' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('c5Key').className = "key lStraightKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ///////////////////////////////////////////////////
+    else if (unicode == 66 && randomNote == 'db5' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('db5Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 78 && randomNote == 'd5'){
+    else if (unicode == 86 && randomNote == 'db5' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('db5Key').className = "key blackKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 78 && randomNote == 'db5' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('db5Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 74 && randomNote == 'db5' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('db5Key').className = "key blackKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ///////////////////////////////////////////////////////
+    else if (unicode == 72 && randomNote == 'd5' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('d5Key').className = "key cutKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 74 && randomNote == 'eb5Key'){
+    else if (unicode == 66 && randomNote == 'd5' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('d5Key').className = "key cutKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 74 && randomNote == 'd5' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('d5Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 77 && randomNote == 'd5' && randomStep == 'whole'&& randomHiLow == 'higher'){
+        document.getElementById('d5Key').className = "key cutKey";
+        numCorrect++;
+        checkCorrect(numCorrect);
+    }
+    ////////////////////////////////////////////////////
+    else if (unicode == 78 && randomNote == 'eb5' && randomStep == 'half'&& randomHiLow == 'lower'){
         document.getElementById('eb5Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-    else if (unicode == 77 && randomNote == 'e5'){
-        document.getElementById('e5Key').className = "key rStraightKey";
+    else if (unicode == 72 && randomNote == 'eb5' && randomStep == 'whole'&& randomHiLow == 'lower'){
+        document.getElementById('eb5Key').className = "key blackKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    else if (unicode == 77 && randomNote == 'eb5' && randomStep == 'half'&& randomHiLow == 'higher'){
+        document.getElementById('eb5Key').className = "key blackKey";
+        numCorrect++
+        checkCorrect(numCorrect);
+    }
+    /////////////////////////////////////////
+    else if (unicode == 74 && randomNote == 'e5' && randomStep == 'half'&& randomHiLow == 'lower'){
+        document.getElementById('eb5Key').className = "key blackKey";
         numCorrect++;
         checkCorrect(numCorrect);
     }
-
+    else if (unicode == 78 && randomNote == 'e5' && randomStep == 'whole'&& randomHiLow == 'lower') {
+            document.getElementById('eb5Key').className = "key blackKey";
+            numCorrect++
+            checkCorrect(numCorrect);
+    }
 }
 
 function checkCorrect(input){
+    console.log('High or Low: ' + randomHiLow);
+    console.log('Step: '+ randomStep );
+    console.log('Note:' + randomNote);
     if (input == 10){
         alert('10/10');
         document.getElementById("correctScore").textContent = numCorrect.toString();
