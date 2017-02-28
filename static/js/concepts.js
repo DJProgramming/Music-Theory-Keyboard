@@ -97,6 +97,12 @@ function changeGlobalNote(value) {
 	} else if(minorScaleHighlight) {	// if minor scale is highlighted
 		highlightMinorScale();			// unhighlight current minor scale
 		minorScaleHighlight = true;		// set flag to highlight new minor scale
+	} else if(majorChordHighlight) {
+		highlightMajorChord();
+		majorChordHighlight = true;
+	} else if(minorChordHighlight) {
+		highlightMinorChord();
+		minorChordHighlight = true;
 	}
 	// check which key was selected
 	// 'b' after a letter means flat
@@ -132,6 +138,12 @@ function changeGlobalNote(value) {
 	} else if(minorScaleHighlight) {	// if minor scale highlight flag is set
 		minorScaleHighlight = false;	// set minor scale highlight flag to false to prime highlighting new scale
 		highlightMinorScale();			// highlight new minor scale
+	} else if(majorChordHighlight) {
+		majorChordHighlight = false;
+		highlightMajorChord();
+	} else if(minorChordHighlight) {
+		minorChordHighlight = false;
+		highlightMinorChord();
 	}
 }
 
@@ -144,11 +156,12 @@ function playMajorScale() {
 	var notesInScale = {};		// a local array that stores the notes that make up selcted major scale (used for playing scale)
 	var keysToColor = {};		// a local array that stores the div ids that make up selected major scale (used for coloring)
 
-	if(majorScaleHighlight) {			// if major scale is highlighted
-		highlightMajorScale();			// unhighlight major scale before playing major scale
-	} else if(minorScaleHighlight) {	// if minor scale is highlighted
-		highlightMinorScale();			// unhighlight minor scale before playing major scale
-	}
+	unhighlight();
+	// if(majorScaleHighlight) {			// if major scale is highlighted
+	// 	highlightMajorScale();			// unhighlight major scale before playing major scale
+	// } else if(minorScaleHighlight) {	// if minor scale is highlighted
+	// 	highlightMinorScale();			// unhighlight minor scale before playing major scale
+	// }
 
 	for(var i = 0; i < scaleLength; i++) {									// loop to identify notes that make up major scale
         divInfo = getDivInfo(globalNote+majorScale[scaleProgression[i]]);	// gets div id, note name, & octave for current note in major scale
@@ -164,11 +177,12 @@ function playMinorScale() {
 	var notesInScale = {};		// a local array that stores the notes that make up selcted minor scale (used for playing scale)
 	var keysToColor = {};		// a local array that stores the div ids that make up selected minor scale (used for coloring)
 
-	if(majorScaleHighlight) {			// if major scale is highlighted
-		highlightMajorScale();			// unhighlight major scale before playing minor scale
-	} else if(minorScaleHighlight) {	// if minor scale is highlighted
-		highlightMinorScale();			// unhighlight minor scale before playing minor scale
-	}
+	unhighlight();
+	// if(majorScaleHighlight) {			// if major scale is highlighted
+	// 	highlightMajorScale();			// unhighlight major scale before playing minor scale
+	// } else if(minorScaleHighlight) {	// if minor scale is highlighted
+	// 	highlightMinorScale();			// unhighlight minor scale before playing minor scale
+	// }
 
 	for(var i = 0; i < scaleLength; i++) {									// loop to identify notes that make up minor scale
         divInfo = getDivInfo(globalNote+minorScale[scaleProgression[i]]);	// gets div id, note name, & octave for current note in minor scale
@@ -205,8 +219,8 @@ function playNote() {
 }
 
 function playSingleNote(value, octave) {
+	unhighlight();
 	var key = checkNote(value, octave); // calls function to determine note to play
-
 	var delay = globalDelay;
     triggerNote(key, globalVelocity, delay, globalSustain);
 }
