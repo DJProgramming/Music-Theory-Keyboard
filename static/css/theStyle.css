@@ -7,8 +7,9 @@
     --naturalKeyColor: white;
     --blackKeyColor: black;
     --borderColor: black;
-    --highlightColor: #b22;
-    --selectColor: #68b;
+    --highlightColor: #b22;     /* blue */
+    --selectColor: #f84;        /* red */
+    /*--selectColor: #68b;        /* red */
 
     /* dimensions */
 
@@ -23,8 +24,14 @@
     --thinWidth: 30px;
     --midWidth: 65px;
 
+    /* key labels */
+    --keyNameOffset: 430px;
+    --keyFontSize: 3em;
+
     --borderThickness: 2px;
     --borderOffset: 4px;
+
+    --keyRoundingRadius: 8;
 
     --numberOfKeys: 17;
 
@@ -58,6 +65,8 @@ div {
 }
 .key:after {
     background: var(--naturalKeyColor);
+    border-bottom-left-radius: calc(var(--whiteKeyWidth) / var(--keyRoundingRadius));
+    border-bottom-right-radius: calc(var(--whiteKeyWidth) / var(--keyRoundingRadius));
 }
 
 .highlightKey {
@@ -65,6 +74,8 @@ div {
 }
 .highlightKey:after {
     background: var(--highlightColor);
+    border-bottom-left-radius: calc(var(--whiteKeyWidth) / var(--keyRoundingRadius));
+    border-bottom-right-radius: calc(var(--whiteKeyWidth) / var(--keyRoundingRadius));
 }
 
 .selectKey {
@@ -72,6 +83,8 @@ div {
 }
 .selectKey:after {
     background: var(--selectColor);
+    border-bottom-left-radius: calc(var(--whiteKeyWidth) / var(--keyRoundingRadius));
+    border-bottom-right-radius: calc(var(--whiteKeyWidth) / var(--keyRoundingRadius));
 }
 
 .blackKey {
@@ -89,7 +102,6 @@ div {
     width: var(--blackKeyWidth);
     height: var(--blackKeyHeight);
     /*position: relative;*/
-    /*box-shadow: inset 4px 4px 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);*/
     box-shadow: inset var(--borderOffset) var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
     z-index: var(--minDepth); /* place above other keys */
 }
@@ -100,7 +112,6 @@ div {
     width: var(--blackKeyWidth);
     height: var(--blackKeyHeight);
     /*position: relative;*/
-    /*box-shadow: inset 4px 4px 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);*/
     box-shadow: inset var(--borderOffset) var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
     z-index: var(--minDepth); /* place above other keys */
 }
@@ -112,7 +123,6 @@ div {
     height: var(--blackKeyHeight);
     position: relative;
     /* black line at top of white key */
-    /*box-shadow: inset 0 4px 0 -2px var(--borderColor);*/
     box-shadow: inset 0 var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 .cutKey:after {
@@ -123,7 +133,6 @@ div {
     height: calc(var(--whiteKeyHeight) - var(--blackKeyHeight));
     position: absolute;
     /* black line on bottom-left, bottom, and bottom-right of white key */
-    /*box-shadow: inset 4px 0 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);*/
     box-shadow: inset var(--borderOffset) 0 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 
@@ -134,7 +143,6 @@ div {
     height: var(--blackKeyHeight);
     position: relative;
     /* black line on top and top-left of white key */
-    /*box-shadow: inset 4px 4px 0 -2px var(--borderColor);*/
     box-shadow: inset var(--borderOffset) var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 .lStraightKey:after {
@@ -144,7 +152,6 @@ div {
     height: calc(var(--whiteKeyHeight) - var(--blackKeyHeight));
     position: absolute;
     /* black line on bottom-left, bottom and bottom-right of white key */
-    /*box-shadow: inset 4px 0 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);*/
     box-shadow: inset var(--borderOffset) 0 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset))  0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 
@@ -155,7 +162,6 @@ div {
     height: var(--blackKeyHeight);
     position: relative;
     /* black line on top and top-right of white key */
-    /*box-shadow: inset 0 4px 0 -2px var(--borderColor), inset -4px 0 0 -2px var(--borderColor);*/
     box-shadow: inset 0 var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) 0 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 .rStraightKey:after {
@@ -166,7 +172,6 @@ div {
     height: calc(var(--whiteKeyHeight) - var(--blackKeyHeight));
     position: absolute;
     /* black line on bottom-left, bottom and bottom-right of white key */
-    /*box-shadow: inset 4px 0 0 -2px var(--borderColor), inset -4px -4px 0 -2px var(--borderColor);*/
     box-shadow: inset var(--borderOffset) 0 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 
@@ -177,12 +182,9 @@ div {
 #keyboard {
     /*width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));*/
     min-height: var(--whiteKeyHeight);
-    /*margin: auto;*/
 }
 
 #noteSelection {
-    /*width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));*/
-    /*margin: auto;*/
 }
 
 #tempoSelection {
@@ -192,6 +194,55 @@ div {
 }
 
 #highlightOptions {
+}
+
+/*********************************************/
+/* Overlay */
+/*********************************************/
+
+.hardwareKey {
+    font-family: courier;
+    font-size: var(--keyFontSize);
+    color: var(--selectColor);
+    margin: calc(var(--whiteKeyHeight) * 5/6) 0 0 0;
+    width: var(--whiteKeyWidth);
+    position: absolute;
+    text-align: center;
+    z-index: 1;
+}
+
+.blackKey .hardwareKey, .highlightBlackKey .hardwareKey {
+    font-size: calc(var(--keyFontSize) * 2/3);
+    width: var(--blackKeyWidth);
+    margin: calc(var(--blackKeyHeight) / 6) 0 0 0;
+}
+
+.keyname {
+    font-size: var(--keyFontSize);
+    color: var(--blackKeyColor);
+    margin: calc(var(--whiteKeyHeight) * 3/4) 0 0 0;
+    width: var(--whiteKeyWidth);
+    position: absolute;
+    text-align: center;
+    z-index: 1;
+ }
+
+.blackKey .keyname, .highlightBlackKey .keyname {
+    font-size: calc(var(--keyFontSize) * 2/3);
+    color: var(--naturalKeyColor);
+    margin: calc(var(--blackKeyHeight) * 3/5) 0 0 0;
+    width: var(--blackKeyWidth);
+}
+
+.lStraightKey .keyname {
+}
+
+.cutKey .keyname, .cutKey .hardwareKey {
+    margin-left: calc(-1/2 * (var(--whiteKeyWidth) - var(--thinWidth)));
+}
+
+.rStraightKey .keyname, .rStraightKey .hardwareKey {
+    margin-left: calc(-1 * (var(--whiteKeyWidth) - var(--midWidth)));
 }
 
 /*********************************************/
@@ -214,6 +265,14 @@ div {
         --thinWidth: 20px;
         --midWidth: 43.333px;
     }
+
+    .keyname {
+        font-size: calc(var(--keyFontSize) * 2/3);
+    }
+
+    .blackKey .keyname, .highlightBlackKey .keyname {
+        font-size: calc(var(--keyFontSize) * 4/9);
+    }
 }
 
 @media only screen and (max-width: 1200px) {
@@ -234,6 +293,18 @@ div {
         --borderThickness: 1px;
         --borderOffset: 2px;
     }
+
+    .hardwareKey, .keyname {
+        font-size: calc(var(--keyFontSize) / 2);
+    }
+
+    .blackKey .hardwareKey, .highlightBlackKey .hardwareKey {
+        font-size: calc(var(--keyFontSize) / 3);
+    }
+
+    .blackKey .keyname, .highlightBlackKey .keyname {
+        font-size: calc(var(--keyFontSize) / 3);
+    }
 }
 
 @media only screen and (max-width: 900px) {
@@ -251,4 +322,13 @@ div {
         --thinWidth: 10px;
         --midWidth: 21.667px;
     }
+
+    .keyname {
+        font-size: calc(var(--keyFontSize) / 3);
+    }
+
+    .blackKey .keyname, .highlightBlackKey .keyname {
+        font-size: calc(var(--keyFontSize) * 2/9);
+    }
 }
+
