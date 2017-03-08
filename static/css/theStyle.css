@@ -8,8 +8,9 @@
     --blackKeyColor: black;
     --borderColor: black;
     --highlightColor: #b22;     /* blue */
-    --selectColor: #f84;        /* red */
-    /*--selectColor: #68b;        /* red */
+    --selectColor: #68b;        /* red */
+    --keyboardKeyColor: #f84;   /* orange */
+    --evilDarkGray: #666;       /* dark gray */
 
     /* dimensions */
 
@@ -31,9 +32,12 @@
     --borderThickness: 2px;
     --borderOffset: 4px;
 
+    --generalPadding: calc(var(--whiteKeyHeight)/10);
+    --mainWidth: calc(var(--whiteKeyWidth) * var(--numberOfWhiteKeys));
+
     --keyRoundingRadius: 8;
 
-    --numberOfKeys: 17;
+    --numberOfWhiteKeys: 17;
 
     --minDepth: 5;
 }
@@ -48,17 +52,16 @@
 
 html, body {
     padding: 0;
-    margin: 0; /* no white space around keyboard */
-}
-
-div {
-    width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));
-    margin: auto;
+    margin: 0;
 }
 
 /*********************************************/
 /* Classes */
 /*********************************************/
+
+.debug {
+    display: none;
+}
 
 .key {
     background: var(--naturalKeyColor);
@@ -92,7 +95,6 @@ div {
     display: inline-block;
     width: var(--blackKeyWidth);
     height: var(--blackKeyHeight);
-    /*position: relative;*/
     z-index: var(--minDepth); /* place above other keys */
 }
 
@@ -101,7 +103,6 @@ div {
     display: inline-block;
     width: var(--blackKeyWidth);
     height: var(--blackKeyHeight);
-    /*position: relative;*/
     box-shadow: inset var(--borderOffset) var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
     z-index: var(--minDepth); /* place above other keys */
 }
@@ -111,7 +112,6 @@ div {
     display: inline-block;
     width: var(--blackKeyWidth);
     height: var(--blackKeyHeight);
-    /*position: relative;*/
     box-shadow: inset var(--borderOffset) var(--borderOffset) 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
     z-index: var(--minDepth); /* place above other keys */
 }
@@ -179,21 +179,29 @@ div {
 /* IDs */
 /*********************************************/
 
+#window {
+}
+
 #keyboard {
-    /*width: calc(var(--whiteKeyWidth) * var(--numberOfKeys));*/
+    box-sizing: initial;
+    width: calc(var(--whiteKeyWidth) * var(--numberOfWhiteKeys));
+    margin: auto;
+    margin-top: var(--generalPadding);
+    margin-bottom: var(--generalPadding);
     min-height: var(--whiteKeyHeight);
+    box-shadow: 0 0 calc(var(--whiteKeyHeight)/10) calc(var(--whiteKeyHeight)/40) black;
+    border: calc(var(--whiteKeyHeight)/20) solid black;
 }
 
-#noteSelection {
+#debug {
+    width: calc(var(--whiteKeyWidth) * var(--numberOfWhiteKeys));
+    margin: auto;
+    padding: calc(var(--whiteKeyHeight)/60);
+    box-shadow: 0 0 calc(var(--whiteKeyHeight)/10) calc(var(--whiteKeyHeight)/40) black;
+    border: calc(var(--whiteKeyHeight)/20) solid black;   
 }
 
-#tempoSelection {
-}
-
-#conceptOptions {
-}
-
-#highlightOptions {
+#noteSelection, #tempoSelection, #conceptOptions, #highlightOptions {
 }
 
 /*********************************************/
@@ -203,7 +211,7 @@ div {
 .hardwareKey {
     font-family: courier;
     font-size: var(--keyFontSize);
-    color: var(--selectColor);
+    color: var(--keyboardKeyColor);
     margin: calc(var(--whiteKeyHeight) * 5/6) 0 0 0;
     width: var(--whiteKeyWidth);
     position: absolute;
@@ -331,4 +339,3 @@ div {
         font-size: calc(var(--keyFontSize) * 2/9);
     }
 }
-
