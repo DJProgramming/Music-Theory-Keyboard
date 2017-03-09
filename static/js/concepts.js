@@ -3,23 +3,24 @@
 // ******************************************************************
 
 var globalTempo;
-var globalNote = 48; // the MIDI note (C3)
-var globalDelay = 0; // play one note every quarter second
-var globalDelayInc = 0.25; // space between notes
-var globalSustain = 3*globalDelayInc; // note length
-var globalVelocity = 127; // how hard the note hits
+var globalNote = 48;                        // the MIDI note (C3)
+var globalDelay = 0;                        // play one note every quarter second
+var globalDelayInc = 0.25;                  // space between notes
+var globalSustain = 3*globalDelayInc;       // note length
+var globalVelocity = 127;                   // how hard the note hits
 
-var highlightColor = 'b22';
-var black = 'black';
-var white = 'white';
+var highlightColor = 'b22';                 // red color
+var black = 'black';                        // black color
+var white = 'white';                        // white color
 
-// var timeScaler = 0.5;
-// var timer = 500;
-var minute = 60000;
-var scaleLength = 15;
-var numberOfKeys = 29;
+var minute = 60000;                         // 1 minute in milliseconds
+var scaleLength = 15;                       // a scale has 15 note hits
+var numberOfKeys = 29;                      // number of keys used in program
 
-// scale & chord pattern arrays
+/*********************************************/
+/* scale & chord pattern arrays */
+/*********************************************/
+
 var majorScale = [
     0,  // root
     2,  // whole
@@ -28,7 +29,7 @@ var majorScale = [
     7,  // whole
     9,  // whole
     11, // whole
-    12  // half
+    12  // half                 
 ];
 var minorScale = [
     0,  // root
@@ -41,7 +42,7 @@ var minorScale = [
     12  // whole
 ];
 var scaleProgression = [
-    0,1,2,3,4,5,6,7,6,5,4,3,2,1,0   // index of each note to play in scale array
+    0,1,2,3,4,5,6,7,6,5,4,3,2,1,0           // index of each note to play in scale array
 ];
 var majorTriChord = [
     0, // +0 semitones
@@ -54,40 +55,78 @@ var minorTriChord = [
     7  // +7 semitones
 ];
 
-var divInfo = {};
-var keyAllowed = {};    // holds the state of all keys being used
-var canColor = {};
+var divInfo = {};                           // holds div information for current global note selected
+var keyAllowed = {};                        // holds the state of all keys being used
+var canColor = {};                          // array to hold flags for each note to determine whether its color can change
 
-var isExecuting = false;
+var timingFunctionIsExecuting = false;      // flag to check whether a timing function is running
 
-var majorScaleHighlight = false;
-var minorScaleHighlight = false;
-var majorChordHighlight = false;
-var minorChordHighlight = false;
+var highlight = {
+    majorScale: false,                      // major scale highlight flag
+    minorScale: false,                      // minor scale highlight flag
+    majorChord: false,                      // major chord highlight flag
+    minorChord: false                       // minor chord highlight flag
+};
+
+var programControl = {                      // flags for different web-pages in program
+    main: true,                             // home page flag
+    noteLesson: false,                      // note lesson page flag
+    noteQuiz: false,                        // note quiz page flag
+    stepLesson: false,                      // step lesson page flag
+    stepQuiz: false,                        // step quize page flag
+    scalesLesson: false,                    // scale lesson page flag
+    scalesQuiz: false                       // scale quiz page flag
+};
 
 // ******************************************************************
 // Functions
 // ******************************************************************
 
-document.addEventListener("keydown", keyboardTrigger, false);
-
-document.addEventListener("keyup", keyboardUntrigger, false);
+document.addEventListener("keydown", keyboardTrigger, false);       // responds to key down events
+document.addEventListener("keyup", keyboardUntrigger, false);       // responds to key up events
+document.addEventListener("keypress", showDebug, false);            // responds to key presses
 
 // is called when html body is loaded to load MIDI.JS plugin
 function load() {
     MIDI.loadPlugin({
-        soundfontUrl: "../static/js/",
-        instrument: "acoustic_grand_piano",
+        soundfontUrl: "../static/js/",                              // locate soundfont javascript location
+        instrument: "acoustic_grand_piano",                         // load wav files to be used as key sounds
         onsuccess: function() {
-            MIDI.setVolume(0,127);
+            MIDI.setVolume(0, globalVelocity);                      // set velocity of midi plugin
         }
     })
-    setTempo(120);  // set default tempo to 120 bpm
+    setTempo(120);                                                  // set default tempo to 120 bpm (beats per minute)
 }
 
 function initializeCanColorArray() {
-    for(var i = 0; i < numberOfKeys; i++) {
-        canColor[i] = true;
+    for(var i = 0; i < numberOfKeys; i++) {                         // for each key in program
+        canColor[i] = true;                                         // allow each key to be highlighted when pressed
+    }
+}
+
+// ------------------------------------------------------------------
+// Program Controls
+// ------------------------------------------------------------------
+
+function stepQuiz() {                                               // when step quiz is loaded
+    programControl.stepQuiz = true;                                 // set step quiz flag to true
+    programControl.main = false;                                    // set main page flag to false
+}
+
+// controls what clicking on a note does depending on context of the program (current web page)
+function contextualClick(value, octave, id) {
+    if(programControl.main) {
+        playSingleNote(value, octave);
+        triggerColor(id);
+    } else if(programControl.stepQuiz) {
+        var divID = getDivIDNoteOctaveFromMidiValue(getMidiValueFromDivID(id));
+        var unicode = getUnicodeCharFromDivID(divID);
+
+        // alert(test);
+
+        playSingleNote(value, octave);
+        triggerColor(id);
+        // keyDownFunction(unicode);
     }
 }
 
@@ -101,18 +140,18 @@ function setTempo(tempo) {
 
 // change the value of the global note
 function changeGlobalNote(value) {
-    if(majorScaleHighlight) {           // if major scale is hightlighted
-        highlightMajorScale();          // unhighlight current major scale
-        majorScaleHighlight = true;     // set flag to highlight new major scale
-    } else if(minorScaleHighlight) {    // if minor scale is highlighted
-        highlightMinorScale();          // unhighlight current minor scale
-        minorScaleHighlight = true;     // set flag to highlight new minor scale
-    } else if(majorChordHighlight) {
+    if(highlight.majorScale) {                      // if major scale is hightlighted
+        highlightMajorScale();                      // unhighlight current major scale
+        highlight.majorScale = true;                // set flag to highlight new major scale
+    } else if(highlight.minorScale) {               // if minor scale is highlighted
+        highlightMinorScale();                      // unhighlight current minor scale
+        highlight.minorScale = true;                // set flag to highlight new minor scale
+    } else if(highlight.majorChord) {
         highlightMajorChord();
-        majorChordHighlight = true;
-    } else if(minorChordHighlight) {
+        highlight.majorChord = true;
+    } else if(highlight.minorChord) {
         highlightMinorChord();
-        minorChordHighlight = true;
+        highlight.minorChord = true;
     }
     // check which key was selected
     // 'b' after a letter means flat
@@ -142,17 +181,17 @@ function changeGlobalNote(value) {
     } else if(value == "g") {
         globalNote = 55;
     }
-    if(majorScaleHighlight) {           // if major scale highlight flag is set
-        majorScaleHighlight = false;    // set major scale highlight flag to false to prime highlighting new scale
-        highlightMajorScale();          // highlight new major scale
-    } else if(minorScaleHighlight) {    // if minor scale highlight flag is set
-        minorScaleHighlight = false;    // set minor scale highlight flag to false to prime highlighting new scale
-        highlightMinorScale();          // highlight new minor scale
-    } else if(majorChordHighlight) {
-        majorChordHighlight = false;
+    if(highlight.majorScale) {                      // if major scale highlight flag is set
+        highlight.majorScale = false;               // set major scale highlight flag to false to prime highlighting new scale
+        highlightMajorScale();                      // highlight new major scale
+    } else if(highlight.minorScale) {               // if minor scale highlight flag is set
+        highlight.minorScale = false;               // set minor scale highlight flag to false to prime highlighting new scale
+        highlightMinorScale();                      // highlight new minor scale
+    } else if(highlight.majorChord) {
+        highlight.majorChord = false;
         highlightMajorChord();
-    } else if(minorChordHighlight) {
-        minorChordHighlight = false;
+    } else if(highlight.minorChord) {
+        highlight.minorChord = false;
         highlightMinorChord();
     }
 }
@@ -169,7 +208,7 @@ function playMajorScale() {
     unhighlightConcepts();
 
     for(var i = 0; i < scaleLength; i++) {                                  // loop to identify notes that make up major scale
-        divInfo = getDivInfo(globalNote+majorScale[scaleProgression[i]]);   // gets div id, note name, & octave for current note in major scale
+        divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorScale[scaleProgression[i]]);   // gets div id, note name, & octave for current note in major scale
         keysToColor[i] = divInfo[0];                                        // store div id into local array to color keys after loop ends
         notesInScale[i] = globalNote+majorScale[scaleProgression[i]];       // store note value in local array to play each note after loop ends
     }
@@ -185,7 +224,7 @@ function playMinorScale() {
     unhighlightConcepts();
 
     for(var i = 0; i < scaleLength; i++) {                                  // loop to identify notes that make up minor scale
-        divInfo = getDivInfo(globalNote+minorScale[scaleProgression[i]]);   // gets div id, note name, & octave for current note in minor scale
+        divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorScale[scaleProgression[i]]);   // gets div id, note name, & octave for current note in minor scale
         keysToColor[i] = divInfo[0];                                        // store div id into local array to color keys after loop ends
         notesInScale[i] = globalNote+minorScale[scaleProgression[i]];       // store note value in local array to play each note after loop ends
     }
@@ -197,7 +236,7 @@ function playMajorTriChord() {
     unhighlightConcepts();
     for(var i = 0; i < 3; i++) {
         triggerNote(globalNote+majorTriChord[i], globalVelocity, globalDelay, globalSustain);
-        divInfo = getDivInfo(globalNote+majorTriChord[i]);
+        divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorTriChord[i]);
         triggerColor(divInfo[0]);
     }
 }
@@ -206,7 +245,7 @@ function playMinorTriChord() {
     unhighlightConcepts();
     for(var i = 0; i < 3; i++) {
         triggerNote(globalNote+minorTriChord[i], globalVelocity, globalDelay, globalSustain);
-        divInfo = getDivInfo(globalNote+minorTriChord[i]);
+        divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorTriChord[i]);
         triggerColor(divInfo[0]);
     }
 }
@@ -214,7 +253,7 @@ function playMinorTriChord() {
 function playNote() {
     unhighlightConcepts();
     triggerNote(globalNote, globalVelocity, globalDelay, globalSustain);
-    divInfo = getDivInfo(globalNote);
+    divInfo = getDivIDNoteOctaveFromMidiValue(globalNote);
     triggerColor(divInfo[0]);
 }
 
@@ -360,7 +399,7 @@ function getDivIDNoteOctaveFromUnicode(input) {
     return noteData;
 }
 
-function getDivInfo(midiValue) {
+function getDivIDNoteOctaveFromMidiValue(midiValue) {
     // array for note information initialized with dummy values
     // position 1: div id; position 2: note name; postition 3: octave
     var noteData = ['1', '2', 3];
@@ -429,6 +468,168 @@ function getDivInfo(midiValue) {
     return noteData;
 }
 
+function getMidiValueFromDivID(divID) {
+
+    var midiValue;
+
+    if(divID == 'c3Key') {
+        midiValue = 48;             // q
+    } else if(divID == 'db3Key') {
+        midiValue = 49;             // 2
+    } else if(divID == 'd3Key') {
+        midiValue = 50;             // w
+    } else if(divID == 'eb3Key') {
+        midiValue = 51;             // 3
+    } else if(divID == 'e3Key') {
+        midiValue = 52;             // e
+    } else if(divID == 'f3Key') {
+        midiValue = 53;             // r
+    } else if(divID == 'gb3Key') {
+        midiValue = 54;             // 5
+    } else if(divID == 'g3Key') {
+        midiValue = 55;             // t
+    } else if(divID == 'ab4key') {
+        midiValue = 56;             // 6
+    } else if(divID == 'a4Key') {
+        midiValue = 57;             // y
+    } else if(divID == 'bb4Key') {
+        midiValue = 58;             // 7
+    } else if(divID == 'b4Key') {
+        midiValue = 59;             // u
+    } else if(divID == 'c4Key') {
+        midiValue = 60;             // i
+    } else if(divID == 'db4Key') {
+        midiValue = 61;             // 9
+    } else if(divID == 'd4Key') {
+        midiValue = 62;             // o
+    } else if(divID == 'eb4Key') {
+        midiValue = 63;             // 0
+    } else if(divID == 'e4Key') {
+        midiValue = 64;             // p
+    } else if(divID == 'f4Key') {
+        midiValue = 65;             // z
+    } else if(divID == 'gb4Key') {
+        midiValue = 66;             // s
+    } else if(divID == 'g4Key') {
+        midiValue = 67;             // x
+    } else if(divID == 'ab5Key') {
+        midiValue = 68;             // d
+    } else if(divID == 'a5Key') {
+        midiValue = 69;             // c
+    } else if(divID == 'bb5Key') {
+        midiValue = 70;             // f
+    } else if(divID == 'b5Key') {
+        midiValue = 71;             // v
+    } else if(divID == 'c5Key') {
+        midiValue = 72;             // b
+    } else if(divID == 'db5Key') {
+        midiValue = 73;             // h
+    } else if(divID == 'd5Key') {
+        midiValue = 74;             // n
+    } else if(divID == 'eb5Key') {
+        midiValue = 75;             // j
+    } else if(divID == 'e5Key') {
+        midiValue = 76;             // m
+    }
+    return midiValue;
+}
+
+function getUnicodeCharFromDivID(divID) {
+
+    var char;
+    var midiValue;
+
+    if(divID == 'c3Key') {
+        char = 'q';
+        midiValue = 48;             // q
+    } else if(divID == 'db3Key') {
+        char = '2';
+        midiValue = 49;             // 2
+    } else if(divID == 'd3Key') {
+        char = 'w';
+        midiValue = 50;             // w
+    } else if(divID == 'eb3Key') {
+        char = '3';
+        midiValue = 51;             // 3
+    } else if(divID == 'e3Key') {
+        char = 'e';
+        midiValue = 52;             // e
+    } else if(divID == 'f3Key') {
+        char = 'r';
+        midiValue = 53;             // r
+    } else if(divID == 'gb3Key') {
+        char = '5';
+        midiValue = 54;             // 5
+    } else if(divID == 'g3Key') {
+        char = 't';
+        midiValue = 55;             // t
+    } else if(divID == 'ab4key') {
+        char = '6';
+        midiValue = 56;             // 6
+    } else if(divID == 'a4Key') {
+        char = 'y';
+        midiValue = 57;             // y
+    } else if(divID == 'bb4Key') {
+        char = '7';
+        midiValue = 58;             // 7
+    } else if(divID == 'b4Key') {
+        char = 'u';
+        midiValue = 59;             // u
+    } else if(divID == 'c4Key') {
+        char = 'i';
+        midiValue = 60;             // i
+    } else if(divID == 'db4Key') {
+        char = '9';
+        midiValue = 61;             // 9
+    } else if(divID == 'd4Key') {
+        char = 'o';
+        midiValue = 62;             // o
+    } else if(divID == 'eb4Key') {
+        char = '0';
+        midiValue = 63;             // 0
+    } else if(divID == 'e4Key') {
+        char = 'p';
+        midiValue = 64;             // p
+    } else if(divID == 'f4Key') {
+        char = 'z';
+        midiValue = 65;             // z
+    } else if(divID == 'gb4Key') {
+        char = 's';
+        midiValue = 66;             // s
+    } else if(divID == 'g4Key') {
+        char = 'x';
+        midiValue = 67;             // x
+    } else if(divID == 'ab5Key') {
+        char = 'd';
+        midiValue = 68;             // d
+    } else if(divID == 'a5Key') {
+        char = 'c';
+        midiValue = 69;             // c
+    } else if(divID == 'bb5Key') {
+        char = 'f';
+        midiValue = 70;             // f
+    } else if(divID == 'b5Key') {
+        char = 'v';
+        midiValue = 71;             // v
+    } else if(divID == 'c5Key') {
+        char = 'b';
+        midiValue = 72;             // b
+    } else if(divID == 'db5Key') {
+        char = 'h';
+        midiValue = 73;             // h
+    } else if(divID == 'd5Key') {
+        char = 'n';
+        // midiValue = 74;             // n
+    } else if(divID == 'eb5Key') {
+        char = 'j';
+        // midiValue = 75;             // j
+    } else if(divID == 'e5Key') {
+        char = 'm';
+        // midiValue = 76;             // m
+    }
+    return char;
+}
+
 // helper function to set relevant values when key is pressed
 function setNoteData(array, id, noteName, octave) {
     array[0] = id;
@@ -446,20 +647,20 @@ function hasClass(element, klass) {
 // ------------------------------------------------------------------
 
 function keyboardTrigger(input) {
-    if(keyAllowed [input.which] == false) return;   // check if key is being held down
-    keyAllowed [input.which] = false;
-    var array = getDivIDNoteOctaveFromUnicode(input);                       // check what keyboard key was pressed
-    if(array[0] != '1') {                           // checks whether keyboard input is valid
-        changeColor(array[0]);
-        startNote(array[1], array[2]);
+    if(keyAllowed[input.which] == false) return;        // check if key is being held down
+    keyAllowed[input.which] = false;                    // keep key from retriggering until released
+    var array = getDivIDNoteOctaveFromUnicode(input);   // check what keyboard key was pressed
+    if(array[0] != '1') {                               // checks whether keyboard input is valid
+        changeColor(array[0]);                          // highlight note being played
+        startNote(array[1], array[2]);                  // play audio corresponding to note being pressed
     }
 }
 
 function keyboardUntrigger(input) {
-    keyAllowed [input.which] = true;
-    var array = getDivIDNoteOctaveFromUnicode(input);                       // check what keyboard key was pressed
-    if(array[0] != '1') {                           // checks whether keyboard input is valid
-        revertColor(array[0]);
+    keyAllowed [input.which] = true;                    // allow key to retrigger once released
+    var array = getDivIDNoteOctaveFromUnicode(input);   // check what keyboard key was pressed
+    if(array[0] != '1') {                               // checks whether keyboard input is valid
+        revertColor(array[0]);                          // 
         stopNote(array[1], array[2]);
     }
 }
@@ -469,27 +670,26 @@ function keyboardUntrigger(input) {
 // ------------------------------------------------------------------
 
 function highlightMajorScale() {
-    if(!isExecuting) {
-        if(minorScaleHighlight) {
+    if(!timingFunctionIsExecuting) {
+        if(highlight.minorScale) {
             highlightMinorScale();
-        } else if(majorChordHighlight) {
+        } else if(highlight.majorChord) {
             highlightMajorChord();
-        } else if(minorChordHighlight) {
+        } else if(highlight.minorChord) {
             highlightMinorChord();
         }
 
-        if(!majorScaleHighlight) {                                  // if major scale is not highlighted
-            majorScaleHighlight = true;                             // set flag for major scale highlighting
-            for(var i = 0; i <= 7; i++) {                           // for each key in the scale
-                divInfo = getDivInfo(globalNote+majorScale[i]);     // get html div information for each key
-                changeColor(divInfo[0]);                            // change the color of each key
-                canColor[checkNote(divInfo[1], divInfo[2]) - 48] = false;
-                // console.log(canColor[checkNote(divInfo[1], divInfo[2]) - 48]);
+        if(!highlight.majorScale) {                 // if major scale is not highlighted
+            highlight.majorScale = true;            // set flag for major scale highlighting
+            for(var i = 0; i <= 7; i++) {           // for each key in the scale
+                                                    // get html div information for each key
+                divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorScale[i]);
+                changeColor(divInfo[0]);            // change the color of each key
             }
         } else {
-            majorScaleHighlight = false;
+            highlight.majorScale = false;
             for(var i = 0; i <= 7; i++) {
-                divInfo = getDivInfo(globalNote+majorScale[i]);
+                divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorScale[i]);
                 revertColor(divInfo[0]);
             }
         }
@@ -497,24 +697,24 @@ function highlightMajorScale() {
 }
 
 function highlightMinorScale() {
-    if(!isExecuting) {
-        if(majorScaleHighlight) {
+    if(!timingFunctionIsExecuting) {
+        if(highlight.majorScale) {
             highlightMajorScale();
-        } else if(majorChordHighlight) {
+        } else if(highlight.majorChord) {
             highlightMajorChord();
-        } else if(minorChordHighlight) {
+        } else if(highlight.minorChord) {
             highlightMinorChord();
         }
-        if(!minorScaleHighlight) {
-            minorScaleHighlight = true;
+        if(!highlight.minorScale) {
+            highlight.minorScale = true;
             for(var i = 0; i <= 7; i++) {
-                divInfo = getDivInfo(globalNote+minorScale[i]);
+                divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorScale[i]);
                 changeColor(divInfo[0]);
             }
         } else {
-            minorScaleHighlight = false;
+            highlight.minorScale = false;
             for(var i = 0; i <= 7; i++) {
-                divInfo = getDivInfo(globalNote+minorScale[i]);
+                divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorScale[i]);
                 revertColor(divInfo[0]);
             }
         }
@@ -522,24 +722,24 @@ function highlightMinorScale() {
 }
 
 function highlightMajorChord() {
-    if(!isExecuting) {
-        if(minorChordHighlight) {
+    if(!timingFunctionIsExecuting) {
+        if(highlight.minorChord) {
             highlightMinorChord();
-        } else if(majorScaleHighlight) {
+        } else if(highlight.majorScale) {
             highlightMajorScale();
-        } else if(minorScaleHighlight) {
+        } else if(highlight.minorScale) {
             highlightMinorScale();
         }
-        if(!majorChordHighlight) {
-            majorChordHighlight = true;
+        if(!highlight.majorChord) {
+            highlight.majorChord = true;
             for(var i = 0; i < 3; i++) {
-                divInfo = getDivInfo(globalNote+majorTriChord[i]);
+                divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorTriChord[i]);
                 changeColor(divInfo[0]);
             }
         } else {
-            majorChordHighlight = false;
+            highlight.majorChord = false;
             for(var i = 0; i < 3; i++) {
-                divInfo = getDivInfo(globalNote+majorTriChord[i]);
+                divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorTriChord[i]);
                 revertColor(divInfo[0]);
             }
         }
@@ -547,24 +747,24 @@ function highlightMajorChord() {
 }
 
 function highlightMinorChord() {
-    if(!isExecuting) {
-        if(majorChordHighlight) {
+    if(!timingFunctionIsExecuting) {
+        if(highlight.majorChord) {
             highlightMajorChord();
-        } else if(majorScaleHighlight) {
+        } else if(highlight.majorScale) {
             highlightMajorScale();
-        } else if(minorScaleHighlight) {
+        } else if(highlight.minorScale) {
             highlightMinorScale();
         }
-        if(!minorChordHighlight) {
-            minorChordHighlight = true;
+        if(!highlight.minorChord) {
+            highlight.minorChord = true;
             for(var i = 0; i < 3; i++) {
-                divInfo = getDivInfo(globalNote+minorTriChord[i]);
+                divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorTriChord[i]);
                 changeColor(divInfo[0]);
             }
         } else {
-            minorChordHighlight = false;
+            highlight.minorChord = false;
             for(var i = 0; i < 3; i++) {
-                divInfo = getDivInfo(globalNote+minorTriChord[i]);
+                divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorTriChord[i]);
                 revertColor(divInfo[0]);
             }
         }
@@ -575,18 +775,16 @@ function highlightMinorChord() {
 // called by keyboardTrigger
 // input is the name of div to change
 function changeColor(input) {
+    // alert(canColor[input]);
+    if(canColor[input] == false) { return; }
     if(hasClass(document.getElementById(input), 'lStraightKey')) {
         document.getElementById(input).className = "highlightKey lStraightKey";
-        // alert('left key');
     } else if(hasClass(document.getElementById(input), 'cutKey')) {
         document.getElementById(input).className = "highlightKey cutKey";
-        // alert('cut key');
     } else if(hasClass(document.getElementById(input), 'rStraightKey')) {
         document.getElementById(input).className = "highlightKey rStraightKey";
-        // alert('right key');
     } else if(hasClass(document.getElementById(input), 'blackKey')) {
         document.getElementById(input).className = "key highlightBlackKey";
-        // alert('black key');
     }
 }
 
@@ -594,30 +792,59 @@ function changeColor(input) {
 // called by keyboardUntrigger
 // input is the name of div to change
 function revertColor(input) {
+    if(canColor[input] == false) { return; }
     if(hasClass(document.getElementById(input), 'lStraightKey')) {
         document.getElementById(input).className = "key lStraightKey";
-        // alert('left key');
     } else if(hasClass(document.getElementById(input), 'cutKey')) {
         document.getElementById(input).className = "key cutKey";
-        // alert('cut key');
     } else if(hasClass(document.getElementById(input), 'rStraightKey')) {
         document.getElementById(input).className = "key rStraightKey";
-        // alert('right key');
     } else if(hasClass(document.getElementById(input), 'highlightBlackKey')) {
         document.getElementById(input).className = "key blackKey";
-        // alert('black key');
+    }
+}
+
+// highlight key
+// called by keyboardTrigger
+// input is the name of div to change
+function changeSelectColor(input) {
+    if(canColor[input] == false) { return; }
+    if(hasClass(document.getElementById(input), 'lStraightKey')) {
+        document.getElementById(input).className = "selectKey lStraightKey";
+    } else if(hasClass(document.getElementById(input), 'cutKey')) {
+        document.getElementById(input).className = "selectKey cutKey";
+    } else if(hasClass(document.getElementById(input), 'rStraightKey')) {
+        document.getElementById(input).className = "selectKey rStraightKey";
+    } else if(hasClass(document.getElementById(input), 'blackKey')) {
+        document.getElementById(input).className = "key selectBlackKey";
+    }
+}
+
+// change key color back to default color
+// called by keyboardUntrigger
+// input is the name of div to change
+function revertSelectColor(input) {
+    if(canColor[input] == false) { return; }
+    if(hasClass(document.getElementById(input), 'lStraightKey')) {
+        document.getElementById(input).className = "key lStraightKey";
+    } else if(hasClass(document.getElementById(input), 'cutKey')) {
+        document.getElementById(input).className = "key cutKey";
+    } else if(hasClass(document.getElementById(input), 'rStraightKey')) {
+        document.getElementById(input).className = "key rStraightKey";
+    } else if(hasClass(document.getElementById(input), 'selectBlackKey')) {
+        document.getElementById(input).className = "key blackKey";
     }
 }
 
 // hightlight all
 function unhighlightConcepts() {
-    if(majorScaleHighlight) {           // if major scale is highlighted
+    if(highlight.majorScale) {           // if major scale is highlighted
         highlightMajorScale();          // unhighlight major scale before playing major chord
-    } else if(minorScaleHighlight) {    // if minor scale is highlighted
+    } else if(highlight.minorScale) {    // if minor scale is highlighted
         highlightMinorScale();          // unhighlight minor scale before playing major chord
-    } else if(majorChordHighlight) {
+    } else if(highlight.majorChord) {
         highlightMajorChord();
-    } else if(minorChordHighlight) {
+    } else if(highlight.minorChord) {
         highlightMinorChord();
     }
 }
@@ -626,7 +853,7 @@ function unhighlightAll() {
     unhighlightConcepts();
     var div;
     for(var i = 0; i < numberOfKeys; i++) {
-        div = getDivInfo(i+48);
+        div = getDivIDNoteOctaveFromMidiValue(i+48);
         revertColor(div[0]);
         // console.log(div);
     }
@@ -644,14 +871,14 @@ function triggerColor(input) {
 }
 
 function scaleKeyColoring(count, input) {
-    isExecuting = true;
+    timingFunctionIsExecuting = true;
     triggerColor(input[count]);
     setTimeout(function () {
         count++;
         if(count < scaleLength) {
             scaleKeyColoring(count, input);
         } else {
-            isExecuting = false;
+            timingFunctionIsExecuting = false;
         }
     }, globalTempo);
 }
@@ -666,11 +893,11 @@ function noteProgression(count, input) {
     }, globalTempo);
 }
 
-//---------------------------------------------------
-// Show Key Names function
-//----------------------------------------------------
+// ------------------------------------------------------------------
+// Show Key Names Functions
+// ------------------------------------------------------------------
 
- function toggleKeyNames(input) {
+ function toggleVisibility(input) {
     var mydiv = document.getElementsByClassName(input);
     for (var i = 0; i < mydiv.length; i++) {
         if(mydiv[i].style.display == 'none') {
@@ -678,5 +905,12 @@ function noteProgression(count, input) {
         } else {
             mydiv[i].style.display = 'none';
         }
+    }
+}
+
+function showDebug(input) {
+    var unicode = input.keyCode ? input.keyCode : input.charCode;
+    if(unicode == 96) {             // `
+        toggleVisibility('debug');
     }
 }
