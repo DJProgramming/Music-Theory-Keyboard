@@ -37,10 +37,12 @@ function keyDownFunction(input){
 
     if(noteUp[0] == highlightedNote[0] || noteDown[0] == highlightedNote[0]) {
         console.log('Correct!');
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
         revertColor(highlightedNote[0]);
     } else {
+        showSnackBar(false);
         console.log('Wrong!');
     }
 }

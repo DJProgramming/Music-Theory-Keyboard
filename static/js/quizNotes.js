@@ -121,146 +121,175 @@ function keyDownFunction(input){
     var unicode = input.keyCode ? input.keyCode : input.charCode;
     if (unicode == 81 && randomNote == 'c3'){
         document.getElementById('c3Key').className = "key lStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 50 && randomNote == 'db3'){
         document.getElementById('db3Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 87 && randomNote == 'd3'){
         document.getElementById('d3Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 51 && randomNote == 'eb3'){
         document.getElementById('eb3Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 69 && randomNote == 'e3'){
         document.getElementById('e3Key').className = "key rStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 82 && randomNote == 'f3'){
         document.getElementById('f3Key').className = "key lStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 53 && randomNote == 'gb3'){
         document.getElementById('gb3Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 84 && randomNote == 'g3'){
         document.getElementById('g3Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 54 && randomNote == 'ab4'){
         document.getElementById('ab4Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 89 && randomNote == 'a4'){
         document.getElementById('a4Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 55 && randomNote == 'bb4'){
         document.getElementById('bb4Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 85 && randomNote == 'b4'){
         document.getElementById('b4Key').className = "key rStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 73 && randomNote == 'c4'){
         document.getElementById('c4Key').className = "key lStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 57 && randomNote == 'db4'){
         document.getElementById('db4Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 79 && randomNote == 'd4'){
         document.getElementById('d4Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 48 && randomNote == 'eb4'){
         document.getElementById('eb4Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 80 && randomNote == 'e4'){
         document.getElementById('e4Key').className = "key rStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 90 && randomNote == 'f4'){
         document.getElementById('f4Key').className = "key lStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 83 && randomNote == 'gb4'){
         document.getElementById('gb4Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 88 && randomNote == 'g4'){
         document.getElementById('g4Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 68 && randomNote == 'ab5'){
         document.getElementById('ab5Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 67 && randomNote == 'a5'){
         document.getElementById('a5Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 70 && randomNote == 'bb5'){
         document.getElementById('bb5Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 86 && randomNote == 'b5'){
         document.getElementById('b5Key').className = "key rStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 66 && randomNote == 'c5'){
         document.getElementById('c5Key').className = "key lStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 72 && randomNote == 'db5'){
         document.getElementById('db5Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 78 && randomNote == 'd5'){
         document.getElementById('d5Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 74 && randomNote == 'eb5Key'){
         document.getElementById('eb5Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (unicode == 77 && randomNote == 'e5'){
         document.getElementById('e5Key').className = "key rStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
@@ -271,61 +300,73 @@ function checkKey(input){
 	console.log('Input: ' + input);
 	if (input == 'c3' && randomNote == 'c3'){
         document.getElementById('c3Key').className = "key lStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'db3' && randomNote == 'db3'){
         document.getElementById('db3Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'd3' && randomNote == 'd3'){
         document.getElementById('d3Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'eb3' && randomNote == 'eb3'){
         document.getElementById('eb3Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
          Correct(numCorrect);
     }
     else if (input == 'e3' && randomNote == 'e3'){
         document.getElementById('e3Key').className = "key rStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'f3' && randomNote == 'f3'){
         document.getElementById('f3Key').className = "key lStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'gb3' && randomNote == 'gb3'){
         document.getElementById('gb3Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'g3' && randomNote == 'g3'){
         document.getElementById('g3Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'ab4' && randomNote == 'ab4'){
         document.getElementById('ab4Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'a4' && randomNote == 'a4'){
         document.getElementById('a4Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'bb4' && randomNote == 'bb4'){
         document.getElementById('bb4Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'b4' && randomNote == 'b4'){
         document.getElementById('b4Key').className = "key rStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
@@ -336,81 +377,98 @@ function checkKey(input){
     }
     else if (input == 'db4' && randomNote == 'db4'){
         document.getElementById('db4Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'd4' && randomNote == 'd4'){
         document.getElementById('d4Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'eb4' && randomNote == 'eb4'){
         document.getElementById('eb4Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'e4' && randomNote == 'e4'){
         document.getElementById('e4Key').className = "key rStraightKey";
+        showSnackBar(true);
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'f4' && randomNote == 'f4'){
         document.getElementById('f4Key').className = "key lStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'gb4' && randomNote == 'gb4'){
         document.getElementById('gb4Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'g4' && randomNote == 'g4'){
         document.getElementById('g4Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'ab5' && randomNote == 'ab5'){
         document.getElementById('ab5Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'a5' && randomNote == 'a5'){
         document.getElementById('a5Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'bb5' && randomNote == 'bb5'){
         document.getElementById('bb5Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'b5' && randomNote == 'b5'){
         document.getElementById('b5Key').className = "key rStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'c5' && randomNote == 'c5'){
         document.getElementById('c5Key').className = "key lStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'db5' && randomNote == 'db5'){
         document.getElementById('db5Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'd5' && randomNote == 'd5'){
         document.getElementById('d5Key').className = "key cutKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'eb5' && randomNote == 'eb5'){
         document.getElementById('eb5Key').className = "key blackKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
     else if (input == 'e5' && randomNote == 'e5'){
         document.getElementById('e5Key').className = "key rStraightKey";
+        showSnackBar(true);
         numCorrect++;
         checkCorrect(numCorrect);
     }
