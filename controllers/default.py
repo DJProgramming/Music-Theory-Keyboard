@@ -27,9 +27,14 @@ def quizNotes():
 def quizSteps():
     response.flash = T("Quiz: Steps")
     return dict(message=T('WHAT!'))
-def quizScales():
-    response.flash = T("Quiz: Scales")
+def quizMajorScales():
+    response.flash = T("Quiz: Major Scales")
     return dict(message=T('Somthing'))
+
+def quizMinorScales():
+    response.flash = T("Quiz: Minor Scales")
+    return dict(message=T('Somthing'))
+
 
 
 def user():

@@ -27,7 +27,7 @@
         <div id="homeButton">
             <button onclick="location.href='index'" type="button">Home</button>
         </div>
-        Score: <span id="correctScore"></span>  <span id="congratsTxt"></span>
+        <h3 style="text-align: center;">Score: <span id="correctScore">0</span>  <span id="congratsTxt"></span></h3>
         <h1 style="text-align:center;">Play a <span id="stepTxt"></span> step </h1>
         <!-- container for individual keys -->
 		<div id="keyboard">
@@ -63,6 +63,7 @@
 				--><div class="key rStraightKey" id="e5Key" onclick="playSingleNote('e', 5); triggerColor(this.id)"><div class="hardwareKey">m</div><div class="keyname">E</div></div>
 
 			</div>
+            <div id="snackbar"></div>
     </body>
 
 </html>
