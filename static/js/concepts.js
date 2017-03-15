@@ -55,7 +55,6 @@ var minorTriChord = [
     7  // +7 semitones
 ];
 
-
 var divInfo = {};                           // holds div information for current global note selected
 var keyAllowed = {};                        // holds the state of all keys being used
 var canColor = {};                          // array to hold flags for each note to determine whether its color can change
@@ -120,14 +119,9 @@ function contextualClick(value, octave, id) {
         playSingleNote(value, octave);
         triggerColor(id);
     } else if(programControl.stepQuiz) {
-        var divID = getDivIDNoteOctaveFromMidiValue(getMidiValueFromDivID(id));
-        var unicode = getUnicodeCharFromDivID(divID);
-
-        // alert(test);
-
         playSingleNote(value, octave);
         triggerColor(id);
-        // keyDownFunction(unicode);
+        clickFunction(value, octave);
     }
 }
 
@@ -260,18 +254,18 @@ function playNote() {
 
 function playSingleNote(value, octave) {
     unhighlightConcepts();
-    var key = checkNote(value, octave); // calls function to determine note to play
+    var key = getMidiValue(value, octave); // calls function to determine note to play
     var delay = globalDelay;
     triggerNote(key, globalVelocity, delay, globalSustain);
 }
 
 function startNote(value, octave) {
-    var key = checkNote(value, octave); // calls function to determine note to play
+    var key = getMidiValue(value, octave); // calls function to determine note to play
     MIDI.noteOn(0, key, globalVelocity, 0);
 }
 
 function stopNote(value, octave) {
-    var key = checkNote(value, octave); // calls function to determine note to play
+    var key = getMidiValue(value, octave); // calls function to determine note to play
     MIDI.noteOff(0, key, 0);
 }
 
@@ -287,7 +281,7 @@ function triggerNote(note, velocity, delay, sustain) {
 
 // used to change global note value variable
 // called by playSingleNote function
-function checkNote(value, octave) {
+function getMidiValue(value, octave) {
     var noteVal;
     if(value == "ab" || value == "g#") {
         noteVal = 44;
@@ -393,6 +387,76 @@ function getDivIDNoteOctaveFromUnicode(input) {
     } else if(unicode == 74) { // j
         setNoteData(noteData, 'eb5Key', 'eb', 5);
     } else if(unicode == 77) { // m
+        setNoteData(noteData, 'e5Key', 'e', 5);
+    }
+    // return note information in a 3 element array
+    // position 1: div id; position 2: note name; postition 3: octave
+    return noteData;
+}
+
+function getDivIDNoteOctaveFromKeyboardChar(char) {
+    // array for note information initialized with dummy values
+    // position 1: div id; position 2: note name; postition 3: octave
+    var noteData = ['1', '2', 3];
+
+    // alert(unicode);
+    if(char == 'q') {
+        setNoteData(noteData, 'c3Key', 'c', 3);
+    } else if(char == '2') {
+        setNoteData(noteData, 'db3Key', 'db', 3);
+    } else if(char == '2') { // w
+        setNoteData(noteData, 'd3Key', 'd', 3);
+    } else if(char == '3') { // 3
+        setNoteData(noteData, 'eb3Key', 'eb', 3);
+    } else if(char == 'e') { // e
+        setNoteData(noteData, 'e3Key', 'e', 3);
+    } else if(char == 'r') { // r
+        setNoteData(noteData, 'f3Key', 'f', 3);
+    } else if(char == '5') { // 5
+        setNoteData(noteData, 'gb3Key', 'gb', 3);
+    } else if(char == 't') { // t
+        setNoteData(noteData, 'g3Key', 'g', 3);
+    } else if(char == '6') { // 6
+        setNoteData(noteData, 'ab4Key', 'ab', 4);
+    } else if(char == 'y') { // y
+        setNoteData(noteData, 'a4Key', 'a', 4);
+    } else if(char == '7') { // 7
+        setNoteData(noteData, 'bb4Key', 'bb', 4);
+    } else if(char == 'u') { // u
+        setNoteData(noteData, 'b4Key', 'b', 4);
+    } else if(char == 'i') { // i
+        setNoteData(noteData, 'c4Key', 'c', 4);
+    } else if(char == '9') { // 9
+        setNoteData(noteData, 'db4Key', 'db', 4);
+    } else if(char == 'o') { // o
+        setNoteData(noteData, 'd4Key', 'd', 4);
+    } else if(char == '0') { // 0
+        setNoteData(noteData, 'eb4Key', 'eb', 4);
+    } else if(char == 'p') { // p
+        setNoteData(noteData, 'e4Key', 'e', 4);
+    } else if(char == 'z') { // z
+        setNoteData(noteData, 'f4Key', 'f', 4);
+    } else if(char == 's') { // s
+        setNoteData(noteData, 'gb4Key', 'gb', 4);
+    } else if(char == 'x') { // x
+        setNoteData(noteData, 'g4Key', 'g', 4);
+    } else if(char == 'd') { // d
+        setNoteData(noteData, 'ab5Key', 'ab', 5);
+    } else if(char == 'c') { // c
+        setNoteData(noteData, 'a5Key', 'a', 5);
+    } else if(char == 'f') { // f
+        setNoteData(noteData, 'bb5Key', 'bb', 5);
+    } else if(char == 'v') { // v
+        setNoteData(noteData, 'b5Key', 'b', 5);
+    } else if(char == 'b') { // b
+        setNoteData(noteData, 'c5Key', 'c', 5);
+    } else if(char == 'h') { // h
+        setNoteData(noteData, 'db5Key', 'db', 5);
+    } else if(char == 'n') { // n
+        setNoteData(noteData, 'd5Key', 'd', 5);
+    } else if(char == 'j') { // j
+        setNoteData(noteData, 'eb5Key', 'eb', 5);
+    } else if(char == 'm') { // m
         setNoteData(noteData, 'e5Key', 'e', 5);
     }
     // return note information in a 3 element array
@@ -535,98 +599,131 @@ function getMidiValueFromDivID(divID) {
     return midiValue;
 }
 
-function getUnicodeCharFromDivID(divID) {
-
+function getKeyaboardCharFromUnicode(input) {
+    var unicode = input.keyCode ? input.keyCode : input.charCode;
     var char;
-    var midiValue;
-
-    if(divID == 'c3Key') {
+    if(unicode == 81) {         // q
         char = 'q';
-        midiValue = 48;             // q
-    } else if(divID == 'db3Key') {
+    } else if(unicode == 50) { // 2
         char = '2';
-        midiValue = 49;             // 2
-    } else if(divID == 'd3Key') {
+    } else if(unicode == 87) { // w
         char = 'w';
-        midiValue = 50;             // w
-    } else if(divID == 'eb3Key') {
+    } else if(unicode == 51) { // 3
         char = '3';
-        midiValue = 51;             // 3
-    } else if(divID == 'e3Key') {
+    } else if(unicode == 69) { // e
         char = 'e';
-        midiValue = 52;             // e
-    } else if(divID == 'f3Key') {
+    } else if(unicode == 82) { // r
         char = 'r';
-        midiValue = 53;             // r
-    } else if(divID == 'gb3Key') {
+    } else if(unicode == 53) { // 5
         char = '5';
-        midiValue = 54;             // 5
-    } else if(divID == 'g3Key') {
+    } else if(unicode == 84) { // t
         char = 't';
-        midiValue = 55;             // t
-    } else if(divID == 'ab4key') {
+    } else if(unicode == 54) { // 6
         char = '6';
-        midiValue = 56;             // 6
-    } else if(divID == 'a4Key') {
+    } else if(unicode == 89) { // y
         char = 'y';
-        midiValue = 57;             // y
-    } else if(divID == 'bb4Key') {
+    } else if(unicode == 55) { // 7
         char = '7';
-        midiValue = 58;             // 7
-    } else if(divID == 'b4Key') {
+    } else if(unicode == 85) { // u
         char = 'u';
-        midiValue = 59;             // u
-    } else if(divID == 'c4Key') {
+    } else if(unicode == 73) { // i
         char = 'i';
-        midiValue = 60;             // i
-    } else if(divID == 'db4Key') {
+    } else if(unicode == 57) { // 9
         char = '9';
-        midiValue = 61;             // 9
-    } else if(divID == 'd4Key') {
+    } else if(unicode == 79) { // o
         char = 'o';
-        midiValue = 62;             // o
-    } else if(divID == 'eb4Key') {
+    } else if(unicode == 48) { // 0
         char = '0';
-        midiValue = 63;             // 0
-    } else if(divID == 'e4Key') {
+    } else if(unicode == 80) { // p
         char = 'p';
-        midiValue = 64;             // p
-    } else if(divID == 'f4Key') {
+    } else if(unicode == 90) { // z
         char = 'z';
-        midiValue = 65;             // z
-    } else if(divID == 'gb4Key') {
+    } else if(unicode == 83) { // s
         char = 's';
-        midiValue = 66;             // s
-    } else if(divID == 'g4Key') {
+    } else if(unicode == 88) { // x
         char = 'x';
-        midiValue = 67;             // x
-    } else if(divID == 'ab5Key') {
+    } else if(unicode == 68) { // d
         char = 'd';
-        midiValue = 68;             // d
-    } else if(divID == 'a5Key') {
+    } else if(unicode == 67) { // c
         char = 'c';
-        midiValue = 69;             // c
-    } else if(divID == 'bb5Key') {
+    } else if(unicode == 70) { // f
         char = 'f';
-        midiValue = 70;             // f
-    } else if(divID == 'b5Key') {
+    } else if(unicode == 86) { // v
         char = 'v';
-        midiValue = 71;             // v
-    } else if(divID == 'c5Key') {
+    } else if(unicode == 66) { // b
         char = 'b';
-        midiValue = 72;             // b
-    } else if(divID == 'db5Key') {
+    } else if(unicode == 72) { // h
         char = 'h';
-        midiValue = 73;             // h
-    } else if(divID == 'd5Key') {
+    } else if(unicode == 78) { // n
         char = 'n';
-        // midiValue = 74;             // n
-    } else if(divID == 'eb5Key') {
+    } else if(unicode == 74) { // j
         char = 'j';
-        // midiValue = 75;             // j
-    } else if(divID == 'e5Key') {
+    } else if(unicode == 77) { // m
         char = 'm';
-        // midiValue = 76;             // m
+    }
+    return char;
+}
+
+function getKeyboardCharFromDivID(divID) {
+    var char;
+    if(divID == 'c3Key') {
+        char = 'q';                 // q
+    } else if(divID == 'db3Key') {
+        char = '2';                 // 2
+    } else if(divID == 'd3Key') {
+        char = 'w';                 // w
+    } else if(divID == 'eb3Key') {
+        char = '3';                 // 3
+    } else if(divID == 'e3Key') {
+        char = 'e';                 // e
+    } else if(divID == 'f3Key') {
+        char = 'r';                 // r
+    } else if(divID == 'gb3Key') {
+        char = '5';                 // 5
+    } else if(divID == 'g3Key') {
+        char = 't';                 // t
+    } else if(divID == 'ab4key') {
+        char = '6';                 // 6
+    } else if(divID == 'a4Key') {
+        char = 'y';                 // y
+    } else if(divID == 'bb4Key') {
+        char = '7';                 // 7
+    } else if(divID == 'b4Key') {
+        char = 'u';                 // u
+    } else if(divID == 'c4Key') {
+        char = 'i';                 // i
+    } else if(divID == 'db4Key') {
+        char = '9';                 // 9
+    } else if(divID == 'd4Key') {
+        char = 'o';                 // o
+    } else if(divID == 'eb4Key') {
+        char = '0';                 // 0
+    } else if(divID == 'e4Key') {
+        char = 'p';                 // p
+    } else if(divID == 'f4Key') {
+        char = 'z';                 // z
+    } else if(divID == 'gb4Key') {
+        char = 's';                 // s
+    } else if(divID == 'g4Key') {
+        char = 'x';                 // x
+    } else if(divID == 'ab5Key') {
+        char = 'd';                 // d
+    } else if(divID == 'a5Key') {
+        char = 'c';                 // c
+    } else if(divID == 'bb5Key') {
+        char = 'f';                 // f
+    } else if(divID == 'b5Key') {
+        char = 'v';                 // v
+    } else if(divID == 'c5Key') {
+        char = 'b';                 // b
+    } else if(divID == 'db5Key') {
+        char = 'h';                 // h
+    } else if(divID == 'd5Key') {
+        char = 'n';                 // n
+    } else if(divID == 'eb5Key') {
+        char = 'j';                 // j
+    } else if(divID == 'e5Key') {
+        char = 'm';                 // m
     }
     return char;
 }
@@ -636,6 +733,36 @@ function setNoteData(array, id, noteName, octave) {
     array[0] = id;
     array[1] = noteName;
     array[2] = octave;
+}
+
+function getWhiteKeysDivInfo() {
+    var whiteKeysDivInfo = {};
+    var currentWhiteIndex = 0;
+    var notes = {};
+    for(var i = 0; i < numberOfKeys; i++) {
+        notes[i] = getDivIDNoteOctaveFromMidiValue(48+i);
+        if(notes[i][1].length < 2) {
+            whiteKeysDivInfo[currentWhiteIndex] = notes[i];
+            currentWhiteIndex++;
+        }
+    }
+    console.log(whiteKeysDivInfo);
+    return whiteKeysDivInfo;
+}
+
+function getBlackKeysDivInfo() {
+    var blackKeysDivInfo = {};
+    var currentBlackIndex = 0;
+    var notes = {};
+    for(var i = 0; i < numberOfKeys; i++) {
+        notes[i] = getDivIDNoteOctaveFromMidiValue(48+i);
+        if(notes[i][1].length > 1) {
+            blackKeysDivInfo[currentBlackIndex] = notes[i];
+            currentBlackIndex++;
+        }
+    }
+    console.log(blackKeysDivInfo);
+    return blackKeysDivInfo;
 }
 
 // tests whether element is a member of a class
@@ -914,36 +1041,4 @@ function showDebug(input) {
     if(unicode == 96) {             // `
         toggleVisibility('debug');
     }
-}
-
-function showSnackBar(input) {
-    // Get the snackbar DIV
-    var x = document.getElementById("snackbar");
-
-    // Add the "show" class to DIV
-    if (input == false){
-        x.textContent = "Wrong!";
-        x.className = "show";
-    }
-    else if (input == true){
-        x.textContent = "Correct";
-        x.className = "show";
-    }
-
-    // After 3 seconds, remove the show class from DIV
-    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-}
-
-/* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
-function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-    document.getElementById("window").style.marginLeft = "250px";
-    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
-}
-
-/* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the background color of body to white */
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("window").style.marginLeft = "0";
-    document.body.style.backgroundColor = "white";
 }
