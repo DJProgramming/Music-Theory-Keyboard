@@ -35,6 +35,10 @@ def quizMinorScales():
     response.flash = T("Quiz: Minor Scales")
     return dict(message=T('Somthing'))
 
+def lesson1():
+    response.flash = T("Something")
+    return dict(message=T('Wack'))
+
 
 
 def user():

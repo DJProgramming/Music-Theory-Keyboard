@@ -193,6 +193,7 @@ html, body {
     min-height: var(--whiteKeyHeight);
     box-shadow: 0 0 calc(var(--whiteKeyHeight)/10) calc(var(--whiteKeyHeight)/40) black;
     border: calc(var(--whiteKeyHeight)/20) solid black;
+    position:fixed;
 }
 
 #debug {

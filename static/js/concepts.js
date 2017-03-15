@@ -55,6 +55,7 @@ var minorTriChord = [
     7  // +7 semitones
 ];
 
+
 var divInfo = {};                           // holds div information for current global note selected
 var keyAllowed = {};                        // holds the state of all keys being used
 var canColor = {};                          // array to hold flags for each note to determine whether its color can change
@@ -931,4 +932,18 @@ function showSnackBar(input) {
 
     // After 3 seconds, remove the show class from DIV
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+/* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("window").style.marginLeft = "250px";
+    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+/* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the background color of body to white */
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("window").style.marginLeft = "0";
+    document.body.style.backgroundColor = "white";
 }

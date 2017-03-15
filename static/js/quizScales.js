@@ -284,6 +284,13 @@ function getRandomMajorScale(){
     }
 }
 
+function storeNote(input){
+    if(inputArray.length < scaleLength) {
+        inputArray.push(input);
+    }
+    cmpArrayLength();
+}
+
 function inputFunction(input){
     for(var i = 0; i < scaleLength; i++){
         console.log("Array: " + i + ": " + inputArray[i]);
@@ -362,44 +369,49 @@ function cmpArrayLength(){
 
 function checkArray(){
     var ifCorrect = false;
+    console.log("Major or Minor: " + randomMajMin);
     for (var i = 0; i < scaleLength;i++){
         console.log('Array' + '['+ i + ']: ' + inputArray[i] + ',' + notesInArray[i]);
     }
+    if (randomMajMin == 'major') {
+        for (var i = 0; i < scaleLength; i++) {
+            if (randomMajMin == 'major') {
+                if (inputArray[i] != notesInArray[i]) {
+                    inputArray = [];
+                    showSnackBar(ifCorrect);
+                    if (window.location.href.indexOf("quizMajorScales") > -1) {
+                        console.log("Major Quiz");
+                        getRandomMajorScale();
+                        break;
+                    }
+                    else if (window.location.href.indexOf("quizMinorScales") > -1) {
+                        console.log("Minor Quiz");
+                        getRandomScale();
+                        break;
+                    }
+                }
+                else {
+                    ifCorrect = true;
+                }
+            }
 
-    for (var i = 0; i < scaleLength; i++) {
-        if (randomMajMin == 'major') {
-            if (inputArray[i] != notesInArray[i]) {
+        }
+    }
+    else if (randomMajMin == 'minor'){
+        for(var i =0; i < scaleLength;i++){
+            if(inputArray[i] != notesInArray[i]){
                 inputArray = [];
-                getRandomScale();
-                ifCorrect = false;
                 showSnackBar(ifCorrect);
-                if(window.location.href == 'quizMajorScales'){
-                    getRandomMajorScale();
-                    break;
-                }
-                else{
-                    getRandomScale();
-                    break;
-                }
+                getRandomScale();
+                break;
             }
             else{
                 ifCorrect = true;
             }
         }
-        else if (randomMajMin == 'minor') {
-            if (inputArray[i] != notesInArray[i]) {
-                inputArray = [];
-                getRandomScale();
-                ifCorrect = false;
-                showSnackBar(ifCorrect);
-                break;
-            }
-            else{
-                ifCorrect = false;
-            }
-        }
     }
     if (ifCorrect == true){
+        console.log("Correct: " + ifCorrect.toString());
         showSnackBar(ifCorrect);
         numCorrect++;
         document.getElementById('correctScore').textContent = numCorrect;
@@ -410,15 +422,17 @@ function checkArray(){
 
 function checkNumCorrect(){
     if (numCorrect == 5){
-        document.getElementById('correctScore').textContent = 'Congratulations! You Passed!';
+        document.getElementById('congratsTxt').textContent = 'Congratulations! You Passed!';
         inputArray = [];
     }
     else{
         inputArray = [];
-        if(window.location.href == 'quizMajorScales'){
+        if(window.location.href.indexOf('quizMajorScales') > -1){
+            console.log("Correct Major");
             getRandomMajorScale();
         }
-        else if(window.location.href == 'quizMinorScales'){
+        else if(window.location.href.indexOf('quizMinorScales') > -1){
+            console.log("Correct Minor");
             getRandomScale();
         }
     }

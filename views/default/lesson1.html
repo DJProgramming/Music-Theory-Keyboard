@@ -7,6 +7,8 @@
 		<link rel="stylesheet" type="text/css" href="../static/css/theStyle.css">
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<!-- polyfill -->
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	    <script src="../static/inc/shim/Base64.js" type="text/javascript"></script>
 		<script src="../static/inc/shim/Base64binary.js" type="text/javascript"></script>
 		<script src="../static/inc/shim/WebAudioAPI.js" type="text/javascript"></script>
@@ -23,24 +25,25 @@
 		<!-- custom scripts -->
 		<script type="text/javascript" src="../static/js/concepts.js"></script>
 	</head>
-	<!-- <body onload="load()"> -->
-	<body onload="load()" background="../static/images/wood-grain.jpg">
-		<div id="window">
-            <div id="mySidenav" class="sidenav">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="lesson1.html">Lesson: Something</a>
-                <a href="quizNotes.html">Quiz: Notes</a>
-                <a href="quizSteps.html">Quiz: Steps</a>
-                <a href="quizMajorScales.html">Quiz: Major Scales</a>
-                <a href="quizMinorScales.html">Quiz: Minor Scales</a>
-            </div>
+	<body onload="load()">
+        <div id="window">
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="index.html"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+            <a href="lesson1.html">Lesson: Something</a>
+            <a href="quizNotes.html">Quiz: Notes</a>
+            <a href="quizSteps.html">Quiz: Steps</a>
+            <a href="quizMajorScales.html">Quiz: Major Scales</a>
+            <a href="quizMinorScales.html">Quiz: Minor Scales</a>
+        </div>
 
-            <!-- Use any element to open the sidenav -->
-            <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
-			<!-- container for individual keys -->
-			<div id="keyboard">
-				<!-- keyboard keys that call functions to play corresponding note when clicked --><!--
-				--><div class="key lStraightKey" id="c3Key" onclick="playSingleNote('c', 3); triggerColor(this.id)"><div class="hardwareKey">q</div><div class="keyname">C</div></div><!--
+        <!-- Use any element to open the sidenav -->
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
+
+		<!-- container for individual keys -->
+		<div id="keyboard">
+			<!-- keyboard keys that call functions to play corresponding note when clicked --><!--
+			--><div class="key lStraightKey" id="c3Key" onclick="playSingleNote('c', 3); triggerColor(this.id);"><div class="hardwareKey">q</div><div class="keyname">C</div></div><!--
 				--><div class="key blackKey" id="db3Key" onclick="playSingleNote('db', 3); triggerColor(this.id)"><div class="hardwareKey">2</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
 				--><div class="key cutKey" id="d3Key" onclick="playSingleNote('d', 3); triggerColor(this.id)"><div class="hardwareKey">w</div><div class="keyname">D</div></div><!--
 				--><div class="key blackKey" id="eb3Key" onclick="playSingleNote('eb', 3); triggerColor(this.id)"><div class="hardwareKey">3</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
@@ -70,57 +73,54 @@
 				--><div class="key blackKey" id="eb5Key" onclick="playSingleNote('eb', 5); triggerColor(this.id)"><div class="hardwareKey">j</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
 				--><div class="key rStraightKey" id="e5Key" onclick="playSingleNote('e', 5); triggerColor(this.id)"><div class="hardwareKey">m</div><div class="keyname">E</div></div>
 
-			</div>
-			<div id="debug" class="debug">
-				<div id="noteSelection">
-					<input type="button" onclick="changeGlobalNote('c')" value="c"/>
-					<input type="button" onclick="changeGlobalNote('db')" value="db"/>
-					<input type="button" onclick="changeGlobalNote('d')" value="d"/>
-					<input type="button" onclick="changeGlobalNote('eb')" value="eb"/>
-					<input type="button" onclick="changeGlobalNote('e')" value="e"/>
-					<input type="button" onclick="changeGlobalNote('f')" value="f"/>
-					<input type="button" onclick="changeGlobalNote('gb')" value="gb"/>
-					<input type="button" onclick="changeGlobalNote('g')" value="g"/>
-					<input type="button" onclick="changeGlobalNote('ab')" value="ab"/>
-					<input type="button" onclick="changeGlobalNote('a')" value="a"/>
-					<input type="button" onclick="changeGlobalNote('bb')" value="bb"/>
-				</div>
-				<div id="tempoSelection">
-				<!-- To add a new tempo option simply create an input button and call setTempo 
-				with the desired value as the argument as shown below -->
-					<input type="button" onclick="setTempo(100)" value="100"/>
-					<input type="button" onclick="setTempo(120)" value="120"/>
-					<input type="button" onclick="setTempo(140)" value="140"/>
-					<input type="button" onclick="setTempo(160)" value="160"/>
-					<input type="button" onclick="setTempo(180)" value="180"/>
-				</div>
-				<div id="conceptOptions">
-				<!-- These buttons are only used for testing and debugging purposes -->
-					<input type="button" onclick="playNote()" value="Play Root Note"/>
-					<input type="button" onclick="playMajorScale()" value="Play Major Scale"/>
-					<input type="button" onclick="playMinorScale()" value="Play Minor Scale"/>
-					<input type="button" onclick="playMajorTriChord()" value="Play Major Chord"/>
-					<input type="button" onclick="playMinorTriChord()" value="Play Minor Chord"/>
-				</div>
-				<div id="highlightOptions">
-					<input type="button" onclick="highlightMajorScale()" value="Toggle Major Scale"/>
-					<input type="button" onclick="highlightMinorScale()" value="Toggle Minor Scale"/>
-					<input type="button" onclick="highlightMajorChord()" value="Toggle Major Chord"/>
-					<input type="button" onclick="highlightMinorChord()" value="Toggle Minor Chord"/>
-					<input type="button" onclick="unhighlightAll()" value="Unhighlight"/>
-				</div>
-				<div id="showKeys">
-					<input type="button" value="Toggle Key Names" onclick="toggleVisibility('keyname');">
-					<input type="button" value="Toggle Hardware Key Names" onclick="toggleVisibility('hardwareKey');">
-					<!-- <input type="button" value="Toggle Debug Menu" onclick="toggleVisibility('debug');"> -->
-				</div>
-		        <div id="quiz_list">
-		            <button onclick="location.href='quizNotes'" type="button">Quiz: Notes</button>
-		            <button onclick="location.href='quizSteps'" type="button">Quiz: Steps</button>
-                    <button onclick="location.href='quizMajorScales'" type="button">Quiz: Major Scales</button>
-                    <button onclick="location.href='quizMajorScales'" type="button">Quiz: Minor Scales</button>
-		        </div>
-		    </div>
-	    </div>
+		</div>
+        <div>
+        Hello, and welcome to your first Music Theory lesson! <br>
+        We're going to start by getting to know the layout of the piano:<br>
+        As you can see, there are
+        <button onclick=
+                "unhighlightAll();
+                 whiteKeys = ['c3Key','d3Key','e3Key','f3Key','g3Key','a4Key', 'b4Key', 'c4Key','d4Key','e4Key','f4Key','g4Key','a5Key', 'b5Key','c5Key','d5Key','e5Key'];
+                 for(var i = 0;i<whiteKeys.length;i++){
+                     changeColor(whiteKeys[i]);
+                 }" class="button">
+            White Keys</button>
+        and
+        <button onclick=
+                "unhighlightAll();
+                 blackKeys = ['db3Key','eb3Key','gb3Key','ab4Key','bb4Key', 'db4Key','eb4Key','gb4Key','ab5Key','bb5Key','db5Key','eb5Key'];
+                 for(var i = 0;i<blackKeys.length;i++){
+                     changeColor(blackKeys[i]);
+                 }">
+            Black Keys</button>.
+        These keys are assigned letter names which are repeated as the corresponding keys reappear. The pitches on the piano start with low pitches on the left, and move to higher ones on the right. <br>
+        To see these note names, click the button that says 'Toggle Key Names'.<br><br>
+
+        Now that you've turned on the note names you'll notice that the white keys have names which are simply the letters A-G, but the black keys are a little more complicated looking.
+        First you may notice that there are two names for every black key. These are called "Enharmonic Equivalences." Don't worry about that for now, though, all you need to remember is that a black key can be referred to by either of the names seen on it.<br><br>
+
+        The next thing that's different about the black key names is they each contain one of these symbols (#,b). These symbols are called accidentals.<br>
+
+        The '#' is called the "sharp" accidental. It raises a note one key higher (to the right). Notice how <button onclick="unhighlightAll();changeColor('gb3Key');">F#</button> is the key directly to the right of <button onclick="unhighlightAll();changeColor('f3Key');">F</button>.<br>
+        The 'b' is called the "flat" accidental. It lowers a note one key lower (to the left). Notice how <button onclick="unhighlightAll();changeColor('eb4Key');">Eb</button> is the key directly to the left of <button onclick="unhighlightAll();changeColor('e4Key');">E</button>.<br>
+        You may notice that the flat symbol looks a lot like a lowercase 'B'. In our lessons the note 'B' will always be referred to as a capital letter, whereas the 'b' which denotes a flat will always be lowercase.<br>
+        Knowing this information we can see that the note <button onclick="unhighlightAll();changeColor('gb3Key');">between F and G</button> can be referred to as F# (F sharp) or Gb (G flat).<br>
+        There are some white keys which do not have black keys in-between them. For these keys a sharp or flat would actually refer to the white note next to it. As an example let's look at C: <br>
+        If we were to try to find Cb we would begin on <button onclick="unhighlightAll();changeColor('c4Key');">C</button> and move back one key,finding ourselves on <button onclick="unhighlightAll();changeColor('b4Key');">B</button>. Depending on the context, B could be referred to as a Cb.<br>
+        <br><br>
+
+        The process of modifying a note with a sharp or flat changes that note by a musical distance. This distance is known as an "interval".
+        When we use a sharp, for instance, we are displacing a note up one key, also known as one "semitone".<br>
+        The number of semitones between two notes can be found by counting the number of spaces between them.<br><br>
+        Musicians over time have come up with more vocabulary to speed up their communication. One of the conventions that has become commonplace today is using half-steps and whole-steps to measure distance.<br><br>
+        A half step is an interval of one semitone. Here are some examples:<br> Half-steps: <br>
+        <button onclick="unhighlightAll();changeColor('e4Key');changeColor('f4Key');">White-to-White</button>, <button onclick="unhighlightAll();changeColor('g4Key');changeColor('ab5Key');">White-to-Black</button>, <button onclick="unhighlightAll();changeColor('db4Key');changeColor('d4Key');">Black-to-White</button>. <br>
+        These are all examples of half-steps.<br>
+        A whole step is an interval of two semitones. Here are some examples: <br>Whole-steps:<br>
+        <button onclick="unhighlightAll();changeColor('c4Key');changeColor('d4Key');">White-to-White</button>, <button onclick="unhighlightAll();changeColor('e4Key');changeColor('gb4Key');">White-to-Black</button>, <button onclick="unhighlightAll();changeColor('db4Key');changeColor('eb4Key');">Black-to-Black</button>, <button onclick="unhighlightAll();changeColor('eb4Key');changeColor('f4Key');">Black-to-White</button>.<br>
+        These are all examples of whole-steps. <br>
+        We've reached the end of the material for this lesson, next try taking a quiz to see if you understood! (LINK TO QUIZ)
+    </div>
+    </div>
 	</body>
 </html>

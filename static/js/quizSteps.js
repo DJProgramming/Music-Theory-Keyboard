@@ -16,7 +16,7 @@ function highlightRandom(){
 
     console.log('Note: ' + randomNote);
 
-    var noteData = getDivInfo(randomNote);
+    var noteData = getDivIDNoteOctaveFromMidiValue(randomNote);
 
     console.log(noteData);
 
@@ -26,10 +26,10 @@ function highlightRandom(){
 function keyDownFunction(input){
     var offset = randomStep == 'half' ? 1 : 2;
     var hitNote = getDivIDNoteOctaveFromUnicode(input);
-    var highlightedNote = getDivInfo(randomNote);
+    var highlightedNote = getDivIDNoteOctaveFromUnicode(randomNote);
     var hitNoteValue = checkNote(hitNote[1], hitNote[2]);
-    var noteUp = getDivInfo(hitNoteValue - offset);
-    var noteDown = getDivInfo(hitNoteValue + offset);
+    var noteUp = getDivIDNoteOctaveFromUnicode(hitNoteValue - offset);
+    var noteDown = getDivIDNoteOctaveFromUnicode(hitNoteValue + offset);
 
     console.log('Offset: ' + offset);
     console.log('Note: ' + hitNote);
