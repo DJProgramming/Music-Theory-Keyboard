@@ -26,49 +26,40 @@
 	<!-- <body onload="load()"> -->
 	<body onload="load()" background="../static/images/wood-grain.jpg">
 		<div id="window">
-            <div id="mySidenav" class="sidenav">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="lesson1.html">Lesson: Something</a>
-                <a href="quizNotes.html">Quiz: Notes</a>
-                <a href="quizSteps.html">Quiz: Steps</a>
-                <a href="quizMajorScales.html">Quiz: Major Scales</a>
-                <a href="quizMinorScales.html">Quiz: Minor Scales</a>
-            </div>
-
-            <!-- Use any element to open the sidenav -->
-            <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
+			<div id="topBanner">
+			</div>
 			<!-- container for individual keys -->
 			<div id="keyboard">
 				<!-- keyboard keys that call functions to play corresponding note when clicked --><!--
-				--><div class="key lStraightKey" id="c3Key" onclick="playSingleNote('c', 3); triggerColor(this.id)"><div class="hardwareKey">q</div><div class="keyname">C</div></div><!--
-				--><div class="key blackKey" id="db3Key" onclick="playSingleNote('db', 3); triggerColor(this.id)"><div class="hardwareKey">2</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="d3Key" onclick="playSingleNote('d', 3); triggerColor(this.id)"><div class="hardwareKey">w</div><div class="keyname">D</div></div><!--
-				--><div class="key blackKey" id="eb3Key" onclick="playSingleNote('eb', 3); triggerColor(this.id)"><div class="hardwareKey">3</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
-				--><div class="key rStraightKey" id="e3Key" onclick="playSingleNote('e', 3); triggerColor(this.id)"><div class="hardwareKey">e</div><div class="keyname">E</div></div><!--
-				--><div class="key lStraightKey" id="f3Key" onclick="playSingleNote('f', 3); triggerColor(this.id)"><div class="hardwareKey">r</div><div class="keyname">F</div></div><!--
-				--><div class="key blackKey" id="gb3Key" onclick="playSingleNote('gb', 3); triggerColor(this.id)"><div class="hardwareKey">5</div><div class="keyname">F<sup>#</sup> G<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="g3Key" onclick="playSingleNote('g', 3); triggerColor(this.id)"><div class="hardwareKey">t</div><div class="keyname">G</div></div><!--
-				--><div class="key blackKey" id="ab4Key" onclick="playSingleNote('ab', 4); triggerColor(this.id)"><div class="hardwareKey">6</div><div class="keyname">G<sup>#</sup> A<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="a4Key" onclick="playSingleNote('a', 4); triggerColor(this.id)"><div class="hardwareKey">y</div><div class="keyname">A</div></div><!--
-				--><div class="key blackKey" id="bb4Key" onclick="playSingleNote('bb', 4); triggerColor(this.id)"><div class="hardwareKey">7</div><div class="keyname">A<sup>#</sup> B<sup>b</sup></div></div><!--
-				--><div class="key rStraightKey" id="b4Key" onclick="playSingleNote('b', 4); triggerColor(this.id)"><div class="hardwareKey">u</div><div class="keyname">B</div></div><!--
-				--><div class="key lStraightKey" id="c4Key" onclick="playSingleNote('c', 4); triggerColor(this.id)"><div class="hardwareKey">i</div><div class="keyname">C</div></div><!--
-				--><div class="key blackKey" id="db4Key" onclick="playSingleNote('db', 4); triggerColor(this.id)"><div class="hardwareKey">9</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="d4Key" onclick="playSingleNote('d', 4); triggerColor(this.id)"><div class="hardwareKey">o</div><div class="keyname">D</div></div><!--
-				--><div class="key blackKey" id="eb4Key" onclick="playSingleNote('eb', 4); triggerColor(this.id)"><div class="hardwareKey">0</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
-				--><div class="key rStraightKey" id="e4Key" onclick="playSingleNote('e', 4); triggerColor(this.id)"><div class="hardwareKey">p</div><div class="keyname">E</div></div><!--
-				--><div class="key lStraightKey" id="f4Key" onclick="playSingleNote('f', 4); triggerColor(this.id)"><div class="hardwareKey">z</div><div class="keyname">F</div></div><!--
-				--><div class="key blackKey" id="gb4Key" onclick="playSingleNote('gb', 4); triggerColor(this.id)"><div class="hardwareKey">s</div><div class="keyname">F<sup>#</sup> G<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="g4Key" onclick="playSingleNote('g', 4); triggerColor(this.id)"><div class="hardwareKey">x</div><div class="keyname">G</div></div><!--
-				--><div class="key blackKey" id="ab5Key" onclick="playSingleNote('ab', 5); triggerColor(this.id)"><div class="hardwareKey">d</div><div class="keyname">G<sup>#</sup> A<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="a5Key" onclick="playSingleNote('a', 5); triggerColor(this.id)"><div class="hardwareKey">c</div><div class="keyname">A</div></div><!--
-				--><div class="key blackKey" id="bb5Key" onclick="playSingleNote('bb', 5); triggerColor(this.id)"><div class="hardwareKey">f</div><div class="keyname">A<sup>#</sup> B<sup>b</sup></div></div><!--
-				--><div class="key rStraightKey" id="b5Key" onclick="playSingleNote('b', 5); triggerColor(this.id)"><div class="hardwareKey">v</div><div class="keyname">B</div></div><!--
-				--><div class="key lStraightKey" id="c5Key" onclick="playSingleNote('c', 5); triggerColor(this.id)"><div class="hardwareKey">b</div><div class="keyname">C</div></div><!--
-				--><div class="key blackKey" id="db5Key" onclick="playSingleNote('db', 5); triggerColor(this.id)"><div class="hardwareKey">h</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="d5Key" onclick="playSingleNote('d', 5); triggerColor(this.id)"><div class="hardwareKey">n</div><div class="keyname">D</div></div><!--
-				--><div class="key blackKey" id="eb5Key" onclick="playSingleNote('eb', 5); triggerColor(this.id)"><div class="hardwareKey">j</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
-				--><div class="key rStraightKey" id="e5Key" onclick="playSingleNote('e', 5); triggerColor(this.id)"><div class="hardwareKey">m</div><div class="keyname">E</div></div>
+				--><div class="key lStraightKey" id="c3Key" onclick="contextualClick('c', 3, this.id)"><div class="hardwareKey">q</div><div class="keyname">C</div></div><!--
+				--><div class="key blackKey" id="db3Key" onclick="contextualClick('db', 3, this.id)"><div class="hardwareKey">2</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="d3Key" onclick="contextualClick('d', 3, this.id)"><div class="hardwareKey">w</div><div class="keyname">D</div></div><!--
+				--><div class="key blackKey" id="eb3Key" onclick="contextualClick('eb', 3, this.id)"><div class="hardwareKey">3</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
+				--><div class="key rStraightKey" id="e3Key" onclick="contextualClick('e', 3, this.id)"><div class="hardwareKey">e</div><div class="keyname">E</div></div><!--
+				--><div class="key lStraightKey" id="f3Key" onclick="contextualClick('f', 3, this.id)"><div class="hardwareKey">r</div><div class="keyname">F</div></div><!--
+				--><div class="key blackKey" id="gb3Key" onclick="contextualClick('gb', 3, this.id)"><div class="hardwareKey">5</div><div class="keyname">F<sup>#</sup> G<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="g3Key" onclick="contextualClick('g', 3, this.id)"><div class="hardwareKey">t</div><div class="keyname">G</div></div><!--
+				--><div class="key blackKey" id="ab4Key" onclick="contextualClick('ab', 4, this.id)"><div class="hardwareKey">6</div><div class="keyname">G<sup>#</sup> A<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="a4Key" onclick="contextualClick('a', 4, this.id)"><div class="hardwareKey">y</div><div class="keyname">A</div></div><!--
+				--><div class="key blackKey" id="bb4Key" onclick="contextualClick('bb', 4, this.id)"><div class="hardwareKey">7</div><div class="keyname">A<sup>#</sup> B<sup>b</sup></div></div><!--
+				--><div class="key rStraightKey" id="b4Key" onclick="contextualClick('b', 4, this.id)"><div class="hardwareKey">u</div><div class="keyname">B</div></div><!--
+				--><div class="key lStraightKey" id="c4Key" onclick="contextualClick('c', 4, this.id)"><div class="hardwareKey">i</div><div class="keyname">C</div></div><!--
+				--><div class="key blackKey" id="db4Key" onclick="contextualClick('db', 4, this.id)"><div class="hardwareKey">9</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="d4Key" onclick="contextualClick('d', 4, this.id)"><div class="hardwareKey">o</div><div class="keyname">D</div></div><!--
+				--><div class="key blackKey" id="eb4Key" onclick="contextualClick('eb', 4, this.id)"><div class="hardwareKey">0</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
+				--><div class="key rStraightKey" id="e4Key" onclick="contextualClick('e', 4, this.id)"><div class="hardwareKey">p</div><div class="keyname">E</div></div><!--
+				--><div class="key lStraightKey" id="f4Key" onclick="contextualClick('f', 4, this.id)"><div class="hardwareKey">z</div><div class="keyname">F</div></div><!--
+				--><div class="key blackKey" id="gb4Key" onclick="contextualClick('gb', 4, this.id)"><div class="hardwareKey">s</div><div class="keyname">F<sup>#</sup> G<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="g4Key" onclick="contextualClick('g', 4, this.id)"><div class="hardwareKey">x</div><div class="keyname">G</div></div><!--
+				--><div class="key blackKey" id="ab5Key" onclick="contextualClick('ab', 5, this.id)"><div class="hardwareKey">d</div><div class="keyname">G<sup>#</sup> A<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="a5Key" onclick="contextualClick('a', 5, this.id)"><div class="hardwareKey">c</div><div class="keyname">A</div></div><!--
+				--><div class="key blackKey" id="bb5Key" onclick="contextualClick('bb', 5, this.id)"><div class="hardwareKey">f</div><div class="keyname">A<sup>#</sup> B<sup>b</sup></div></div><!--
+				--><div class="key rStraightKey" id="b5Key" onclick="contextualClick('b', 5, this.id)"><div class="hardwareKey">v</div><div class="keyname">B</div></div><!--
+				--><div class="key lStraightKey" id="c5Key" onclick="contextualClick('c', 5, this.id)"><div class="hardwareKey">b</div><div class="keyname">C</div></div><!--
+				--><div class="key blackKey" id="db5Key" onclick="contextualClick('db', 5, this.id)"><div class="hardwareKey">h</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="d5Key" onclick="contextualClick('d', 5, this.id)"><div class="hardwareKey">n</div><div class="keyname">D</div></div><!--
+				--><div class="key blackKey" id="eb5Key" onclick="contextualClick('eb', 5, this.id)"><div class="hardwareKey">j</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
+				--><div class="key rStraightKey" id="e5Key" onclick="contextualClick('e', 5, this.id)"><div class="hardwareKey">m</div><div class="keyname">E</div></div>
 
 			</div>
 			<div id="debug" class="debug">
@@ -117,8 +108,7 @@
 		        <div id="quiz_list">
 		            <button onclick="location.href='quizNotes'" type="button">Quiz: Notes</button>
 		            <button onclick="location.href='quizSteps'" type="button">Quiz: Steps</button>
-                    <button onclick="location.href='quizMajorScales'" type="button">Quiz: Major Scales</button>
-                    <button onclick="location.href='quizMajorScales'" type="button">Quiz: Minor Scales</button>
+		            <button onclick="location.href='quizScales'" type="button">Quiz: Scales</button>
 		        </div>
 		    </div>
 	    </div>
