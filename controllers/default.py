@@ -20,25 +20,33 @@ def index():
     response.flash = T("Hello World")
     return dict(message=T('Welcome to web2py!'))
 
-
+def lesson1():
+    response.flash = T("Lesson: One")
+    return dict(message=T('One'))
 def quizNotes():
     response.flash = T("Quiz: Notes")
     return dict(message=T('WHAT!'))
 def quizSteps():
     response.flash = T("Quiz: Steps")
     return dict(message=T('WHAT!'))
+def lessonScales():
+    response.flash = T("Lesson: Scales")
+    return dict(message=T('Scales'))
 def quizMajorScales():
     response.flash = T("Quiz: Major Scales")
     return dict(message=T('Somthing'))
-
 def quizMinorScales():
     response.flash = T("Quiz: Minor Scales")
     return dict(message=T('Somthing'))
-
-def lesson1():
-    response.flash = T("Something")
-    return dict(message=T('Wack'))
-
+def quizInterval():
+    response.flash = T("Quiz: Interval")
+    return dict(message=T('Something else'))
+def lessonStaff():
+    response.flash = T("Lesson: Staff")
+    return dict(message=T('Something something'))
+def reference():
+    response.flash = T("Reference Guid")
+    return dict(message=T('Here you go'))
 
 
 def user():

@@ -42,11 +42,9 @@ function keyUpFunction(input) {
         checkCorrect(numCorrect);                                               // check to see if score limit has been reached
         canColor[highlightedNote[0]] = true;                                    // allow randomly selected note to unhighlight
         revertSelectColor(highlightedNote[0]);                                  // uncolor randomly selected note
-        showSnackBar(true);
         console.log('Correct!');
     } else {
         // console.log('Wrong!');
-        showSnackBar(false);
     }
 }
 

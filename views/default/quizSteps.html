@@ -16,7 +16,7 @@
 		<script src="../static/js/midi/plugin.audiotag.js" type="text/javascript"></script>
 		<script src="../static/js/midi/plugin.webaudio.js" type="text/javascript"></script>
 		<script src="../static/js/midi/plugin.webmidi.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<!-- utils -->
 		<script src="../static/js/util/dom_request_xhr.js" type="text/javascript"></script>
 		<script src="../static/js/util/dom_request_script.js" type="text/javascript"></script>
@@ -25,24 +25,28 @@
         <script type="text/javascript" src="../static/js/concepts.js"></script>
 	</head>
     <body onload="stepQuiz(); highlightRandom(); load();" background="../static/images/wood-grain.jpg">
-        <div id="window">
-        <div id="mySidenav" class="sidenav">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <a href="index.html"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
-            <a href="lesson1.html">Lesson: Introduction</a>
-            <a href="quizNotes.html">Quiz: Notes</a>
-            <a href="quizSteps.html">Quiz: Steps</a>
-            <a href="quizMajorScales.html">Quiz: Major Scales</a>
-            <a href="quizMinorScales.html">Quiz: Minor Scales</a>
-        </div>
-        <!-- Use any element to open the sidenav -->
-        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span></button>
-    	<div id="topBanner">
-	        Score: <span id="correctScore"></span>  <span id="congratsTxt"></span>
-	        <h1 class="instruction" style="text-align:center;">Play a <span id="stepTxt"></span> step </h1>
-        </div>
-        <!-- container for individual keys -->
-		<div id="keyboard">
+    	<div id="window">
+    		<div id="topBanner">
+		        <div id="mySidenav" class="sidenav">
+		            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		            <a href="index.html"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+		            <a href="lesson1.html">Lesson: Introduction</a>
+		            <a href="quizNotes.html">Quiz: Notes</a>
+		            <a href="quizSteps.html">Quiz: Steps</a>
+		            <a href="lessonScales.html">Lesson: Scales</a>
+		            <a href="quizMajorScales.html">Quiz: Major Scales</a>
+		            <a href="quizMinorScales.html">Quiz: Minor Scales</a>
+		            <a href="quizInterval.html">Quiz: Interval</a>
+		            <a href="lessonStaff.html">Lesson: Staff</a>
+		            <a href="reference.html">Reference Guide</a>
+		        </div>
+		        <!-- Use any element to open the sidenav -->
+		        <span id="menuButton" onclick="openNav()">&#9776; Menu</span>
+			        <h3 style="text-align: center;">Score: <span id="correctScore">0</span>  <span id="congratsTxt"></span></h3>
+			        <h1 class="instruction" style="text-align:center;">Play a <span id="stepTxt"></span> step </h1>
+	        </div>
+	        <!-- container for individual keys -->
+			<div id="keyboard">
 				<!-- keyboard keys that call functions to play corresponding note when clicked --><!--
 				--><div class="key lStraightKey" id="c3Key" onclick="contextualClick('c', 3, this.id)"><div class="hardwareKey">q</div><div class="keyname">C</div></div><!--
 				--><div class="key blackKey" id="db3Key" onclick="contextualClick('db', 3, this.id)"><div class="hardwareKey">2</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
@@ -73,10 +77,14 @@
 				--><div class="key cutKey" id="d5Key" onclick="contextualClick('d', 5, this.id)"><div class="hardwareKey">n</div><div class="keyname">D</div></div><!--
 				--><div class="key blackKey" id="eb5Key" onclick="contextualClick('eb', 5, this.id)"><div class="hardwareKey">j</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
 				--><div class="key rStraightKey" id="e5Key" onclick="contextualClick('e', 5, this.id)"><div class="hardwareKey">m</div><div class="keyname">E</div></div>
-
 			</div>
-            <div id="snackbar"></div>
-            </div>
+			<div class="buttons">
+				<div id="showKeys">
+					<input type="button" value="Toggle Key Names" onclick="toggleVisibility('keyname');">
+					<input type="button" value="Toggle Hardware Key Names" onclick="toggleVisibility('hardwareKey');">
+				</div>
+			</div>
+		</div>
     </body>
 
 </html>

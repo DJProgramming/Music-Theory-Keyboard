@@ -39,6 +39,8 @@
 
     --numberOfWhiteKeys: 17;
 
+    --buttonWidth: calc(var(--mainWidth)/12);
+
     --minDepth: 5;
 }
 
@@ -48,11 +50,18 @@
 
 * {
     box-sizing: border-box;
+    -webkit-user-select: none;  /* Chrome/Safari */        
+    -moz-user-select: none;     /* Firefox */
+    -ms-user-select: none;      /* IE10+ */
 }
 
 html, body {
     padding: 0;
     margin: 0;
+}
+
+h2 {
+    color: white;
 }
 
 /*********************************************/
@@ -175,6 +184,40 @@ html, body {
     box-shadow: inset var(--borderOffset) 0 0 calc(-1 * var(--borderThickness)) var(--borderColor), inset calc(-1 * var(--borderOffset)) calc(-1 * var(--borderOffset)) 0 calc(-1 * var(--borderThickness)) var(--borderColor);
 }
 
+.buttons {
+    width: calc(var(--whiteKeyWidth) * var(--numberOfWhiteKeys));
+    margin: auto;
+}
+
+.lesson {
+    width: calc(var(--whiteKeyWidth) * var(--numberOfWhiteKeys));
+    box-shadow: 0 calc(var(--whiteKeyHeight)/10) calc(var(--whiteKeyHeight)/20) black;
+    background: rgba(255,255,255,.6);
+    padding: 20px 10px 20px 10px;
+    border-radius: 20px;
+    border: var(--borderOffset) solid black;
+    margin: auto;
+}
+
+.lessonBlock {
+    display: none;
+}
+
+#reference {
+    width: var(--mainWidth);
+    margin: auto;
+}
+
+.noteSelectionButton {
+    width: calc(var(--whiteKeyWidth) * var(--numberOfWhiteKeys) / 11);
+
+    /*width: 4em;*/
+}
+
+.conceptSelectionButton {
+    width: calc(var(--whiteKeyWidth) * var(--numberOfWhiteKeys) / 5);
+}
+
 /*********************************************/
 /* IDs */
 /*********************************************/
@@ -207,6 +250,14 @@ html, body {
 }
 
 #noteSelection, #tempoSelection, #conceptOptions, #highlightOptions {
+}
+
+.previous {
+
+}
+
+.next {
+    /*float: right;*/
 }
 
 /*********************************************/
@@ -350,8 +401,11 @@ html, body {
 /*********************************************/
 
 .instruction {
-    border-top: 4px solid black;
-    border-bottom: 4px solid black;
+    border: 4px solid black;
+    width: calc(var(--whiteKeyWidth) * var(--numberOfWhiteKeys));
+    margin: auto;
+    /*border-top: 4px solid black;*/
+    /*border-bottom: 4px solid black;*/
     background: linear-gradient(rgba(255, 255, 255, .5), rgba(255, 255, 255, 1), rgba(255, 255, 255, .5));
 }
 
@@ -410,13 +464,13 @@ However, delay the fade out process for 2.5 seconds */
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
     top: 0;
     left: 0;
     background-color: #111; /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    z-index: 10;
 }
 
 /* The navigation menu links */
@@ -441,6 +495,15 @@ However, delay the fade out process for 2.5 seconds */
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
+}
+
+#menuButton {
+    /*background: rgba(255,255,255,.8);*/
+    color: white;
+    border-radius: .5em;
+    padding: .2em;
+    font-size: 2em;
+    cursor: pointer;
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */

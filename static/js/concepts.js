@@ -62,6 +62,7 @@ var canColor = {};                          // array to hold flags for each note
 var timingFunctionIsExecuting = false;      // flag to check whether a timing function is running
 
 var highlight = {
+    rootNote: false,                        //
     majorScale: false,                      // major scale highlight flag
     minorScale: false,                      // minor scale highlight flag
     majorChord: false,                      // major chord highlight flag
@@ -70,12 +71,18 @@ var highlight = {
 
 var programControl = {                      // flags for different web-pages in program
     main: true,                             // home page flag
+    lesson1: false,                         // keyboard usage lesson flag
     noteLesson: false,                      // note lesson page flag
     noteQuiz: false,                        // note quiz page flag
     stepLesson: false,                      // step lesson page flag
     stepQuiz: false,                        // step quize page flag
-    scalesLesson: false,                    // scale lesson page flag
-    scalesQuiz: false                       // scale quiz page flag
+    lessonScales: false,                    // scale lesson page flag
+    intervalQuiz: false,                    // interval quize page flag
+    scalesQuiz: false,                      // scale quiz page flag
+    lessonStaff: false,                     // 
+    reference: false,
+    step: 1,
+    maxStep: 0
 };
 
 // ******************************************************************
@@ -108,20 +115,142 @@ function initializeCanColorArray() {
 // Program Controls
 // ------------------------------------------------------------------
 
-function stepQuiz() {                                               // when step quiz is loaded
-    programControl.stepQuiz = true;                                 // set step quiz flag to true
+function lesson1() {                                                // when lesson one is loaded
     programControl.main = false;                                    // set main page flag to false
+    programControl.lesson1 = true;                                  // 
+    programControl.lessonScales = false;
+    programControl.stepQuiz = false;                                // set step quiz flag to true
+    programControl.intervalQuiz = false;
+    programControl.lessonStaff = false;
+    hideClass('keyname');
+    hideClass('hardwareKey');
+    showClass('1');
+    programControl.maxStep = 6;
+}
+
+function noteQuiz() {                                               // when step quiz is loaded
+    programControl.main = false;                                    // set main page flag to false
+    programControl.lesson1 = false;                                 //
+    programControl.noteQuiz = true;
+    programControl.stepQuiz = false;                                 // set step quiz flag to true
+    programControl.lessonScales = false;
+    programControl.intervalQuiz = false;
+    programControl.lessonStaff = false;
+    programControl.reference = false;
+}
+
+function stepQuiz() {                                               // when step quiz is loaded
+    programControl.main = false;                                    // set main page flag to false
+    programControl.lesson1 = false;                                 //
+    programControl.stepQuiz = true;                                 // set step quiz flag to true
+    programControl.intervalQuiz = false;
+    programControl.lessonStaff = false;
+    programControl.reference = false;
+}
+
+function lessonScales() {
+    programControl.lessonScales = true;
+    programControl.main = false;                                    // set main page flag to false
+    programControl.lesson1 = false;                                 //
+    programControl.stepQuiz = true;                                 // set step quiz flag to true
+    programControl.intervalQuiz = false;
+    programControl.lessonStaff = false;
+    programControl.reference = false;
+    showClass('1');
+    programControl.step = 1;
+    programControl.maxStep = 4;
+}
+
+function intervalQuiz() {
+    programControl.intervalQuiz = true;
+    programControl.main = false;
+    programControl.lesson1 = false;
+    programControl.stepQuiz = false;
+    programControl.lessonStaff = false;
+    programControl.reference = false;
+}
+
+function lessonStaff() {
+    programControl.main = false;                                    // set main page flag to false
+    programControl.lesson1 = false;                                 //
+    programControl.stepQuiz = true;                                 // set step quiz flag to true
+    programControl.lessonScales = false;
+    programControl.intervalQuiz = false;
+    programControl.lessonStaff = true;
+    programControl.reference = false;
+}
+
+function reference() {
+    highlightRootNote();
+    programControl.reference = true;
+    programControl.main = false;
+    programControl.lesson1 = false;
+    programControl.stepQuiz = false;
+    programControl.intervalQuiz = false;
+    programControl.lessonStaff = false;
 }
 
 // controls what clicking on a note does depending on context of the program (current web page)
 function contextualClick(value, octave, id) {
+    unhighlightAll();
     if(programControl.main) {
         playSingleNote(value, octave);
         triggerColor(id);
-    } else if(programControl.stepQuiz) {
+    } else if(programControl.lesson1) {
+        playSingleNote(value, octave);
+        triggerColor(id);
+    } else if(programControl.noteQuiz) {
         playSingleNote(value, octave);
         triggerColor(id);
         clickFunction(value, octave);
+    }
+    else if(programControl.stepQuiz) {
+        playSingleNote(value, octave);
+        triggerColor(id);
+        clickFunction(value, octave);
+    } else if(programControl.lessonScales) {
+
+    } else {
+        playSingleNote(value, octave);
+        triggerColor(id);
+        clickFunction(value, octave);
+    }
+}
+
+function next() {
+    if(programControl.main) {
+
+    } else if(programControl.lesson1) {
+        if(programControl.step < programControl.maxStep) {
+            hideClass(programControl.step.toString());
+            programControl.step++;
+            showClass(programControl.step.toString());
+        }
+    } else {
+        console.log("next");
+        if(programControl.step < programControl.maxStep) {
+            hideClass(programControl.step.toString());
+            programControl.step++;
+            showClass(programControl.step.toString());
+        }
+    }
+}
+
+function previous() {
+    if(programControl.main) {
+
+    } else if(programControl.lesson1) {
+        if(programControl.step > 1) {
+            hideClass(programControl.step.toString());
+            programControl.step--;
+            showClass(programControl.step.toString());
+        }
+    } else {
+        if(programControl.step > 1) {
+            hideClass(programControl.step.toString());
+            programControl.step--;
+            showClass(programControl.step.toString());
+        }
     }
 }
 
@@ -147,6 +276,9 @@ function changeGlobalNote(value) {
     } else if(highlight.minorChord) {
         highlightMinorChord();
         highlight.minorChord = true;
+    } else if(highlight.rootNote) {
+        highlightRootNote();
+        highlight.rootNote = true;
     }
     // check which key was selected
     // 'b' after a letter means flat
@@ -188,6 +320,9 @@ function changeGlobalNote(value) {
     } else if(highlight.minorChord) {
         highlight.minorChord = false;
         highlightMinorChord();
+    } else if(highlight.rootNote) {
+        highlight.rootNote = false;
+        highlightRootNote();
     }
 }
 
@@ -196,64 +331,73 @@ function changeGlobalNote(value) {
 // ------------------------------------------------------------------
 
 function playMajorScale() {
-    var index = 0;              // used as a seed for noteProgression & scaleKeyColoring functions
-    var notesInScale = {};      // a local array that stores the notes that make up selcted major scale (used for playing scale)
-    var keysToColor = {};       // a local array that stores the div ids that make up selected major scale (used for coloring)
+    if(!timingFunctionIsExecuting) {
+        var index = 0;              // used as a seed for noteProgression & scaleKeyColoring functions
+        var notesInScale = {};      // a local array that stores the notes that make up selcted major scale (used for playing scale)
+        var keysToColor = {};       // a local array that stores the div ids that make up selected major scale (used for coloring)
 
-    unhighlightConcepts();
+        unhighlightConcepts();
 
-    for(var i = 0; i < scaleLength; i++) {                                  // loop to identify notes that make up major scale
-        divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorScale[scaleProgression[i]]);   // gets div id, note name, & octave for current note in major scale
-        keysToColor[i] = divInfo[0];                                        // store div id into local array to color keys after loop ends
-        notesInScale[i] = globalNote+majorScale[scaleProgression[i]];       // store note value in local array to play each note after loop ends
+        for(var i = 0; i < scaleLength; i++) {                                  // loop to identify notes that make up major scale
+            divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorScale[scaleProgression[i]]);   // gets div id, note name, & octave for current note in major scale
+            keysToColor[i] = divInfo[0];                                        // store div id into local array to color keys after loop ends
+            notesInScale[i] = globalNote+majorScale[scaleProgression[i]];       // store note value in local array to play each note after loop ends
+        }
+        noteProgression(index, notesInScale);   // plays each note that makes up major scale
+        scaleKeyColoring(index, keysToColor);   // colors each note as scale is major played
     }
-    noteProgression(index, notesInScale);   // plays each note that makes up major scale
-    scaleKeyColoring(index, keysToColor);   // colors each note as scale is major played
 }
 
 function playMinorScale() {
-    var index = 0;              // used as a seed for noteProgression & scaleKeyColoring functions
-    var notesInScale = {};      // a local array that stores the notes that make up selcted minor scale (used for playing scale)
-    var keysToColor = {};       // a local array that stores the div ids that make up selected minor scale (used for coloring)
+    if(!timingFunctionIsExecuting) {
+        var index = 0;              // used as a seed for noteProgression & scaleKeyColoring functions
+        var notesInScale = {};      // a local array that stores the notes that make up selcted minor scale (used for playing scale)
+        var keysToColor = {};       // a local array that stores the div ids that make up selected minor scale (used for coloring)
 
-    unhighlightConcepts();
+        unhighlightConcepts();
 
-    for(var i = 0; i < scaleLength; i++) {                                  // loop to identify notes that make up minor scale
-        divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorScale[scaleProgression[i]]);   // gets div id, note name, & octave for current note in minor scale
-        keysToColor[i] = divInfo[0];                                        // store div id into local array to color keys after loop ends
-        notesInScale[i] = globalNote+minorScale[scaleProgression[i]];       // store note value in local array to play each note after loop ends
+        for(var i = 0; i < scaleLength; i++) {                                  // loop to identify notes that make up minor scale
+            divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorScale[scaleProgression[i]]);   // gets div id, note name, & octave for current note in minor scale
+            keysToColor[i] = divInfo[0];                                        // store div id into local array to color keys after loop ends
+            notesInScale[i] = globalNote+minorScale[scaleProgression[i]];       // store note value in local array to play each note after loop ends
+        }
+        noteProgression(index, notesInScale);   // plays each note that makes up minor scale
+        scaleKeyColoring(index, keysToColor);   // colors each note as scale is minor played
     }
-    noteProgression(index, notesInScale);   // plays each note that makes up minor scale
-    scaleKeyColoring(index, keysToColor);   // colors each note as scale is minor played
 }
 
 function playMajorTriChord() {
-    unhighlightConcepts();
-    for(var i = 0; i < 3; i++) {
-        triggerNote(globalNote+majorTriChord[i], globalVelocity, globalDelay, globalSustain);
-        divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorTriChord[i]);
-        triggerColor(divInfo[0]);
+    if(!timingFunctionIsExecuting) {
+        unhighlightConcepts();
+        for(var i = 0; i < 3; i++) {
+            triggerNote(globalNote+majorTriChord[i], globalVelocity, globalDelay, globalSustain);
+            divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorTriChord[i]);
+            triggerColor(divInfo[0]);
+        }
     }
 }
 
 function playMinorTriChord() {
-    unhighlightConcepts();
-    for(var i = 0; i < 3; i++) {
-        triggerNote(globalNote+minorTriChord[i], globalVelocity, globalDelay, globalSustain);
-        divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorTriChord[i]);
-        triggerColor(divInfo[0]);
+    if(!timingFunctionIsExecuting) {
+        unhighlightConcepts();
+        for(var i = 0; i < 3; i++) {
+            triggerNote(globalNote+minorTriChord[i], globalVelocity, globalDelay, globalSustain);
+            divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorTriChord[i]);
+            triggerColor(divInfo[0]);
+        }
     }
 }
 
 function playNote() {
-    unhighlightConcepts();
-    triggerNote(globalNote, globalVelocity, globalDelay, globalSustain);
-    divInfo = getDivIDNoteOctaveFromMidiValue(globalNote);
-    triggerColor(divInfo[0]);
+    if(!timingFunctionIsExecuting) {
+        unhighlightConcepts();
+        triggerNote(globalNote, globalVelocity, globalDelay, globalSustain);
+        divInfo = getDivIDNoteOctaveFromMidiValue(globalNote);
+        triggerColor(divInfo[0]);
+    }
 }
 
 function playSingleNote(value, octave) {
-    unhighlightConcepts();
     var key = getMidiValue(value, octave); // calls function to determine note to play
     var delay = globalDelay;
     triggerNote(key, globalVelocity, delay, globalSustain);
@@ -265,6 +409,7 @@ function startNote(value, octave) {
 }
 
 function stopNote(value, octave) {
+    unhighlightAll();
     var key = getMidiValue(value, octave); // calls function to determine note to play
     MIDI.noteOff(0, key, 0);
 }
@@ -404,7 +549,7 @@ function getDivIDNoteOctaveFromKeyboardChar(char) {
         setNoteData(noteData, 'c3Key', 'c', 3);
     } else if(char == '2') {
         setNoteData(noteData, 'db3Key', 'db', 3);
-    } else if(char == '2') { // w
+    } else if(char == 'w') { // w
         setNoteData(noteData, 'd3Key', 'd', 3);
     } else if(char == '3') { // 3
         setNoteData(noteData, 'eb3Key', 'eb', 3);
@@ -746,7 +891,7 @@ function getWhiteKeysDivInfo() {
             currentWhiteIndex++;
         }
     }
-    console.log(whiteKeysDivInfo);
+    // console.log(whiteKeysDivInfo);
     return whiteKeysDivInfo;
 }
 
@@ -761,7 +906,7 @@ function getBlackKeysDivInfo() {
             currentBlackIndex++;
         }
     }
-    console.log(blackKeysDivInfo);
+    // console.log(blackKeysDivInfo);
     return blackKeysDivInfo;
 }
 
@@ -797,7 +942,38 @@ function keyboardUntrigger(input) {
 // Color Functions
 // ------------------------------------------------------------------
 
+function highlightWhiteKeys() {
+    unhighlightAll();
+    var whiteKeys = getWhiteKeysDivInfo();
+    for (var i = 0; i < Object.keys(whiteKeys).length; i++) {
+        changeSelectColor(whiteKeys[i][0]);
+    }
+}
+
+function highlightBlackKeys() {
+    unhighlightAll();
+    var blackKeys = getBlackKeysDivInfo();
+    for (var i = 0; i < Object.keys(blackKeys).length; i++) {
+        changeSelectColor(blackKeys[i][0]);
+    }
+}
+
+function highlightRootNote() {
+    if(highlight.rootNote) {
+        unhighlightAll();
+        highlight.rootNote = false;
+        var note = getDivIDNoteOctaveFromMidiValue(globalNote);
+        revertColor(note[0]);
+    } else {
+        unhighlightAll();
+        highlight.rootNote = true;
+        var note = getDivIDNoteOctaveFromMidiValue(globalNote);
+        changeColor(note[0]);
+    }
+}
+
 function highlightMajorScale() {
+    console.log(globalNote);
     if(!timingFunctionIsExecuting) {
         if(highlight.minorScale) {
             highlightMinorScale();
@@ -808,6 +984,7 @@ function highlightMajorScale() {
         }
 
         if(!highlight.majorScale) {                 // if major scale is not highlighted
+            unhighlightAll();
             highlight.majorScale = true;            // set flag for major scale highlighting
             for(var i = 0; i <= 7; i++) {           // for each key in the scale
                                                     // get html div information for each key
@@ -815,6 +992,7 @@ function highlightMajorScale() {
                 changeColor(divInfo[0]);            // change the color of each key
             }
         } else {
+            unhighlightAll();
             highlight.majorScale = false;
             for(var i = 0; i <= 7; i++) {
                 divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorScale[i]);
@@ -834,12 +1012,14 @@ function highlightMinorScale() {
             highlightMinorChord();
         }
         if(!highlight.minorScale) {
+            unhighlightAll();
             highlight.minorScale = true;
             for(var i = 0; i <= 7; i++) {
                 divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorScale[i]);
                 changeColor(divInfo[0]);
             }
         } else {
+            unhighlightAll();
             highlight.minorScale = false;
             for(var i = 0; i <= 7; i++) {
                 divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorScale[i]);
@@ -859,12 +1039,14 @@ function highlightMajorChord() {
             highlightMinorScale();
         }
         if(!highlight.majorChord) {
+            unhighlightAll();
             highlight.majorChord = true;
             for(var i = 0; i < 3; i++) {
                 divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorTriChord[i]);
                 changeColor(divInfo[0]);
             }
         } else {
+            unhighlightAll();
             highlight.majorChord = false;
             for(var i = 0; i < 3; i++) {
                 divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+majorTriChord[i]);
@@ -884,12 +1066,14 @@ function highlightMinorChord() {
             highlightMinorScale();
         }
         if(!highlight.minorChord) {
+            unhighlightAll();
             highlight.minorChord = true;
             for(var i = 0; i < 3; i++) {
                 divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorTriChord[i]);
                 changeColor(divInfo[0]);
             }
         } else {
+            unhighlightAll();
             highlight.minorChord = false;
             for(var i = 0; i < 3; i++) {
                 divInfo = getDivIDNoteOctaveFromMidiValue(globalNote+minorTriChord[i]);
@@ -978,11 +1162,17 @@ function unhighlightConcepts() {
 }
 
 function unhighlightAll() {
-    unhighlightConcepts();
+    // unhighlightConcepts();
     var div;
+    highlight.rootNote = false;
+    highlight.majorScale = false;
+    highlight.minorScale = false;
+    highlight.majorChord = false;
+    highlight.minorChord = false;
     for(var i = 0; i < numberOfKeys; i++) {
         div = getDivIDNoteOctaveFromMidiValue(i+48);
         revertColor(div[0]);
+        revertSelectColor(div[0]);
         // console.log(div);
     }
 }
@@ -992,6 +1182,7 @@ function unhighlightAll() {
 // ------------------------------------------------------------------
 
 function triggerColor(input) {
+    // unhighlightAll();
     changeColor(input);
     setTimeout(function () {
         revertColor(input);
@@ -1022,7 +1213,7 @@ function noteProgression(count, input) {
 }
 
 // ------------------------------------------------------------------
-// Show Key Names Functions
+// Visibility Functions
 // ------------------------------------------------------------------
 
  function toggleVisibility(input) {
@@ -1036,12 +1227,28 @@ function noteProgression(count, input) {
     }
 }
 
+function hideClass(input) {
+    var mydiv = document.getElementsByClassName(input);
+    for (var i = 0; i < mydiv.length; i++) {
+        mydiv[i].style.display = 'none';
+    }
+}
+
+function showClass(input) {
+    var mydiv = document.getElementsByClassName(input);
+    for(var i = 0; i < mydiv.length; i++) {
+        mydiv[i].style.display = 'block';
+    }
+}
+
 function showDebug(input) {
     var unicode = input.keyCode ? input.keyCode : input.charCode;
     if(unicode == 96) {             // `
         toggleVisibility('debug');
     }
 }
+
+//////////
 
 function showSnackBar(input) {
     // Get the snackbar DIV

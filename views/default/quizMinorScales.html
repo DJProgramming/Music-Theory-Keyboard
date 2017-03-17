@@ -32,14 +32,17 @@
             <a href="lesson1.html">Lesson: Introduction</a>
             <a href="quizNotes.html">Quiz: Notes</a>
             <a href="quizSteps.html">Quiz: Steps</a>
+            <a href="lessonScales.html">Lesson: Scales</a>
             <a href="quizMajorScales.html">Quiz: Major Scales</a>
             <a href="quizMinorScales.html">Quiz: Minor Scales</a>
+            <a href="quizInterval.html">Quiz: Interval</a>
+            <a href="reference.html">Reference Guide</a>
         </div>
 
         <!-- Use any element to open the sidenav -->
-        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
+        <span id="menuButton" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
         <h3 style="text-align: center;">Score: <span id="correctScore">0</span>  <span id="congratsTxt"></span></h3>
-        <h1 style="text-align: center;">Play a <span id="scaleId"></span> scale</h1>
+        <h1 class="instruction" style="text-align: center;">Play a <span id="scaleId"></span> scale</h1>
         <h1 style="text-align: center;"><span id="correctId"></span></h1>
         <!-- container for individual keys -->
 		<div id="keyboard">
@@ -73,10 +76,16 @@
 				--><div class="key cutKey" id="d5Key" onclick="playSingleNote('d', 5); triggerColor(this.id); storeNote(74)"><div class="hardwareKey">n</div><div class="keyname">D</div></div><!--
 				--><div class="key blackKey" id="eb5Key" onclick="playSingleNote('eb', 5); triggerColor(this.id); storeNote(75)"><div class="hardwareKey">j</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
 				--><div class="key rStraightKey" id="e5Key" onclick="playSingleNote('e', 5); triggerColor(this.id); storeNote(76)"><div class="hardwareKey">m</div><div class="keyname">E</div></div>
-
-		</div>
-        <div id="snackbar"></div>
-            </div>
+			</div>
+			<div class="buttons">
+				<div id="showKeys">
+					<input type="button" value="Toggle Key Names" onclick="toggleVisibility('keyname');">
+					<input type="button" value="Toggle Hardware Key Names" onclick="toggleVisibility('hardwareKey');">
+				</div>
+				<button onclick="location.href='quizInterval'" type="button">Quiz: Intervals</button>
+			</div>
+        	<div id="snackbar"></div>
+        </div>
     </body>
 
 </html>

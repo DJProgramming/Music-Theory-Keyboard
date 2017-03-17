@@ -13,7 +13,7 @@ var randomMajMin;
 
 var numCorrect = 0;
 
-document.addEventListener('keydown', inputFunction, false);
+document.addEventListener('keyup', inputFunction, false);
 
 
 function getRandomScale(){
