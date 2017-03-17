@@ -1042,3 +1042,35 @@ function showDebug(input) {
         toggleVisibility('debug');
     }
 }
+
+function showSnackBar(input) {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar");
+
+    // Add the "show" class to DIV
+    if (input == false){
+        x.textContent = "Wrong!";
+        x.className = "show";
+    }
+    else if (input == true){
+        x.textContent = "Correct";
+        x.className = "show";
+    }
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+/* Set the width of the side navigation to 250px and the left margin of the page content to 250px and add a black background color to body */
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("window").style.marginLeft = "250px";
+    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+/* Set the width of the side navigation to 0 and the left margin of the page content to 0, and the background color of body to white */
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("window").style.marginLeft = "0";
+    document.body.style.backgroundColor = "white";
+}

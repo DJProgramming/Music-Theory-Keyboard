@@ -16,53 +16,67 @@
 		<script src="../static/js/midi/plugin.audiotag.js" type="text/javascript"></script>
 		<script src="../static/js/midi/plugin.webaudio.js" type="text/javascript"></script>
 		<script src="../static/js/midi/plugin.webmidi.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<!-- utils -->
 		<script src="../static/js/util/dom_request_xhr.js" type="text/javascript"></script>
 		<script src="../static/js/util/dom_request_script.js" type="text/javascript"></script>
 		<!-- custom scripts -->
 		<script type="text/javascript" src="../static/js/quizNotes.js"></script>
-		<!-- <script type="text/javascript" src="../static/js/quizSteps.js"></script> -->
         <script type="text/javascript" src="../static/js/concepts.js"></script>
 	</head>
-    <body onload="highlightRandom(); load();">
-        <div id="homeButton">
-            <button onclick="location.href='index'" type="button">Home</button>
+    <body onload="highlightRandom(); load();" background="../static/images/wood-grain.jpg">
+        <div id="window">
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="index.html"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+            <a href="lesson1.html">Lesson: Introduction</a>
+            <a href="quizNotes.html">Quiz: Notes</a>
+            <a href="quizSteps.html">Quiz: Steps</a>
+            <a href="quizMajorScales.html">Quiz: Major Scales</a>
+            <a href="quizMinorScales.html">Quiz: Minor Scales</a>
         </div>
-        Score: <span id="correctScore"></span>  <span id="congratsTxt"></span>
+
+        <!-- Use any element to open the sidenav -->
+        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; Menu</span></button>
+        <div>
+            <h3 style="text-align: center;">Score: <span id="correctScore">0</span>  <span id="congratsTxt"></span> <i class="fa fa-repeat" style="visibility: hidden" id="redoId" onclick="repeatQuiz();"> Retry?</i></h3>
+            <h1 style="text-align: center;">Play corresponding note</h1>
+        </div>
         <!-- container for individual keys -->
 		<div id="keyboard">
 				<!-- keyboard keys that call functions to play corresponding note when clicked --><!--
-				--><div class="key lStraightKey" id="c3Key" onclick="playSingleNote('c', 3); triggerColor(this.id)"><div class="hardwareKey">q</div><div class="keyname">C</div></div><!--
-				--><div class="key blackKey" id="db3Key" onclick="playSingleNote('db', 3); triggerColor(this.id)"><div class="hardwareKey">2</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="d3Key" onclick="playSingleNote('d', 3); triggerColor(this.id)"><div class="hardwareKey">w</div><div class="keyname">D</div></div><!--
-				--><div class="key blackKey" id="eb3Key" onclick="playSingleNote('eb', 3); triggerColor(this.id)"><div class="hardwareKey">3</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
-				--><div class="key rStraightKey" id="e3Key" onclick="playSingleNote('e', 3); triggerColor(this.id)"><div class="hardwareKey">e</div><div class="keyname">E</div></div><!--
-				--><div class="key lStraightKey" id="f3Key" onclick="playSingleNote('f', 3); triggerColor(this.id)"><div class="hardwareKey">r</div><div class="keyname">F</div></div><!--
-				--><div class="key blackKey" id="gb3Key" onclick="playSingleNote('gb', 3); triggerColor(this.id)"><div class="hardwareKey">5</div><div class="keyname">F<sup>#</sup> G<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="g3Key" onclick="playSingleNote('g', 3); triggerColor(this.id)"><div class="hardwareKey">t</div><div class="keyname">G</div></div><!--
-				--><div class="key blackKey" id="ab4Key" onclick="playSingleNote('ab', 4); triggerColor(this.id)"><div class="hardwareKey">6</div><div class="keyname">G<sup>#</sup> A<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="a4Key" onclick="playSingleNote('a', 4); triggerColor(this.id)"><div class="hardwareKey">y</div><div class="keyname">A</div></div><!--
-				--><div class="key blackKey" id="bb4Key" onclick="playSingleNote('bb', 4); triggerColor(this.id)"><div class="hardwareKey">7</div><div class="keyname">A<sup>#</sup> B<sup>b</sup></div></div><!--
-				--><div class="key rStraightKey" id="b4Key" onclick="playSingleNote('b', 4); triggerColor(this.id)"><div class="hardwareKey">u</div><div class="keyname">B</div></div><!--
-				--><div class="key lStraightKey" id="c4Key" onclick="playSingleNote('c', 4); triggerColor(this.id)"><div class="hardwareKey">i</div><div class="keyname">C</div></div><!--
-				--><div class="key blackKey" id="db4Key" onclick="playSingleNote('db', 4); triggerColor(this.id)"><div class="hardwareKey">9</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="d4Key" onclick="playSingleNote('d', 4); triggerColor(this.id)"><div class="hardwareKey">o</div><div class="keyname">D</div></div><!--
-				--><div class="key blackKey" id="eb4Key" onclick="playSingleNote('eb', 4); triggerColor(this.id)"><div class="hardwareKey">0</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
-				--><div class="key rStraightKey" id="e4Key" onclick="playSingleNote('e', 4); triggerColor(this.id)"><div class="hardwareKey">p</div><div class="keyname">E</div></div><!--
-				--><div class="key lStraightKey" id="f4Key" onclick="playSingleNote('f', 4); triggerColor(this.id)"><div class="hardwareKey">z</div><div class="keyname">F</div></div><!--
-				--><div class="key blackKey" id="gb4Key" onclick="playSingleNote('gb', 4); triggerColor(this.id)"><div class="hardwareKey">s</div><div class="keyname">F<sup>#</sup> G<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="g4Key" onclick="playSingleNote('g', 4); triggerColor(this.id)"><div class="hardwareKey">x</div><div class="keyname">G</div></div><!--
-				--><div class="key blackKey" id="ab5Key" onclick="playSingleNote('ab', 5); triggerColor(this.id)"><div class="hardwareKey">d</div><div class="keyname">G<sup>#</sup> A<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="a5Key" onclick="playSingleNote('a', 5); triggerColor(this.id)"><div class="hardwareKey">c</div><div class="keyname">A</div></div><!--
-				--><div class="key blackKey" id="bb5Key" onclick="playSingleNote('bb', 5); triggerColor(this.id)"><div class="hardwareKey">f</div><div class="keyname">A<sup>#</sup> B<sup>b</sup></div></div><!--
-				--><div class="key rStraightKey" id="b5Key" onclick="playSingleNote('b', 5); triggerColor(this.id)"><div class="hardwareKey">v</div><div class="keyname">B</div></div><!--
-				--><div class="key lStraightKey" id="c5Key" onclick="playSingleNote('c', 5); triggerColor(this.id)"><div class="hardwareKey">b</div><div class="keyname">C</div></div><!--
-				--><div class="key blackKey" id="db5Key" onclick="playSingleNote('db', 5); triggerColor(this.id)"><div class="hardwareKey">h</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
-				--><div class="key cutKey" id="d5Key" onclick="playSingleNote('d', 5); triggerColor(this.id)"><div class="hardwareKey">n</div><div class="keyname">D</div></div><!--
-				--><div class="key blackKey" id="eb5Key" onclick="playSingleNote('eb', 5); triggerColor(this.id)"><div class="hardwareKey">j</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
-				--><div class="key rStraightKey" id="e5Key" onclick="playSingleNote('e', 5); triggerColor(this.id)"><div class="hardwareKey">m</div><div class="keyname">E</div></div>
-
-			</div>
+				--><div class="key lStraightKey" id="c3Key" onclick="playSingleNote('c', 3); triggerColor(this.id);checkKey('c3');"><div class="hardwareKey">q</div><div class="keyname">C</div></div><!--
+				--><div class="key blackKey" id="db3Key" onclick="playSingleNote('db', 3); triggerColor(this.id);checkKey('db3');"><div class="hardwareKey">2</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="d3Key" onclick="playSingleNote('d', 3); triggerColor(this.id);checkKey('d3');"><div class="hardwareKey">w</div><div class="keyname">D</div></div><!--
+				--><div class="key blackKey" id="eb3Key" onclick="playSingleNote('eb', 3); triggerColor(this.id);checkKey('eb3');"><div class="hardwareKey">3</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
+				--><div class="key rStraightKey" id="e3Key" onclick="playSingleNote('e', 3); triggerColor(this.id);checkKey('e3');"><div class="hardwareKey">e</div><div class="keyname">E</div></div><!--
+				--><div class="key lStraightKey" id="f3Key" onclick="playSingleNote('f', 3); triggerColor(this.id);checkKey('f3');"><div class="hardwareKey">r</div><div class="keyname">F</div></div><!--
+				--><div class="key blackKey" id="gb3Key" onclick="playSingleNote('gb', 3); triggerColor(this.id);checkKey('gb3');"><div class="hardwareKey">5</div><div class="keyname">F<sup>#</sup> G<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="g3Key" onclick="playSingleNote('g', 3); triggerColor(this.id);checkKey('g3');"><div class="hardwareKey">t</div><div class="keyname">G</div></div><!--
+				--><div class="key blackKey" id="ab4Key" onclick="playSingleNote('ab', 4); triggerColor(this.id);checkKey('ab4');"><div class="hardwareKey">6</div><div class="keyname">G<sup>#</sup> A<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="a4Key" onclick="playSingleNote('a', 4); triggerColor(this.id);checkKey('a4');"><div class="hardwareKey">y</div><div class="keyname">A</div></div><!--
+				--><div class="key blackKey" id="bb4Key" onclick="playSingleNote('bb', 4); triggerColor(this.id);checkKey('bb4');"><div class="hardwareKey">7</div><div class="keyname">A<sup>#</sup> B<sup>b</sup></div></div><!--
+				--><div class="key rStraightKey" id="b4Key" onclick="playSingleNote('b', 4); triggerColor(this.id);checkKey('b4');"><div class="hardwareKey">u</div><div class="keyname">B</div></div><!--
+				--><div class="key lStraightKey" id="c4Key" onclick="playSingleNote('c', 4); triggerColor(this.id);checkKey('c4');"><div class="hardwareKey">i</div><div class="keyname">C</div></div><!--
+				--><div class="key blackKey" id="db4Key" onclick="playSingleNote('db', 4); triggerColor(this.id);checkKey('db4');"><div class="hardwareKey">9</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="d4Key" onclick="playSingleNote('d', 4); triggerColor(this.id);checkKey('d4');"><div class="hardwareKey">o</div><div class="keyname">D</div></div><!--
+				--><div class="key blackKey" id="eb4Key" onclick="playSingleNote('eb', 4); triggerColor(this.id);checkKey('eb4');"><div class="hardwareKey">0</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
+				--><div class="key rStraightKey" id="e4Key" onclick="playSingleNote('e', 4); triggerColor(this.id);checkKey('e4');"><div class="hardwareKey">p</div><div class="keyname">E</div></div><!--
+				--><div class="key lStraightKey" id="f4Key" onclick="playSingleNote('f', 4); triggerColor(this.id);checkKey('f4');"><div class="hardwareKey">z</div><div class="keyname">F</div></div><!--
+				--><div class="key blackKey" id="gb4Key" onclick="playSingleNote('gb', 4); triggerColor(this.id);checkKey('gb4');"><div class="hardwareKey">s</div><div class="keyname">F<sup>#</sup> G<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="g4Key" onclick="playSingleNote('g', 4); triggerColor(this.id);checkKey('g4');"><div class="hardwareKey">x</div><div class="keyname">G</div></div><!--
+				--><div class="key blackKey" id="ab5Key" onclick="playSingleNote('ab', 5); triggerColor(this.id);checkKey('ab5');"><div class="hardwareKey">d</div><div class="keyname">G<sup>#</sup> A<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="a5Key" onclick="playSingleNote('a', 5); triggerColor(this.id);checkKey('a5');"><div class="hardwareKey">c</div><div class="keyname">A</div></div><!--
+				--><div class="key blackKey" id="bb5Key" onclick="playSingleNote('bb', 5); triggerColor(this.id);checkKey('bb5');"><div class="hardwareKey">f</div><div class="keyname">A<sup>#</sup> B<sup>b</sup></div></div><!--
+				--><div class="key rStraightKey" id="b5Key" onclick="playSingleNote('b', 5); triggerColor(this.id);checkKey('b5');"><div class="hardwareKey">v</div><div class="keyname">B</div></div><!--
+				--><div class="key lStraightKey" id="c5Key" onclick="playSingleNote('c', 5); triggerColor(this.id);checkKey('c5');"><div class="hardwareKey">b</div><div class="keyname">C</div></div><!--
+				--><div class="key blackKey" id="db5Key" onclick="playSingleNote('db', 5); triggerColor(this.id);checkKey('db5');"><div class="hardwareKey">h</div><div class="keyname">C<sup>#</sup> D<sup>b</sup></div></div><!--
+				--><div class="key cutKey" id="d5Key" onclick="playSingleNote('d', 5); triggerColor(this.id);checkKey('d5');"><div class="hardwareKey">n</div><div class="keyname">D</div></div><!--
+				--><div class="key blackKey" id="eb5Key" onclick="playSingleNote('eb', 5); triggerColor(this.id);checkKey('eb5');"><div class="hardwareKey">j</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
+				--><div class="key rStraightKey" id="e5Key" onclick="playSingleNote('e', 5); triggerColor(this.id);checkKey('e5');"><div class="hardwareKey">m</div><div class="keyname">E</div></div>
+		</div>
+        <div id="snackbar"></div>
+            </div>
     </body>
 
 </html>
