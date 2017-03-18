@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns = "http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Quiz: Steps | Virtual Music Theory Keyboard</title>
-		<link rel="stylesheet" type="text/css" href="../static/css/theStyle.css">
-        <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Virtual Music Theory Keyboard</title>
+		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<!-- polyfill -->
 	    <script src="../static/inc/shim/Base64.js" type="text/javascript"></script>
@@ -21,14 +21,16 @@
 		<script src="../static/js/util/dom_request_xhr.js" type="text/javascript"></script>
 		<script src="../static/js/util/dom_request_script.js" type="text/javascript"></script>
 		<!-- custom scripts -->
-		<script type="text/javascript" src="../static/js/quizSteps.js"></script>
-        <script type="text/javascript" src="../static/js/concepts.js"></script>
+		<script type="text/javascript" src="../static/js/concepts.js"></script>
+		<link rel="stylesheet" type="text/css" href="../static/css/theStyle.css">
+		<link rel="stylesheet" type="text/css" href="../static/css/lesson1style.css">
 	</head>
-    <body onload="stepQuiz(); highlightRandom(); load();" background="../static/images/wood-grain.jpg">
-    	<div id="window">
-    		<div id="topBanner">
-		        <div id="mySidenav" class="sidenav">
-		            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+	<body onload="load(); lessonStaff()" background="../static/images/wood-grain.jpg">
+		<div id="window">
+			<div id="topBanner">
+			</div>
+			<div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                 <a href="index.html"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                 <a href="lesson1.html">Lesson: Introduction</a>
                 <a href="quizNotes.html">Quiz: Notes</a>
@@ -41,13 +43,10 @@
                 <a href="lessonCircle.html">Lesson: Circle</a>
                 <a href="quizKeys.html">Quiz: Key Signature</a>
                 <a href="reference.html">Reference Guide</a>
-		        </div>
-		        <!-- Use any element to open the sidenav -->
-		        <span id="menuButton" onclick="openNav()">&#9776; Menu</span>
-			        <h3 style="text-align: center;">Score: <span id="correctScore">0</span>  <span id="congratsTxt"></span></h3>
-			        <h1 class="instruction" style="text-align:center;">Play a <span id="stepTxt"></span> step </h1>
-	        </div>
-	        <!-- container for individual keys -->
+            </div>
+            <!-- Use any element to open the sidenav -->
+            <span id="menuButton" onclick="openNav()">&#9776; Menu</span>
+			<!-- container for individual keys -->
 			<div id="keyboard">
 				<!-- keyboard keys that call functions to play corresponding note when clicked --><!--
 				--><div class="key lStraightKey" id="c3Key" onclick="contextualClick('c', 3, this.id)"><div class="hardwareKey">q</div><div class="keyname">C</div></div><!--
@@ -79,14 +78,72 @@
 				--><div class="key cutKey" id="d5Key" onclick="contextualClick('d', 5, this.id)"><div class="hardwareKey">n</div><div class="keyname">D</div></div><!--
 				--><div class="key blackKey" id="eb5Key" onclick="contextualClick('eb', 5, this.id)"><div class="hardwareKey">j</div><div class="keyname">D<sup>#</sup> E<sup>b</sup></div></div><!--
 				--><div class="key rStraightKey" id="e5Key" onclick="contextualClick('e', 5, this.id)"><div class="hardwareKey">m</div><div class="keyname">E</div></div>
+
 			</div>
-			<div class="buttons">
+			<div class="lesson">
 				<div id="showKeys">
 					<input type="button" value="Toggle Key Names" onclick="toggleVisibility('keyname');">
 					<input type="button" value="Toggle Hardware Key Names" onclick="toggleVisibility('hardwareKey');">
 				</div>
+				<button class="previous" onclick="previous()">Pervious</button>
+				<button class="next" onclick="next()">Next</button>
+			    <p class="lessonBlock 1" id="first">
+			    Now that we know how the piano works, it's time to tackle the staff!<br>
+
+A staff is comprised of five lines. Both the lines and their spaces are significant.<br>
+A note is either placed ON the line, or IN a space.<br>
+These note placements correspond with the white keys of the keyboard.<br>
+				</p>
+				<p class="lessonBlock 2" id="second">
+				<img src="../static/images/GrandStaffPics/Staff1.png"><br>
+		       This is a TREBLE CLEF. it assigns a set of notes to the lines and spaces on the clefs.<br>
+<img src="../static/images/GrandStaffPics/Staff2.png"><br>
+In the Treble clef, the bottom line corresponds to the E note.<br> 
+The space directly above it corresponds to the F note.<br>
+The space directly below it corresponds to the D note.<br>
+<img src="../static/images/GrandStaffPics/Staff4.png"><br>
+When there is no more room, a LEDGER LINE is added as an extension to the staff, where the C is placed.<br>
+A helpful mnemonic device to learn the notes as they appear on the lines in the Treble clef is:<br><br>
+            Fine (top line)<br>
+         Does<br>
+      Boy<br>
+   Good<br>
+Every (bottom line)<br><br>
+And for the spaces, the trick is simply:<br><br>
+         E (top space)<br>
+      C<br>
+   A<br>
+F (bottom space)<br>
+				</p>
+				<p class="lessonBlock 3">
+				<img src="../static/images/GrandStaffPics/Staff5.png"><br>
+		        The other clef we will be using is the BASS CLEF. <br>
+This clef represents a different set of notes lower in pitch than in the Treble clef.<br>
+The bottom line corresponds to the G note.<br>
+The line above it corresponds to the A note, etc. etc.<br>
+A helpful mnemonic device to memorize the notes as they appear on the lines in the Bass clef is:<br><br>
+<img src="../static/images/GrandStaffPics/Staff7.png"> <br>
+            Always (top line)<br>
+         Fine<br>
+      Do<br>
+   Boys<br>
+Good (bottom line)<br>
+“All Cows Eat Grass” for the spaces:<br><br>
+<img src="../static/images/GrandStaffPics/Staff6.png"> <br>
+         Grass (top space)<br>
+      Eat<br>
+   Cows<br>
+All (bottom space)<br><br>
+When a note is placed on the first ledger line above the Bass clef, it is a C note at the same pitch as the C note demonstrated on the Treble clef.<br> 
+This is known as middle C.<br>
+<img src="../static/images/GrandStaffPics/Staff8.png"> <br>
+In what is called the GRAND STAFF, these clefs are placed with the Treble on top and the Bass below.<br> 
+They are joined by the middle C note.<br>
+		        </p>
+		        <p class="lessonBlock 4">
+			       Now that we've finished the lesson, go check out the quiz!
+                </p>
 			</div>
 		</div>
-    </body>
-
+	</body>
 </html>

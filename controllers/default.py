@@ -44,6 +44,12 @@ def quizInterval():
 def lessonStaff():
     response.flash = T("Lesson: Staff")
     return dict(message=T('Something something'))
+def quizKeys():
+    response.flash = T("Quiz: Keys")
+    return dict(message=T('Something something'))
+def lessonCircle():
+    response.flash = T("Lesson: Circle")
+    return dict(message=T('Something something'))
 def reference():
     response.flash = T("Reference Guid")
     return dict(message=T('Here you go'))

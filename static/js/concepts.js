@@ -178,6 +178,23 @@ function lessonStaff() {
     programControl.intervalQuiz = false;
     programControl.lessonStaff = true;
     programControl.reference = false;
+    showClass('1');
+    programControl.step = 1;
+    programControl.maxStep = 4;
+}
+
+function lessonCircle() {
+    programControl.main = false;                                    // set main page flag to false
+    programControl.lesson1 = false;                                 //
+    programControl.stepQuiz = true;                                 // set step quiz flag to true
+    programControl.lessonScales = false;
+    programControl.intervalQuiz = false;
+    programControl.lessonStaff = false;
+    programControl.lessonCircle = true;
+    programControl.reference = false;
+    showClass('1');
+    programControl.step = 1;
+    programControl.maxStep = 5;
 }
 
 function reference() {
